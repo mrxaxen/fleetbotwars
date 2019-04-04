@@ -6,7 +6,8 @@
 package visual;
 
 import java.awt.Image;
-import java.awt.Rectangle;
+import java.awt.Point;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,39 +15,57 @@ import java.awt.Rectangle;
  */
 public class Visual {
     
-    //top left corner
-    protected int x, y;
-    protected Rectangle rect;
+    private Point referenceCoords;
+    private ArrayList<Point> coordsArray;
     private String type;
     private Image model; //[!]
+    private int width, height;
 
-    ///////////////////////RECT IN CONSTRUCTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    
     /**
      * create Visual
-     * @param x
-     * @param y
-     * @param type
-     * @param model 
+     * @param referenceCoords Top left coords of the current Visual element. This important if it has any dimension greater then 1.
+     * @param type Unit name (eg. Cavalary, Destroyer, etc.)
+     * @param model Serves as the visually represented modell of it's owner.
      */
-    public Visual(int x, int y, String type, Image model) {
-        this.x = x;
-        this.y = y;
+
+    public Visual(Point referenceCoords, String type, Image model) {
+        this.referenceCoords = referenceCoords;
         this.type = type;
         this.model = model;
+        this.coordsArray = new ArrayList<Point>();
+        coordsArray.add(referenceCoords);
+
     }   
-    
+    /**
+     * @param referenceCoords Top left coords of the current Visual element. This important if it has any dimension greater then 1.
+     * @param type Unit name (eg. Cavalary, Destroyer, etc.)
+     * @param model Serves as the visually represented modell of it's owner.
+     * @param width Width of the unit
+     * @param height Height of the unit
+     */
+
+    public Visual(Point referenceCoords, String type, Image model, int width, int height) {
+        this.referenceCoords = referenceCoords;
+        this.type = type;
+        this.model = model;
+        this.coordsArray = new ArrayList<Point>();
+        coordsArray = fillOccupiedCoords(referenceCoords, width, height);
+    }  
+
+    private ArrayList<Point> fillOccupiedCoords(Point referenceCoords, int width, int height){
+        ArrayList<Point> retArr = new ArrayList<Point>();
+        for(int i = referenceCoords.x; i < referenceCoords.x + width; i++){
+            for(int j = referenceCoords.y; j < referenceCoords.y + width; j++){
+                retArr.add(new Point(i, j));
+            }
+        } 
+        return retArr;
+    }
+
     /**
      * graphic display of Visual
      */
     public void draw() {
         //
     }
-    
-    /////getters, setters
-
-    public Rectangle getRect() {
-        return rect;
-    }
-        
 }

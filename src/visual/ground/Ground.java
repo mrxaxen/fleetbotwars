@@ -15,16 +15,34 @@ import visual.Visual;
 public class Ground extends Visual {
     
     protected boolean occupied = false;
+    private Unit ownerRefernce;
 
     /**
      * create Ground
-     * @param x
-     * @param y
+     * @param coords 
      * @param type
      * @param model 
+     * @param ownerRefernce
      */
-    public Ground(int x, int y, String type, Image model) {
-        super(x, y, type, model);
+    public Ground(Point coords, String type, Image model, Unit ownerRefernce) {
+        super(coords, type, model);
+        this.ownerRefernce = ownerRefernce;
     }  
-    
+
+    /**
+     * 
+     * @return true if occupied, false else
+     */
+    public boolean isOccupied(){
+        return ownerRefernce.equals(null);
+    }
+
+    /**
+     * 
+     * @return the reference to the Player Object, 
+     * who owns/occupies the current ground
+     */
+    public Unit getOwnerReference(){
+        return ownerRefernce;
+    }
 }

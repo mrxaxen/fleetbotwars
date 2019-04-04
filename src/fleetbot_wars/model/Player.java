@@ -6,18 +6,46 @@
 package fleetbot_wars.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import visual.unit.Controllable;
 
 /**
  *
  * @author WB
  */
-public class Player
-{
+public class Player{
+    
     // 0 - food, 1 - wood, 2 - stone, 3 - gold, 4 - upgrade
-    private int resources[] = new int[5];
+    
     // 0 - Farm, 1 - HarvestCenter, 2 - StoneMine, 3 - GoldMine, 4 - WorkerSpawn, 5 - MilitarySpawm, 6 - Turret, 7 - Barricade,
     // 8 - Lumberjack, 9 - Miner, 10 - Builder,
     // 11 - Infantry, 12 -  Cavalry, 13 - Ranger, 14 - Destroyer, 15 - Medic
-    private ArrayList controlled[] = new ArrayList[16];
+
+    private HashMap resources; 
+    private ArrayList<Controllable> playerUnits;
+    private String playerName;  
+
+    public Player(String name, int[] initResources){
+        this.playerName = name;
+        this.resources = new HashMap();
+        resources.add("food", initResources[0]);
+        resources.add("wood", initResources[1]);
+        resources.add("stone", initResources[2]);
+        resources.add("gold", initResources[3]);
+        resources.add("upgrade", initResources[4]);
+    }
+
+    public void decreaseResource(String name, Integer amount){
+        resource.put(name, resource.get(name) - amount);
+    }
+
+    public void increaseResource(String name, Integer amount){
+        resource.put(name, resource.get(name) + amount);
+    }
+
+    public void addControllable(Controllable unit){
+
+    }
+
 }
