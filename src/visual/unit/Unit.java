@@ -6,6 +6,7 @@
 package visual.unit;
 
 import java.awt.Image;
+import java.awt.Point;
 import visual.Visual;
 
 /**
@@ -18,14 +19,13 @@ public class Unit extends Visual {
 
     /**
      * create Unit
-     * @param x
-     * @param y
+     * @param coords
      * @param type
      * @param model
      * @param hp 
      */
-    public Unit(int x, int y, String type, Image model, int hp) {
-        super(x, y, type, model);
+    public Unit(Point coords, String type, Image model, int hp) {
+        super(coords, type, model);
         this.maxHp = this.currHp = hp;
     }
     

@@ -6,6 +6,7 @@
 package visual.unit;
 
 import java.awt.Image;
+import java.awt.Point;
 
 /**
  *
@@ -15,13 +16,12 @@ public class Lumberjack extends Controllable {
 
     /**
      * create Lumberjack at (x,y) coordinates, for 'team' team
-     * @param x
-     * @param y
+     * @param coords
      * @param team 
      */
-    public Lumberjack(int x, int y, int team)
+    public Lumberjack(Point coords, int team)
     {
-        super(x, y, "lumberjack", null, 100, 1, 1, 10, 1, 1, 1, team);
+        super(coords, "lumberjack", null, 100, 1, 1, 10, 1, 1, 1, team);
     }
     
     private boolean isValidTarget(Unit tar) { 

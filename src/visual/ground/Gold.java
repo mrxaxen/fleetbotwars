@@ -6,6 +6,7 @@
 package visual.ground;
 
 import java.awt.Image;
+import java.awt.Point;
 
 /**
  *
@@ -18,8 +19,8 @@ public class Gold extends Ground {
      * @param x
      * @param y 
      */
-    public Gold(int x, int y) {
-        super(x, y, "gold", null);
+    public Gold(Point coords) {
+        super(coords, "gold", null, null);
     }
     
 }

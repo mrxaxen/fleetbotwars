@@ -5,6 +5,8 @@
  */
 package visual.unit;
 
+import java.awt.Point;
+
 /**
  *
  * @author WB
@@ -16,13 +18,12 @@ public class Miner extends Controllable {
     
     /**
      * create Miner at (x,y) coordinates, for 'team' team
-     * @param x
-     * @param y
+     * @param coords
      * @param team 
      */
-    public Miner(int x, int y, int team)
+    public Miner(Point coords, int team)
     {
-        super(x, y, "miner", null, 100, 1, 0, 0, 1, 1, 0, team);
+        super(coords, "miner", null, 100, 1, 0, 0, 1, 1, 0, team);
     }
     
 }

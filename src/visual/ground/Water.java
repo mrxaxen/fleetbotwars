@@ -6,6 +6,7 @@
 package visual.ground;
 
 import java.awt.Image;
+import java.awt.Point;
 
 /**
  *
@@ -18,8 +19,8 @@ public class Water extends Ground {
      * @param x
      * @param y 
      */
-    public Water(int x, int y) {
-        super(x, y, "water", null);
+    public Water(Point coords) {
+        super(coords, "water", null, null);
     }
  
 }

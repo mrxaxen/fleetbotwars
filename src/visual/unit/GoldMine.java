@@ -5,6 +5,8 @@
  */
 package visual.unit;
 
+import java.awt.Point;
+
 /**
  *
  * @author asjf86
@@ -13,12 +15,11 @@ public class GoldMine extends Mine {
 
     /**
      * create GoldMine at (x,y) coordinates, for 'team' team
-     * @param x
-     * @param y
+     * @param coords
      * @param team 
      */
-    public GoldMine(int x, int y, int team) {
-        super(x, y, "goldmine", null, 500, team);
+    public GoldMine(Point coords, int team) {
+        super(coords, "goldmine", null, 500, team);
     }
     
     /**

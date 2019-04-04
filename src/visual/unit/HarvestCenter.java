@@ -5,6 +5,8 @@
  */
 package visual.unit;
 
+import java.awt.Point;
+
 /**
  *
  * @author asjf86
@@ -13,12 +15,11 @@ public class HarvestCenter extends Controllable {
     
     /**
      * create HarvestCenter at (x,y) coordinates, for 'team' team
-     * @param x
-     * @param y
+     * @param coords
      * @param team 
      */
-    public HarvestCenter(int x, int y, int team) {
-        super(x, y, "harvestcenter", null, 500, 0, 0, 0, 1, 1, 0, team);
+    public HarvestCenter(Point coords, int team) {
+        super(coords, "harvestcenter", null, 500, 0, 0, 0, 1, 1, 0, team);
     }
     
     /**

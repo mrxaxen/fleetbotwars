@@ -6,6 +6,7 @@
 package visual.unit;
 
 import java.awt.Image;
+import java.awt.Point;
 
 /**
  *
@@ -15,12 +16,11 @@ public class Turret extends Controllable {
 
     /**
      * create Turret at (x,y) coordinates, for 'team' team
-     * @param x
-     * @param y
+     * @param coords
      * @param team 
      */
-    public Turret(int x, int y, int team) {
-        super(x, y, "turret", null, 500, 0, 1, 10, 5, 1, 3, team);
+    public Turret(Point coords, int team) {
+        super(coords, "turret", null, 500, 0, 1, 10, 5, 1, 3, team);
     }
     
 }

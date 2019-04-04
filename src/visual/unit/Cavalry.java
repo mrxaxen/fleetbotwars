@@ -5,6 +5,8 @@
  */
 package visual.unit;
 
+import java.awt.Point;
+
 /**
  *
  * @author WB
@@ -13,13 +15,12 @@ public class Cavalry extends Controllable {
     
     /**
      * create Cavalry at (x,y) coordinates, for 'team' team
-     * @param x
-     * @param y
+     * @param coords
      * @param team 
      */
-    public Cavalry(int x, int y, int team)
+    public Cavalry(Point coords, int team)
     {
-        super(x, y, "cavalry", null, 100, 1, 1, 10, 5, 1, 1, team);
+        super(coords, "cavalry", null, 100, 1, 1, 10, 5, 1, 1, team);
     }
     
 }

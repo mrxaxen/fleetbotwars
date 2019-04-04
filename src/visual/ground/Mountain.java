@@ -6,6 +6,7 @@
 package visual.ground;
 
 import java.awt.Image;
+import java.awt.Point;
 
 /**
  *
@@ -18,8 +19,8 @@ public class Mountain extends Ground {
      * @param x
      * @param y 
      */
-    public Mountain(int x, int y) {
-        super(x, y, "mountain", null);
+    public Mountain(Point coords) {
+        super(coords, "mountain", null, null);
         this.occupied = true;
     }
     

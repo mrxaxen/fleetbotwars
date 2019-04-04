@@ -5,6 +5,8 @@
  */
 package visual.unit;
 
+import java.awt.Point;
+
 /**
  *
  * @author WB
@@ -17,9 +19,9 @@ public class Ranger extends Controllable {
      * @param y
      * @param team 
      */
-    public Ranger(int x, int y, int team)
+    public Ranger(Point coords, int team)
     {
-        super(x, y, "ranger", null, 100, 1, 1, 10, 5, 1, 2, team);
+        super(coords, "ranger", null, 100, 1, 1, 10, 5, 1, 2, team);
     }
     
 }

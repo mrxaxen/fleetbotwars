@@ -23,7 +23,7 @@ public class Visual {
 
     /**
      * create Visual
-     * @param referenceCoords Top left coords of the current Visual element. This important if it has any dimension greater then 1.
+     * @param referenceCoords Top left coords of the current Visual element. This important if it has any dimension greater than 1.
      * @param type Unit name (eg. Cavalary, Destroyer, etc.)
      * @param model Serves as the visually represented modell of it's owner.
      */

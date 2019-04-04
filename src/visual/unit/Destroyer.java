@@ -5,6 +5,8 @@
  */
 package visual.unit;
 
+import java.awt.Point;
+
 /**
  *
  * @author WB
@@ -13,13 +15,11 @@ public class Destroyer extends Controllable {
     
     /**
      * create Destroyer at (x,y) coordinates, for 'team' team
-     * @param x
-     * @param y
      * @param team 
      */
-    public Destroyer(int x, int y, int team)
+    public Destroyer(Point coords, int team)
     {
-        super(x, y, "destroyer", null, 100, 1, 1, 10, 5, 1, 1, team);
+        super(coords, "destroyer", null, 100, 1, 1, 10, 5, 1, 1, team);
     }
     
     private boolean isValidTarget(Unit tar) { 

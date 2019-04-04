@@ -5,6 +5,8 @@
  */
 package visual.unit;
 
+import java.awt.Point;
+
 /**
  *
  * @author WB
@@ -12,13 +14,12 @@ package visual.unit;
 public class Builder extends Controllable {
     /**
      * create Builder at (x,y) coordinates, for 'team' team
-     * @param x
-     * @param y
+     * @param coords
      * @param team 
      */
-    public Builder(int x, int y, int team)
+    public Builder(Point coords, int team)
     {
-        super(x, y, "builder", null, 100, 1, 0, 0, 1, 1, 0, team);
+        super(coords, "builder", null, 100, 1, 0, 0, 1, 1, 1, team);
     }
     
     /**

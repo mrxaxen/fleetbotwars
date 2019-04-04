@@ -6,6 +6,7 @@
 package visual.unit;
 
 import java.awt.Image;
+import java.awt.Point;
 
 /**
  *
@@ -21,8 +22,8 @@ public class Tree extends Unit {
      * @param model
      * @param hp 
      */
-    public Tree(int x, int y) {
-        super(x, y, "tree", null, 50);
+    public Tree(Point coords) {
+        super(coords, "tree", null, 50);
     }
     
 }

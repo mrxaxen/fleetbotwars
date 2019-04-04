@@ -7,6 +7,7 @@ package visual.ground;
 
 import visual.ground.Ground;
 import java.awt.Image;
+import java.awt.Point;
 
 /**
  *
@@ -19,8 +20,8 @@ public class Base extends Ground {
      * @param x
      * @param y 
      */
-    public Base(int x, int y) {
-        super(x, y, "base", null);
+    public Base(Point coords) {
+        super(coords, "base", null, null);
     }   
     
 }

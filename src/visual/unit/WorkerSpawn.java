@@ -6,6 +6,7 @@
 package visual.unit;
 
 import java.awt.Image;
+import java.awt.Point;
 
 /**
  *
@@ -15,12 +16,11 @@ public class WorkerSpawn extends Controllable {
 
     /**
      * create WorkerSpawn at (x,y) coordinates, for 'team' team
-     * @param x
-     * @param y
+     * @param coords
      * @param team 
      */
-    public WorkerSpawn(int x, int y, int team) {
-        super(x, y, "workerspawn", null, 500, 0, 0, 0, 1, 1, 0, team);
+    public WorkerSpawn(Point coords, int team) {
+        super(coords, "workerspawn", null, 500, 0, 0, 0, 1, 1, 0, team);
     }
     
     /**

@@ -6,6 +6,7 @@
 package visual.unit;
 
 import java.awt.Image;
+import java.awt.Point;
 
 /**
  *
@@ -15,12 +16,11 @@ public class Barricade extends Controllable {
 
     /**
      * create Barricade at (x,y) coordinates, for 'team' team
-     * @param x
-     * @param y
+     * @param coords
      * @param team 
      */
-    public Barricade(int x, int y, int team) {
-        super(x, y, "barricade", null, 500, 0, 0, 0, 5, 1, 0, team);
+    public Barricade(Point coords, int team) {
+        super(coords, "barricade", null, 500, 0, 0, 0, 5, 1, 0, team);
     }
     
 }

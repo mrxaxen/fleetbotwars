@@ -6,6 +6,7 @@
 package visual.unit;
 
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Timer;
@@ -20,9 +21,17 @@ abstract public class Mine extends Controllable {
     protected boolean active = false;
     private Timer timer;
 
-    public Mine(int x, int y, String type, Image model, int hp, int team)
+    /**
+     * called when specific Mine created
+     * @param coords
+     * @param type
+     * @param model
+     * @param hp
+     * @param team 
+     */
+    public Mine(Point coords, String type, Image model, int hp, int team)
     {
-        super(x, y, type, model, hp, 0, 0, 0, 1, 1, 0, team);
+        super(coords, type, model, hp, 0, 0, 0, 1, 1, 0, team);
         ActionListener taskPerformer = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

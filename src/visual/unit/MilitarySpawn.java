@@ -5,6 +5,8 @@
  */
 package visual.unit;
 
+import java.awt.Point;
+
 /**
  *
  * @author asjf86
@@ -13,12 +15,11 @@ public class MilitarySpawn extends Controllable {
     
     /**
      * create MilitarySpawn at (x,y) coordinates, for 'team' team
-     * @param x
-     * @param y
+     * @param coords
      * @param team 
      */
-    public MilitarySpawn(int x, int y, int team) {
-        super(x, y, "militaryspawn", null, 500, 0, 0, 0, 1, 1, 0, team);
+    public MilitarySpawn(Point coords, int team) {
+        super(coords, "militaryspawn", null, 500, 0, 0, 0, 1, 1, 0, team);
     }
     
     /**

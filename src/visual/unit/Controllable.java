@@ -6,6 +6,7 @@
 package visual.unit;
 
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Rectangle;
 
 /**
@@ -34,9 +35,9 @@ public class Controllable extends Unit {
      * @param rng
      * @param team
      */
-    public Controllable(int x, int y, String type, Image model, int hp,
+    public Controllable(Point coords, String type, Image model, int hp,
             int mvmtSpd, int atkSpd, int dmg, int maxLvl, int lvl, int rng, int team) { //MAXLEVEL IN SPECIFIC CONSTRS
-        super(x, y, type, model, hp);
+        super(coords, type, model, hp);
         this.mvmtSpd = mvmtSpd;
         this.atkSpd = atkSpd;
         this.dmg = dmg;

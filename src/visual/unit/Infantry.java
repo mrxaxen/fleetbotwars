@@ -6,6 +6,7 @@
 package visual.unit;
 
 import java.awt.Image;
+import java.awt.Point;
 
 /**
  *
@@ -15,13 +16,12 @@ public class Infantry extends Controllable {
 
     /**
      * create Infantry at (x,y) coordinates, for 'team' team
-     * @param x
-     * @param y
+     * @param coords
      * @param team 
      */
-    public Infantry(int x, int y, int team)
+    public Infantry(Point coords, int team)
     {
-        super(x, y, "infantry", null, 100, 1, 1, 10, 5, 1, 1, team);
+        super(coords, "infantry", null, 100, 1, 1, 10, 5, 1, 1, team);
     }
     
 }

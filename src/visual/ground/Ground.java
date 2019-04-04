@@ -6,7 +6,9 @@
 package visual.ground;
 
 import java.awt.Image;
+import java.awt.Point;
 import visual.Visual;
+import visual.unit.Unit;
 
 /**
  *

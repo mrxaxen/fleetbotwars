@@ -5,6 +5,8 @@
  */
 package visual.unit;
 
+import java.awt.Point;
+
 /**
  *
  * @author WB
@@ -13,13 +15,12 @@ public class Medic extends Controllable {
     
     /**
      * create Medic at (x,y) coordinates, for 'team' team
-     * @param x
-     * @param y
+     * @param coords
      * @param team 
      */
-    public Medic(int x, int y, int team)
+    public Medic(Point coords, int team)
     {
-        super(x, y, "medic", null, 100, 1, 1, -10, 5, 1, 1, team);
+        super(coords, "medic", null, 100, 1, 1, -10, 5, 1, 1, team);
     }
     
     //check if overrides the one in Controllable!!!!

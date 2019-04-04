@@ -25,23 +25,25 @@ public class Player{
     private HashMap resources; 
     private ArrayList<Controllable> playerUnits;
     private String playerName;  
+    private int team;
 
-    public Player(String name, int[] initResources){
+    public Player(String name, int team, int[] initResources){
         this.playerName = name;
-        this.resources = new HashMap();
-        resources.add("food", initResources[0]);
-        resources.add("wood", initResources[1]);
-        resources.add("stone", initResources[2]);
-        resources.add("gold", initResources[3]);
-        resources.add("upgrade", initResources[4]);
+        this.team = team;
+        this.resources = new HashMap<>();
+        resources.put("food", initResources[0]);
+        resources.put("wood", initResources[1]);
+        resources.put("stone", initResources[2]);
+        resources.put("gold", initResources[3]);
+        resources.put("upgrade", initResources[4]);
     }
 
-    public void decreaseResource(String name, Integer amount){
-        resource.put(name, resource.get(name) - amount);
+    public void decreaseResource(String name, int amount){
+        resources.put(name, (int)resources.get(name) - amount);
     }
 
-    public void increaseResource(String name, Integer amount){
-        resource.put(name, resource.get(name) + amount);
+    public void increaseResource(String name, int amount){
+        resources.put(name, (int)resources.get(name) + amount);
     }
 
     public void addControllable(Controllable unit){

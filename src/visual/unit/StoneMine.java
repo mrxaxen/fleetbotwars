@@ -5,6 +5,8 @@
  */
 package visual.unit;
 
+import java.awt.Point;
+
 /**
  *
  * @author asjf86
@@ -13,12 +15,11 @@ public class StoneMine extends Mine {
         
     /**
      * create StoneMine at (x,y) coordinates, for 'team' team
-     * @param x
-     * @param y
+     * @param coords
      * @param team 
      */
-    public StoneMine(int x, int y, int team) {
-        super(x, y, "stonemine", null, 500, team);
+    public StoneMine(Point coords, int team) {
+        super(coords, "stonemine", null, 500, team);
     }
     
     /**
