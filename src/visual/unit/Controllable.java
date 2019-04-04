@@ -69,10 +69,6 @@ public class Controllable extends Unit {
     public void defHit(Controllable tar) {
         this.hit(tar);
     }
-
-    private boolean inRange(Controllable atkr, Unit tar) {
-        return atkr.rngRect.intersects(tar.getRect());      
-    }
     
     /**
      * returns whether the targeted Unit is valid target for attacking Controllable
@@ -84,12 +80,10 @@ public class Controllable extends Unit {
     }
 
     private void hit(Unit tar) {
-        if (inRange(this, tar)) {
-            //MOVE ATKSPD MODIF HIGHER UP?????????????????
-            tar.currHp -= this.dmg * atkSpd; 
-            if (tar.currHp <= 0) {
-                tar.deathEvent();
-            }
+        //MOVE ATKSPD MODIF HIGHER UP?????????????????
+        tar.currHp -= this.dmg * atkSpd; 
+        if (tar.currHp <= 0) {
+            tar.deathEvent();
         }
     }
 
@@ -129,4 +123,11 @@ public class Controllable extends Unit {
             //this.rng *= currLvl;
         }
     }
+    
+    ///// getters, setters
+
+    public Rectangle getRngRect() {
+        return rngRect;
+    }
+    
 }
