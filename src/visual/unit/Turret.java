@@ -20,7 +20,7 @@ public class Turret extends Controllable {
      * @param team 
      */
     public Turret(int x, int y, int team) {
-        super(x, y, "turret", /*turret_model*/, /*turret_hp*/, 0, /*turret_atkSpd*/, /*turret_dmg*/, 1, /*turret_rng*/, team);
+        super(x, y, "turret", null, 500, 0, 1, 10, 5, 1, 3, team);
     }
     
 }

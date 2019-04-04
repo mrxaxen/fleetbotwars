@@ -6,6 +6,7 @@
 package visual;
 
 import java.awt.Image;
+import java.awt.Rectangle;
 
 /**
  *
@@ -13,10 +14,14 @@ import java.awt.Image;
  */
 public class Visual {
     
-    private int x, y;
+    //top left corner
+    protected int x, y;
+    protected Rectangle rect;
     private String type;
     private Image model; //[!]
 
+    ///////////////////////RECT IN CONSTRUCTOR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    
     /**
      * create Visual
      * @param x
@@ -37,4 +42,11 @@ public class Visual {
     public void draw() {
         //
     }
+    
+    /////getters, setters
+
+    public Rectangle getRect() {
+        return rect;
+    }
+        
 }

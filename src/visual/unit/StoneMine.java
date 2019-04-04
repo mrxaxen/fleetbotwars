@@ -18,7 +18,7 @@ public class StoneMine extends Mine {
      * @param team 
      */
     public StoneMine(int x, int y, int team) {
-        super(x, y, "stonemine", /*sm_model*/, /*sm_hp*/, team);
+        super(x, y, "stonemine", null, 500, team);
     }
     
     /**

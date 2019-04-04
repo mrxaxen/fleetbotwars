@@ -18,7 +18,7 @@ public class Builder extends Controllable {
      */
     public Builder(int x, int y, int team)
     {
-        super(x, y, "builder", /*builder_model*/, /*builder_hp*/, /*builder_mvmtSpd*/, 0, 0, 1, /*lj_rng*/, team);
+        super(x, y, "builder", null, 100, 1, 0, 0, 1, 1, 0, team);
     }
     
     /**

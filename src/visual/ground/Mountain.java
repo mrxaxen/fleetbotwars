@@ -19,7 +19,7 @@ public class Mountain extends Ground {
      * @param y 
      */
     public Mountain(int x, int y) {
-        super(x, y, "mountain", /*mountain_model*/);
+        super(x, y, "mountain", null);
         this.occupied = true;
     }
     

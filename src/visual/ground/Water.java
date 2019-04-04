@@ -19,7 +19,7 @@ public class Water extends Ground {
      * @param y 
      */
     public Water(int x, int y) {
-        super(x, y, "water", /*water_model*/);
+        super(x, y, "water", null);
     }
  
 }

@@ -20,7 +20,7 @@ public class Barricade extends Controllable {
      * @param team 
      */
     public Barricade(int x, int y, int team) {
-        super(x, y, "barricade", /*barricade_model*/, /*barricade_hp*/, 0, 0, 0, 1, 0, team);
+        super(x, y, "barricade", null, 500, 0, 0, 0, 5, 1, 0, team);
     }
     
 }

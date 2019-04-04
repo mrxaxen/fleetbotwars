@@ -18,7 +18,7 @@ public class HarvestCenter extends Controllable {
      * @param team 
      */
     public HarvestCenter(int x, int y, int team) {
-        super(x, y, "harvestcenter", /*hc_model*/, /*hc_hp*/, 0, 0, 0, 1, 0, team);
+        super(x, y, "harvestcenter", null, 500, 0, 0, 0, 1, 1, 0, team);
     }
     
     /**

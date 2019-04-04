@@ -20,7 +20,7 @@ public class Base extends Ground {
      * @param y 
      */
     public Base(int x, int y) {
-        super(x, y, "base", /*base_model*/);
+        super(x, y, "base", null);
     }   
     
 }

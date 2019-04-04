@@ -21,7 +21,11 @@ public class Lumberjack extends Controllable {
      */
     public Lumberjack(int x, int y, int team)
     {
-        super(x, y, "lumberjack", /*lj_model*/, /*lj_hp*/, /*lj_mvmtSpd*/, /*lj_atkSpd*/, /*lj_dmg*/, 1, /*lj_rng*/, team);
+        super(x, y, "lumberjack", null, 100, 1, 1, 10, 1, 1, 1, team);
+    }
+    
+    private boolean isValidTarget(Unit tar) { 
+        return tar instanceof Tree; //tree
     }
     
 }

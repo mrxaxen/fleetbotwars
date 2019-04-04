@@ -20,7 +20,7 @@ public class Farm extends Controllable {
      * @param team 
      */
     public Farm(int x, int y, int team) {
-        super(x, y, "farm", /*farm_model*/, /*farm_hp*/, 0, 0, 0, 1, 0, team);
+        super(x, y, "farm", null, 500, 0, 0, 0, 5, 1, 0, team);
     }
     
     /**

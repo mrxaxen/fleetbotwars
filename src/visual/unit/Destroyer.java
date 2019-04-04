@@ -19,7 +19,12 @@ public class Destroyer extends Controllable {
      */
     public Destroyer(int x, int y, int team)
     {
-        super(x, y, "destroyer", /**/, /**/, /**/, /**/, /**/, 1, /**/, team);
+        super(x, y, "destroyer", null, 100, 1, 1, 10, 5, 1, 1, team);
+    }
+    
+    private boolean isValidTarget(Unit tar) { 
+        return tar instanceof Controllable && ((Controllable)tar).team != this.team   //building
+                && true/*BUILDING CHECK!!*/;
     }
     
 }

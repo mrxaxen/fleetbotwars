@@ -19,7 +19,7 @@ public class Gold extends Ground {
      * @param y 
      */
     public Gold(int x, int y) {
-        super(x, y, "gold", /*gold_model*/);
+        super(x, y, "gold", null);
     }
     
 }

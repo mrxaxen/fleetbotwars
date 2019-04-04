@@ -19,7 +19,7 @@ public class Ranger extends Controllable {
      */
     public Ranger(int x, int y, int team)
     {
-        super(x, y, "ranger", /**/, /**/, /**/, /**/, /**/, 1, /**/, team);
+        super(x, y, "ranger", null, 100, 1, 1, 10, 5, 1, 2, team);
     }
     
 }

@@ -18,7 +18,7 @@ public class MilitarySpawn extends Controllable {
      * @param team 
      */
     public MilitarySpawn(int x, int y, int team) {
-        super(x, y, "militaryspawn", /*ms_model*/, /*ms_hp*/, 0, 0, 0, 1, 0, team);
+        super(x, y, "militaryspawn", null, 500, 0, 0, 0, 1, 1, 0, team);
     }
     
     /**

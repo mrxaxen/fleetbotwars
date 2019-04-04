@@ -22,7 +22,7 @@ public class Tree extends Unit {
      * @param hp 
      */
     public Tree(int x, int y) {
-        super(x, y, "tree", /*tree_model*/, /*tree_hp*/);
+        super(x, y, "tree", null, 50);
     }
     
 }

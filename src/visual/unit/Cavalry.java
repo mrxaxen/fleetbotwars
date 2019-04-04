@@ -19,7 +19,7 @@ public class Cavalry extends Controllable {
      */
     public Cavalry(int x, int y, int team)
     {
-        super(x, y, "cavalry", /**/, /**/, /**/, /**/, /**/, 1, /**/, team);
+        super(x, y, "cavalry", null, 100, 1, 1, 10, 5, 1, 1, team);
     }
     
 }

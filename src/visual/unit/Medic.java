@@ -19,8 +19,12 @@ public class Medic extends Controllable {
      */
     public Medic(int x, int y, int team)
     {
-        super(x, y, "medic"
-                + "", /**/, /**/, /**/, /**/, /**/, 1, /**/, team);
+        super(x, y, "medic", null, 100, 1, 1, -10, 5, 1, 1, team);
+    }
+    
+    //check if overrides the one in Controllable!!!!
+    private boolean isValidTarget(Unit tar) { 
+        return tar instanceof Controllable && ((Controllable)tar).team == this.team; //friendly
     }
     
 }

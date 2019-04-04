@@ -22,7 +22,7 @@ public class Miner extends Controllable {
      */
     public Miner(int x, int y, int team)
     {
-        super(x, y, "miner", /*miner_model*/, /*miner_hp*/, /*miner_mvmtSpd*/, 0, 0, 1, /*lj_rng*/, team);
+        super(x, y, "miner", null, 100, 1, 0, 0, 1, 1, 0, team);
     }
     
 }

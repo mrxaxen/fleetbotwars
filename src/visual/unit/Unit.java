@@ -14,7 +14,7 @@ import visual.Visual;
  */
 public class Unit extends Visual {
     
-    protected int hp;
+    protected int maxHp, currHp;
 
     /**
      * create Unit
@@ -26,7 +26,7 @@ public class Unit extends Visual {
      */
     public Unit(int x, int y, String type, Image model, int hp) {
         super(x, y, type, model);
-        this.hp = hp;
+        this.maxHp = this.currHp = hp;
     }
     
     /**

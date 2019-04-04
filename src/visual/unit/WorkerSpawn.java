@@ -20,7 +20,7 @@ public class WorkerSpawn extends Controllable {
      * @param team 
      */
     public WorkerSpawn(int x, int y, int team) {
-        super(x, y, "workerspawn", /*ws_model*/, /*ws_hp*/, 0, 0, 0, 1, 0, team);
+        super(x, y, "workerspawn", null, 500, 0, 0, 0, 1, 1, 0, team);
     }
     
     /**

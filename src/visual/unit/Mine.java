@@ -22,7 +22,7 @@ abstract public class Mine extends Controllable {
 
     public Mine(int x, int y, String type, Image model, int hp, int team)
     {
-        super(x, y, type, model, hp, 0, 0, 0, 1, 0, team);
+        super(x, y, type, model, hp, 0, 0, 0, 1, 1, 0, team);
         ActionListener taskPerformer = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -21,7 +21,7 @@ public class Infantry extends Controllable {
      */
     public Infantry(int x, int y, int team)
     {
-        super(x, y, "infantry", /**/, /**/, /**/, /**/, /**/, 1, /**/, team);
+        super(x, y, "infantry", null, 100, 1, 1, 10, 5, 1, 1, team);
     }
     
 }
