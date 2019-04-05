@@ -8,47 +8,86 @@ package fleetbot_wars.model;
 import javafx.scene.control.TextFormatter;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.border.EtchedBorder;
 import java.awt.*;
+import java.util.HashMap;
 
-/**
- *
- * @author EG
- */
+
 public class Options extends Menu {
 
-    boolean music = true;
-    boolean gameSounds = true;
-    boolean globalSound = true;
+    private final int SLIDER_EXTENT = 15;
+    private final int SLIDER_MIN = 0;
+    private final int SLIDER_MAX = 100;
 
-    int musicValue = 50;
-    int gameSoundsValue = 50;
-    int globalSoundValue = 50;
-
-    JTabbedPane upperPane;
-    JPanel lowerPane;
-    JPanel sound;
-    JPanel misc;
+    private boolean music, gameSounds, globalSound;
+    private int musicValue, gameSoundsValue, globalSoundsValue;
 
     Options(GUI gui) {
         super(gui);
-        upperPane = new JTabbedPane();
-        lowerPane = new JPanel();
-        sound = new JPanel();
-        misc = new JPanel();
+        initPane();
     }
 
-    private void initUpperPane() {
-        initSoundTab();
+    private void backToDefault() {
+        music = true;
+        gameSounds = true;
+        globalSound = true;
+
+        musicValue = 50;
+        gameSoundsValue = 50;
+        globalSoundsValue = 50;
+    }
+
+    private void initPane() {
+        JTabbedPane upperPane = initUpperPane();
+        JPanel lowerPane = initLowerPane();
+        GridLayout layout = new GridLayout(2, 1);
+        this.setLayout(layout);
+
+        this.add(upperPane);
+        this.add(lowerPane);
+    }
+
+    //TODO: add buttons to lowerPane and implement listeners
+    private JPanel initLowerPane() {
+        JPanel lowerPane = new JPanel();
+        GridLayout layout = new GridLayout();
+        lowerPane.setLayout(layout);
+
+        JButton okButton = new JButton("Accept");
+        JButton defaultButton = new JButton("Default");
+        JButton cancelButton = new JButton("Cancel");
+
+
+        return lowerPane;
+    }
+
+    private JTabbedPane initUpperPane() {
+        JTabbedPane upperPane = new JTabbedPane();
+        JPanel sound = initSoundTab();
+        JPanel misc = initMiscTab();
         upperPane.addTab("Sound", sound);
         upperPane.addTab("Misc", misc);
+        return upperPane;
     }
 
-    private void initSoundTab() {
+    private JPanel initMiscTab() {
+        JPanel misc = new JPanel();
+        GridLayout layout = new GridLayout();
+        layout.setColumns(2);
+        layout.setRows(3);
+        misc.setLayout(layout);
 
-        FlowLayout layout = new FlowLayout();
-        layout.setAlignment(FlowLayout.CENTER);
+        JCheckBox placeHolder = new JCheckBox();
+
+        misc.add(placeHolder);
+
+        return misc;
+    }
+
+    private JPanel initSoundTab() {
+        JPanel sound = new JPanel();
+
+        GridLayout layout = new GridLayout(0, 3);
         layout.setHgap(20);
         layout.setVgap(20);
         sound.setLayout(layout);
@@ -57,55 +96,78 @@ public class Options extends Menu {
         JPanel globalSound = new JPanel();
         JPanel gameSounds = new JPanel();
         JPanel music = new JPanel();
+        layout = new GridLayout(3, 1);
         globalSound.setLayout(layout);
         gameSounds.setLayout(layout);
         music.setLayout(layout);
 
         //globalSound components
+        JLabel globalSoundLabel = new JLabel("Global sound");
         JCheckBox globalSoundCheckBox = new JCheckBox();
+        globalSoundCheckBox.setText("On/Off");
         JSlider globalSoundSlider = new JSlider();
-        globalSoundSlider.setMinimum(0);
-        globalSoundSlider.setMaximum(100);
+        globalSoundSlider.setLabelTable(globalSoundSlider.createStandardLabels(25, 0));
+        globalSoundSlider.setPaintLabels(true);
+        globalSoundSlider.setExtent(SLIDER_EXTENT);
+        globalSoundSlider.setMinimum(SLIDER_MIN);
+        globalSoundSlider.setMaximum(SLIDER_MAX);
 
-        globalSoundCheckBox.addChangeListener((e) -> {
+        globalSoundCheckBox.addActionListener((e) -> {
             this.globalSound = !this.globalSound;
             globalSoundCheckBox.setEnabled(this.globalSound);
         });
         globalSoundSlider.addChangeListener((e) -> {
-            globalSoundValue = globalSoundSlider.getValue();
+            if (globalSoundSlider.getValueIsAdjusting())
+                globalSoundsValue = globalSoundSlider.getValue();
         });
+        globalSound.setBorder(new EtchedBorder());
+        globalSound.add(globalSoundLabel);
         globalSound.add(globalSoundCheckBox);
         globalSound.add(globalSoundSlider);
 
         //gameSound components
+        JLabel gameSoundsLabel = new JLabel("Game Sounds");
         JCheckBox gameSoundCheckBox = new JCheckBox();
         JSlider gameSoundSlider = new JSlider();
-        gameSoundSlider.setMinimum(0);
-        gameSoundSlider.setMaximum(100);
+        gameSoundSlider.setLabelTable(gameSoundSlider.createStandardLabels(25, 0));
+        gameSoundSlider.setPaintLabels(true);
+        gameSoundSlider.setExtent(SLIDER_EXTENT);
+        gameSoundSlider.setMinimum(SLIDER_MIN);
+        gameSoundSlider.setMaximum(SLIDER_MAX);
 
-        gameSoundCheckBox.addChangeListener((e) -> {
+        gameSoundCheckBox.addActionListener((e) -> {
             this.gameSounds = !this.gameSounds;
             gameSoundCheckBox.setEnabled(this.gameSounds);
         });
         gameSoundSlider.addChangeListener((e) -> {
-            gameSoundsValue = gameSoundSlider.getValue();
+            if (gameSoundSlider.getValueIsAdjusting())
+                gameSoundsValue = gameSoundSlider.getValue();
         });
+        gameSounds.setBorder(new EtchedBorder());
+        gameSounds.add(gameSoundsLabel);
         gameSounds.add(gameSoundCheckBox);
         gameSounds.add(gameSoundSlider);
 
         //music components
+        JLabel musicLabel = new JLabel("Music");
         JCheckBox musicCheckBox = new JCheckBox();
         JSlider musicSlider = new JSlider();
-        musicSlider.setMinimum(0);
-        musicSlider.setMaximum(100);
+        musicSlider.setLabelTable(musicSlider.createStandardLabels(25, 0));
+        musicSlider.setPaintLabels(true);
+        musicSlider.setExtent(SLIDER_EXTENT);
+        musicSlider.setMinimum(SLIDER_MIN);
+        musicSlider.setMaximum(SLIDER_MAX);
 
-        musicCheckBox.addChangeListener((e) -> {
+        musicCheckBox.addActionListener((e) -> {
             this.music = !this.music;
             musicCheckBox.setEnabled(this.music);
         });
         musicSlider.addChangeListener((e) -> {
-            musicValue = musicSlider.getValue();
+            if (!musicSlider.getValueIsAdjusting())
+                musicValue = musicSlider.getValue();
         });
+        music.setBorder(new EtchedBorder());
+        music.add(musicLabel);
         music.add(musicCheckBox);
         music.add(musicSlider);
 
@@ -114,6 +176,7 @@ public class Options extends Menu {
         sound.add(music);
         //End of sound tab
 
+        return sound;
     }
 
     @Override

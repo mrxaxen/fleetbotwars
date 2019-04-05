@@ -53,8 +53,8 @@ class NewGameMenu extends Menu{
     private JButton initBack() {
         JButton button = new JButton("Back");
         button.addActionListener((ActionEvent e) -> {
-            this.setVisible(false);
-            gui.getMenu("mainmenu").setVisible(true);
+//            this.setVisible(false);
+            gui.putMenuToFront("mainmenu");
         });
         return button;
     }

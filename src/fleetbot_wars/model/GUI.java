@@ -11,7 +11,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.HashMap;
 
-
 /**
  * @author WB
  */
@@ -19,6 +18,7 @@ public class GUI extends JFrame {
 
     private static GUI instance;
     private HashMap<String, Menu> menus = new HashMap<>();
+    private JLayeredPane layeredPane = this.getLayeredPane();
 
     public static GUI getInstance(Dimension size) {
         if (instance == null) {
@@ -36,44 +36,49 @@ public class GUI extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
         initMenus();
+        addComponentResizeListeners();
     }
 
     private void initMenus() {
-
         int width = this.getContentPane().getWidth();
         int height = this.getContentPane().getHeight();
 
-        JLayeredPane layeredPane = this.getLayeredPane();
-
         MainMenu mainMenu = new MainMenu(this);
         NewGameMenu newGameMenu = new NewGameMenu(this);
+        Options options = new Options(this);
 
         mainMenu.setBounds(0, 0, width, height);
         newGameMenu.setBounds(0, 0, width, height);
+        options.setBounds(0, 0, width, height);
 
         layeredPane.add(mainMenu, 0);
         layeredPane.add(newGameMenu, 1);
-
-        this.getContentPane().add(mainMenu);
-        this.getContentPane().add(newGameMenu);
+        layeredPane.add(options, 2);
 
         menus.put("mainmenu", mainMenu);
         menus.put("play", newGameMenu);
-//        menus.put("options", options);
+        menus.put("options", options);
+    }
 
+    //TODO: do something about the delay on fullscreen/windowed change
+    private void addComponentResizeListeners() {
         layeredPane.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-                menus.forEach((key,menu) -> {
-                    menu.setBounds(0,0, instance.getContentPane().getWidth(), instance.getContentPane().getHeight());
+                menus.forEach((key, menu) -> {
+                    menu.setBounds(0, 0, instance.getContentPane().getWidth(), instance.getContentPane().getHeight());
                 });
+                System.out.println("LP RESIZE CALLED");
             }
         });
     }
 
-    Menu getMenu(String name) {
-        return menus.get(name);
+    void putMenuToFront(String name) {
+        Menu menu = menus.get(name);
+        layeredPane.getComponent(0).setVisible(false);
+        menu.setVisible(true);
+        layeredPane.setComponentZOrder(menu, 0);
     }
 
 }
