@@ -10,12 +10,13 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.HashMap;
-import java.util.HashSet;
+
 
 /**
  * @author WB
  */
 public class GUI extends JFrame {
+
     private static GUI instance;
     private HashMap<String, Menu> menus = new HashMap<>();
 
