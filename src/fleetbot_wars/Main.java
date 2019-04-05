@@ -5,17 +5,20 @@
  */
 package fleetbot_wars;
 
+import fleetbot_wars.model.GUI;
+
+import java.awt.*;
+
 /**
  *
  * @author asjf86
  */
 public class Main {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         // TODO code application logic here
+        GUI gui = GUI.getInstance(new Dimension(600, 600));
+        gui.setVisible(true);
     }
     
 }
