@@ -7,9 +7,7 @@ package fleetbot_wars.model;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  *
@@ -28,6 +26,7 @@ public abstract class Menu extends JPanel {
         buttons = new ArrayList<>();
         initButtons();
         this.gui = gui;
+        this.setVisible(false);
     }
 
     protected abstract void initButtons();
@@ -35,7 +34,7 @@ public abstract class Menu extends JPanel {
     protected JButton initOptions() {
         JButton button = new JButton("Options");
         button.addActionListener(e -> {
-//            show options
+            gui.putMenuToFront("options");
         });
         return button;
     }

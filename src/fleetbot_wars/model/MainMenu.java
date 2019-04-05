@@ -19,6 +19,7 @@ public class MainMenu extends Menu {
     MainMenu(GUI gui) {
         super(gui);
         initLayout();
+        this.setVisible(true);
     }
 
     private void initLayout() {
@@ -38,8 +39,9 @@ public class MainMenu extends Menu {
     private JButton initPlay() {
         JButton button = new JButton("New Game");
         button.addActionListener((ActionEvent e) -> {
-            this.setVisible(false);
-            gui.getMenu("play").setVisible(true);
+//            this.setVisible(false);
+//            gui.getMenu("play").setVisible(true);
+            gui.putMenuToFront("play");
         });
         return button;
     }
