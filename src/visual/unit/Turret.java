@@ -21,6 +21,8 @@ public class Turret extends Controllable {
      */
     public Turret(Point coords, int team) {
         super(coords, "turret", null, 500, 0, 1, 10, 5, 1, 3, team);
+        this.width = 2;
+        this.height = 2;
     }
     
     @Override

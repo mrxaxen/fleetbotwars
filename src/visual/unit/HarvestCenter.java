@@ -20,6 +20,8 @@ public class HarvestCenter extends Controllable {
      */
     public HarvestCenter(Point coords, int team) {
         super(coords, "harvestcenter", null, 500, 0, 0, 0, 1, 1, 0, team);
+        this.width = 3;
+        this.height = 2;
     }
     
     /**

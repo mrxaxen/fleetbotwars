@@ -20,6 +20,8 @@ public class StoneMine extends Mine {
      */
     public StoneMine(Point coords, int team) {
         super(coords, "stonemine", null, 500, team);
+        this.width = 3;
+        this.height = 2;
     }
     
     /**

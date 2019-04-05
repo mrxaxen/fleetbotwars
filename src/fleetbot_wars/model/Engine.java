@@ -41,8 +41,20 @@ public class Engine
     public void move(Controllable cont, Point dest) {
         //distance, availibility, blocked path, speed
         //stop on collision
-        ArrayList<Point> pathPoints = path(cont.getReferenceCoords(), dest);
-        //ITERATE ON PATH POINTS STEP BY STEP
+        Ground destGround = map.groundAt(dest);
+        if (!destGround.isOccupied()) {
+            ArrayList<Point> pathPoints = path(cont.getReferenceCoords(), dest);
+            pathPoints.add(dest);
+            //ITERATE ON PATH POINTS STEP BY STEP
+        }        
+    }
+    
+    /**
+     * given Controllable stops moving
+     * @param cont 
+     */
+    public void stopMove(Controllable cont) {
+        
     }
     
     /**
@@ -62,6 +74,14 @@ public class Engine
                 move(atkr, tar.getReferenceCoords());
             }
         }
+    }
+    
+    /**
+     * given Controllable stops attacking
+     * @param cont 
+     */
+    public void stopAttack(Controllable cont) {
+        
     }
     
     ///// private helper methods
@@ -96,7 +116,7 @@ public class Engine
     }
     
     /**
-     * returns the Points of a path bewteen Points a and b
+     * returns the Points of a path bewteen Points a and b (a and b not included)
      * @param a: first point (start)
      * @param b: last point (end)
      * @return 

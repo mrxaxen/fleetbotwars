@@ -21,6 +21,8 @@ public class Farm extends Controllable {
      */
     public Farm(Point coords, int team) {
         super(coords, "farm", null, 500, 0, 0, 0, 5, 1, 0, team);
+        this.width = 3;
+        this.height = 2;
     }
     
     /**

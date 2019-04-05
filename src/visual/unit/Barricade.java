@@ -21,6 +21,8 @@ public class Barricade extends Controllable {
      */
     public Barricade(Point coords, int team) {
         super(coords, "barricade", null, 500, 0, 0, 0, 5, 1, 0, team);
+        this.width = 5;
+        this.height = 1;
     }
     
 }

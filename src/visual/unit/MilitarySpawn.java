@@ -20,6 +20,8 @@ public class MilitarySpawn extends Controllable {
      */
     public MilitarySpawn(Point coords, int team) {
         super(coords, "militaryspawn", null, 500, 0, 0, 0, 1, 1, 0, team);
+        this.width = 3;
+        this.height = 2;
     }
     
     /**

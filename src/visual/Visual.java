@@ -19,7 +19,8 @@ public class Visual {
     private ArrayList<Point> coordsArray;
     protected String type;
     private Image model; //[!]
-    protected int width, height;
+    protected int width = 1;
+    protected int height = 1;
 
     /**
      * create Visual
@@ -86,9 +87,6 @@ public class Visual {
      */
     public Point distanceFromPoint(Point p) {
         //PLACEHOLDER
-        //return (distance on x axis, distance on y axis)
-        //@Laci, legyszi igy ket reszben add vissza, mert kulon hasznalom 
-        //az x es y komponenset a tavolsagnak. koszi!
         return null;
     }
     

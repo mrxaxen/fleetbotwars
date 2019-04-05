@@ -20,6 +20,8 @@ public class GoldMine extends Mine {
      */
     public GoldMine(Point coords, int team) {
         super(coords, "goldmine", null, 500, team);
+        this.width = 3;
+        this.height = 2;
     }
     
     /**

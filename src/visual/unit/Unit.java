@@ -5,6 +5,7 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.Map;
 import java.awt.Image;
 import java.awt.Point;
 import visual.Visual;
@@ -34,6 +35,14 @@ public class Unit extends Visual {
      */
     public void deathEvent() {
         //
+    }
+    
+    /**
+     * removes references to this Unit from given Map (fleetbot map)
+     * @param map
+     */
+    public void cleanUp(Map map) {
+        
     }
     
     /**
