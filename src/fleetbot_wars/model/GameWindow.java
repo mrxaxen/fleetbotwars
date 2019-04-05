@@ -5,11 +5,15 @@
  */
 package fleetbot_wars.model;
 
+import javax.swing.*;
+import java.awt.*;
+
 /**
  *
  * @author WB
  */
 public class GameWindow
 {
-    
+
+
 }

@@ -5,11 +5,68 @@
  */
 package fleetbot_wars.model;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+
 /**
  *
- * @author WB
+ * @author EG
  */
-public class NewGameMenu
-{
-    
+class NewGameMenu extends Menu{
+
+    NewGameMenu(GUI gui) {
+        super(gui);
+        initLayout();
+    }
+
+    private void initLayout() {
+        buttons.forEach((button) -> {
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = BUTTON_INSET;
+            gbc.fill = GridBagConstraints.BOTH;
+            gbc.anchor = GridBagConstraints.CENTER;
+            gbc.gridy = GridBagConstraints.RELATIVE;
+            gbc.gridx = 0;
+            gbc.weightx = 1;
+            gbc.gridwidth = GridBagConstraints.RELATIVE;
+            this.add(button, gbc);
+        });
+    }
+
+    private JButton initCreate() {
+        JButton button = new JButton("Create");
+        button.addActionListener((ActionEvent e) -> {
+//            create lobby
+        });
+        return button;
+    }
+
+    private JButton initJoin() {
+        JButton button = new JButton("Join");
+        button.addActionListener((ActionEvent e) -> {
+//            Join lobby at ip
+        });
+        return button;
+    }
+
+    private JButton initBack() {
+        JButton button = new JButton("Back");
+        button.addActionListener((ActionEvent e) -> {
+            this.setVisible(false);
+            gui.getMenu("mainmenu").setVisible(true);
+        });
+        return button;
+    }
+
+    @Override
+    protected void initButtons() {
+        buttons.add(initCreate());
+        buttons.add(initJoin());
+        buttons.add(initBack());
+        buttons.forEach((button) -> {
+            button.setMinimumSize(DEFAULT_BUTTON_SIZE);
+            button.setPreferredSize(PREFERRED_BUTTON_SIZE);
+        });
+    }
 }

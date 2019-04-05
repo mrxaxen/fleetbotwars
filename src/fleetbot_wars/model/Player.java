@@ -6,7 +6,6 @@
 package fleetbot_wars.model;
 
 import java.util.ArrayList;
-import visual.unit.Controllable;
 
 /**
  *
