@@ -6,9 +6,10 @@
 package visual.ground;
 
 import java.awt.Image;
-import java.awt.Point;
 import visual.Visual;
 import visual.unit.Unit;
+import visual.Visual;
+import java.awt.Point;
 
 /**
  *
@@ -41,8 +42,8 @@ public class Ground extends Visual {
 
     /**
      * 
-     * @return the reference to the Unit, 
-     * that occupies the current ground
+     * @return the reference to the Unit Object, 
+     * who owns/occupies the current ground
      */
     public Unit getOwnerReference(){
         return ownerRefernce;
