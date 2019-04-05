@@ -81,8 +81,8 @@ public class Engine
     /**
      * returns whether target Unit is in attacker Controllable's line of sight.
      * incorrect in some cases (only checks reference coordinates)
-     * @param atkr
-     * @param tar
+     * @param atkr: attacker
+     * @param tar: target
      * @return 
      */
     private boolean losCheck(Controllable atkr, Unit tar) {
@@ -97,8 +97,8 @@ public class Engine
     
     /**
      * returns the Points of a path bewteen Points a and b
-     * @param a
-     * @param b
+     * @param a: first point (start)
+     * @param b: last point (end)
      * @return 
      */
     private ArrayList<Point> path(Point a, Point b) {

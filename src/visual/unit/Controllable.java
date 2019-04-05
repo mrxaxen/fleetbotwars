@@ -63,7 +63,9 @@ public abstract class Controllable extends Unit {
      * @param tar 
      */
     public void defHit(Controllable tar) {
-        this.hit(tar);
+        if (this.isValidTarget(tar)) {            
+            this.hit(tar);
+        }
     }
     
     /**
