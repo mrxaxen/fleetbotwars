@@ -23,9 +23,11 @@ public class Medic extends Controllable {
         super(coords, "medic", null, 100, 1, 1, -10, 5, 1, 1, team);
     }
     
-    //check if overrides the one in Controllable!!!!
-    private boolean isValidTarget(Unit tar) { 
-        return tar instanceof Controllable && ((Controllable)tar).team == this.team; //friendly
+    @Override
+    public boolean isValidTarget(Unit target) {
+        return target instanceof Controllable
+               && this.team == ((Controllable)target).team;
+        //ADDITIONAL RESTRICTION? (exclude buildings)
     }
     
 }

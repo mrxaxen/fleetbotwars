@@ -21,10 +21,11 @@ public class GUI
     
     public Unit select(Point locationClicked) { //assumes existence of method that returns a Point based on mouse location (on click)
         Ground groundClicked = engine.getMap().groundAt(locationClicked);
-        //isOccupied, getOwnerReference
         if (groundClicked.isOccupied()) {
             return groundClicked.getOwnerReference();
         }
         return null;
     }
+    
+    
 }

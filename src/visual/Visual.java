@@ -15,11 +15,11 @@ import java.util.ArrayList;
  */
 public class Visual {
     
-    private Point referenceCoords;
+    protected Point referenceCoords;
     private ArrayList<Point> coordsArray;
-    private String type;
+    protected String type;
     private Image model; //[!]
-    private int width, height;
+    protected int width, height;
 
     /**
      * create Visual
@@ -68,4 +68,42 @@ public class Visual {
     public void draw() {
         //
     }
+    
+    /**
+     * tells whether given Point is inside the Visual's area
+     * @param p
+     * @return 
+     */
+    public boolean containsPoint(Point p) {
+        //PLACEHOLDER
+        return true;
+    }
+    
+    /**
+     * returns distance between given Point and closest Point of Visual's area
+     * @param p
+     * @return 
+     */
+    public Point distanceFromPoint(Point p) {
+        //PLACEHOLDER
+        //return (distance on x axis, distance on y axis)
+        //@Laci, legyszi igy ket reszben add vissza, mert kulon hasznalom 
+        //az x es y komponenset a tavolsagnak. koszi!
+        return null;
+    }
+    
+    ///// getters, setters
+    
+    public Point getReferenceCoords() {
+        return referenceCoords;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+        
 }

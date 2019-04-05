@@ -13,17 +13,15 @@ import java.awt.Rectangle;
  *
  * @author asjf86
  */
-public class Controllable extends Unit {
+public abstract class Controllable extends Unit {
 
     private int mvmtSpd, atkSpd, dmg, maxLvl, currLvl, rng;
     protected int team;
     private Rectangle rngRect;
 
     /**
-     * create Controllable at (x,y) coordinates, for 'team' team
-     *
-     * @param x
-     * @param y
+     * create Controllable at (x,y) coordinates, for 'team' team     *
+     * @param coords
      * @param type
      * @param model
      * @param hp
@@ -45,18 +43,15 @@ public class Controllable extends Unit {
         this.currLvl = lvl;
         this.rng = rng;
         this.team = team;
-        //always created as lvl 1
-        this.rngRect = new Rectangle(this.rect.x - rng, this.rect.y - rng,
-                                     this.rect.width + 2 * rng, this.rect.height + 2 * rng);
+        this.rngRect = new Rectangle(this.referenceCoords.x - rng, this.referenceCoords.y - rng,
+                                     this.width + 2 * rng, this.height + 2 * rng);
     }
 
     /**
-     * hit target Unit (offensive). target will defend itself if able to
-     *
+     * hit target Unit (offensive). target will defend itself if able to     *
      * @param tar: target Unit
      */
     public void offHit(Unit tar) {
-        //validate target HIGHER UP(isValidTarget)
         this.hit(tar);
         if (tar instanceof Controllable && ((Controllable)tar).dmg > 0) {
             ((Controllable)tar).defHit(this);
@@ -73,15 +68,14 @@ public class Controllable extends Unit {
     
     /**
      * returns whether the targeted Unit is valid target for attacking Controllable
-     * @param tar
+     * @param target
      * @return 
      */
-    private boolean isValidTarget(Unit tar) { //most used version: mobile Controllable attacks
-        return tar instanceof Controllable && ((Controllable)tar).team != this.team;
-    }
-
+    //class made abstract, therefore this method can be overridden in specific Controllables
+    //only necessary to do so where Controllable has to attack
+    public boolean isValidTarget(Unit target) { return false; }
+    
     private void hit(Unit tar) {
-        //MOVE ATKSPD MODIF HIGHER UP?????????????????
         tar.currHp -= this.dmg * atkSpd; 
         if (tar.currHp <= 0) {
             tar.deathEvent();
@@ -90,20 +84,18 @@ public class Controllable extends Unit {
 
     /**
      * move to target location (steps in direction of greater distance)     *
-     * @param x
-     * @param y
+     * @param xdist: distance on x axis
+     * @param ydist: distance on y axis
+     * @param xdir: direction along x axis (which way to move)
+     * @param ydir: direction along y axis (which way to move)
      */
-    public void step(int x, int y) {
-        //loop, check ground availibility, add mvmtSpd factor (HIGHER UP)    
-        int xdist = x - this.x; int xdir = (int) Math.signum(xdist);
-        int ydist = y - this.y; int ydir = (int) Math.signum(ydist);
-        
+    public void step(int xdist, int ydist, int xdir, int ydir) {                
         if (xdist != 0 || ydist != 0) {
             if (xdist <= ydist) {
-                this.x += xdir;
+                this.referenceCoords.x += xdir;
                 xdist -= xdir;
             } else {
-                this.y += ydir;
+                this.referenceCoords.y += ydir;
                 ydist -= ydir;
             }
         }
@@ -123,12 +115,28 @@ public class Controllable extends Unit {
             this.dmg *= (1 + 1 / currLvl);
             //this.rng *= currLvl;
         }
+    }   
+    
+    public boolean isBuilding() {
+        String t = this.type;
+        return t.equals("workerspawn") || t.equals("militaryspawn")
+               || t.equals("farm") || t.equals("harvestcenter") 
+               || t.equals("goldmine") || t.equals("stonemine")
+               || t.equals("turret") || t.equals("barricade");
+    }
+    
+    public boolean isHuman() {
+        return !isBuilding();
     }
     
     ///// getters, setters
 
     public Rectangle getRngRect() {
         return rngRect;
+    }
+
+    public int getTeam() {
+        return team;
     }
     
 }

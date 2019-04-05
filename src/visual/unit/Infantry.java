@@ -24,4 +24,10 @@ public class Infantry extends Controllable {
         super(coords, "infantry", null, 100, 1, 1, 10, 5, 1, 1, team);
     }
     
+    @Override
+    public boolean isValidTarget(Unit target) {
+        return target instanceof Controllable
+               && this.team != ((Controllable)target).team;
+    }
+    
 }

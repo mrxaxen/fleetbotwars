@@ -41,8 +41,8 @@ public class Ground extends Visual {
 
     /**
      * 
-     * @return the reference to the Player Object, 
-     * who owns/occupies the current ground
+     * @return the reference to the Unit, 
+     * that occupies the current ground
      */
     public Unit getOwnerReference(){
         return ownerRefernce;

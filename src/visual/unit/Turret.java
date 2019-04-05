@@ -23,4 +23,10 @@ public class Turret extends Controllable {
         super(coords, "turret", null, 500, 0, 1, 10, 5, 1, 3, team);
     }
     
+    @Override
+    public boolean isValidTarget(Unit target) {
+        return target instanceof Controllable
+               && this.team != ((Controllable)target).team;
+    }
+    
 }

@@ -23,9 +23,10 @@ public class Lumberjack extends Controllable {
     {
         super(coords, "lumberjack", null, 100, 1, 1, 10, 1, 1, 1, team);
     }
-    
-    private boolean isValidTarget(Unit tar) { 
-        return tar instanceof Tree; //tree
+        
+    @Override
+    public boolean isValidTarget(Unit target) {
+        return target instanceof Tree;
     }
     
 }

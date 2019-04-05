@@ -15,16 +15,19 @@ public class Destroyer extends Controllable {
     
     /**
      * create Destroyer at (x,y) coordinates, for 'team' team
+     * @param coords
      * @param team 
      */
     public Destroyer(Point coords, int team)
     {
-        super(coords, "destroyer", null, 100, 1, 1, 10, 5, 1, 1, team);
+        super(coords, "destroyer", null, 100, 1, 1, 50, 5, 1, 1, team);
     }
     
-    private boolean isValidTarget(Unit tar) { 
-        return tar instanceof Controllable && ((Controllable)tar).team != this.team   //building
-                && true/*BUILDING CHECK!!*/;
+    @Override
+    public boolean isValidTarget(Unit target) { 
+        return target instanceof Controllable
+               && this.team != ((Controllable)target).team
+               && ((Controllable)target).isBuilding();
     }
     
 }
