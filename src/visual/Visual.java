@@ -18,11 +18,11 @@ import java.util.ArrayList;
  */
 public class Visual {
 
-    private Point referenceCoords;
+    protected Point referenceCoords;
     private ArrayList<Point> coordsArray;
-    private String type;
+    protected String type;
     private Image model; // [!]
-    private int width, height;
+    protected int width, height;
     private Rectangle rectangle;
     private int defaultDimX = 10;
     private int defaultDimY = 10;
@@ -44,6 +44,8 @@ public class Visual {
         this.model = model;
         this.rectangle = new Rectangle(referenceCoords, new Dimension(this.defaultDimX, this.defaultDimY));
         this.centerCoords = new Point(rectangle.getCenterX(), rectangle.getCenterY());
+        this.width = defaultDimX;
+        this.height = defaultDimY;
 
         this.coordsArray = new ArrayList<Point>();
         coordsArray = fillOccupiedCoords(referenceCoords, defaultDimX, defaultDimY);
@@ -66,6 +68,8 @@ public class Visual {
         this.model = model;
         this.rectangle = new Rectangle(referenceCoords, new Dimensions(width, heigth));
         this.centerCoords = new Point(this.rectangle.getCenterX(), this.rectangle.getCenterY());
+        this.width = width;
+        this.height = height;
 
         this.coordsArray = new ArrayList<Point>();
         coordsArray = fillOccupiedCoords(referenceCoords, width, height);
@@ -110,6 +114,15 @@ public class Visual {
         return (int) (Point2D.distance(coordsFrom.x, coordsFrom.y, centerCoords.x, centerCoords.y));
     }
 
+    /**
+     * Calculates the difference between the given coordinates and the current
+     * Visual's coordinates as signed value. To achive this the calculation expect to receive the
+     * center coordinates as parameter and uses the current Visual objects center
+     * coordinas as well.
+     * 
+     * @param coordsFrom Center coordinates of the corresponding Visual Object.
+     * @return The signed difference between the two center coordinates as Point Object.
+     */
     public Point getDirectionFrom(Point coordsFrom) {
         int x = coordsFrom.x - centerCoords.x;
         int y = coordsFrom.y - centerCoords.y;
