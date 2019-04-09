@@ -36,15 +36,7 @@ public class Unit extends Visual {
     public void deathEvent() {
         //
     }
-    
-    /**
-     * removes references to this Unit from given Map (fleetbot map)
-     * @param map
-     */
-    public void cleanUp(Map map) {
         
-    }
-    
     /**
      * display properties and actions of Unit
      */

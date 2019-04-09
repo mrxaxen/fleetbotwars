@@ -89,7 +89,7 @@ public class Visual {
      * graphic display of Visual
      */
     public void draw() {
-        //
+        //PLACEHOLDER
     }
 
     /**
@@ -176,5 +176,9 @@ public class Visual {
      */
     public ArrayList<Point> getCoordsArray() {
         return coordsArray;
+    }
+    
+    public void setReferenceCoords(Point referenceCoords) {
+        this.referenceCoords = referenceCoords;
     }
 }

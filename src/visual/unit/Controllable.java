@@ -84,24 +84,7 @@ public abstract class Controllable extends Unit {
         }
     }
 
-    /**
-     * move to target location (steps in direction of greater distance)     *
-     * @param xdist: distance on x axis
-     * @param ydist: distance on y axis
-     * @param xdir: direction along x axis (which way to move)
-     * @param ydir: direction along y axis (which way to move)
-     */
-    public void step(int xdist, int ydist, int xdir, int ydir) {                
-        if (xdist != 0 || ydist != 0) {
-            if (xdist <= ydist) {
-                this.referenceCoords.x += xdir;
-                xdist -= xdir;
-            } else {
-                this.referenceCoords.y += ydir;
-                ydist -= ydir;
-            }
-        }
-    }
+    //step moved up to Engine
 
     /**
      * increase Unit level

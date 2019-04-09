@@ -18,18 +18,18 @@ import java.awt.Point;
 public class Ground extends Visual {
     
     protected boolean occupied = false;
-    private Unit ownerRefernce;
+    private Unit ownerReference;
 
     /**
      * create Ground
      * @param coords 
      * @param type
      * @param model 
-     * @param ownerRefernce
+     * @param ownerReference
      */
-    public Ground(Point coords, String type, Image model, Unit ownerRefernce) {
+    public Ground(Point coords, String type, Image model, Unit ownerReference) {
         super(coords, type, model);
-        this.ownerRefernce = ownerRefernce;
+        this.ownerReference = ownerReference;
     }  
 
     /**
@@ -37,7 +37,7 @@ public class Ground extends Visual {
      * @return true if occupied, false else
      */
     public boolean isOccupied(){
-        return ownerRefernce.equals(null);
+        return ownerReference != null;
     }
 
     /**
@@ -46,6 +46,11 @@ public class Ground extends Visual {
      * who owns/occupies the current ground
      */
     public Unit getOwnerReference(){
-        return ownerRefernce;
+        return ownerReference;
     }
+
+    public void setOwnerReference(Unit ownerReference) {
+        this.ownerReference = ownerReference;
+    }
+    
 }
