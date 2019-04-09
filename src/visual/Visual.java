@@ -43,7 +43,7 @@ public class Visual {
         this.type = type;
         this.model = model;
         this.rectangle = new Rectangle(referenceCoords, new Dimension(this.defaultDimX, this.defaultDimY));
-        this.centerCoords = new Point(rectangle.getCenterX(), rectangle.getCenterY());
+        this.centerCoords = new Point((int)rectangle.getCenterX(), (int)rectangle.getCenterY());
         this.width = defaultDimX;
         this.height = defaultDimY;
 
@@ -66,8 +66,8 @@ public class Visual {
         this.referenceCoords = referenceCoords;
         this.type = type;
         this.model = model;
-        this.rectangle = new Rectangle(referenceCoords, new Dimensions(width, heigth));
-        this.centerCoords = new Point(this.rectangle.getCenterX(), this.rectangle.getCenterY());
+        this.rectangle = new Rectangle(referenceCoords, new Dimension(width, height));
+        this.centerCoords = new Point((int)this.rectangle.getCenterX(), (int)this.rectangle.getCenterY());
         this.width = width;
         this.height = height;
 

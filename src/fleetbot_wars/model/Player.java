@@ -18,7 +18,7 @@ public class Player {
     // 8 - Lumberjack, 9 - Miner, 10 - Builder,
     // 11 - Infantry, 12 - Cavalry, 13 - Ranger, 14 - Destroyer, 15 - Medic
 
-    private Map resources;
+    private HashMap resources;
     private ArrayList<Controllable> playerUnits;
     private String playerName;
     private int playerNumber;
@@ -49,7 +49,7 @@ public class Player {
      * @param amount       The amount by the given resource needs to be DECREASED.
      */
     public void decreaseResource(String resourceName, int amount) {
-        int currResource = resources.get(resourceName);
+        int currResource = (int)resources.get(resourceName);
         resources.put(resourceName, currResource - amount);
     }
 
@@ -61,7 +61,7 @@ public class Player {
      * @param amount       The amount by the given resource needs to be INCREASED.
      */
     public void increaseResource(String resourceName, int amount) {
-        int currResource = resources.get(resourceName);
+        int currResource = (int)resources.get(resourceName);
         resources.put(resourceName, currResource + amount);
     }
 
@@ -94,15 +94,15 @@ public class Player {
      * @param name The name of the requested resource.
      * @return The amount of the requested resource.
      */
-    public Integer getResourceByName(String name) {
-        return resources.get(name);
+    public int getResourceByName(String name) {
+        return (int)resources.get(name);
     }
 
     /**
      * 
      * @return All the available resources as raw data.
      */
-    public Map<String, Integer> getResourceMap() {
+    public HashMap<String, Integer> getResourceMap() {
         return resources;
     }
 
