@@ -27,7 +27,7 @@ public class Destroyer extends Controllable {
     public boolean isValidTarget(Unit target) { 
         return target instanceof Controllable
                && this.team != ((Controllable)target).team
-               && ((Controllable)target).isBuilding();
+               && ((Controllable)target).isBuildingType();
     }
     
 }

@@ -18,6 +18,9 @@ public abstract class Controllable extends Unit {
     private int mvmtSpd, atkSpd, dmg, maxLvl, currLvl, rng;
     protected int team;
     private Rectangle rngRect;
+    private boolean moving = false;
+    private boolean attacking = false;
+    private boolean building = false;
 
     /**
      * create Controllable at (x,y) coordinates, for 'team' team     *
@@ -47,26 +50,31 @@ public abstract class Controllable extends Unit {
                                      this.width + 2 * rng, this.height + 2 * rng);
     }
 
+    
     /**
      * hit target Unit (offensive). target will defend itself if able to     *
      * @param tar: target Unit
      */
+    /*
     public void offHit(Unit tar) {
         this.hit(tar);
         if (tar instanceof Controllable && ((Controllable)tar).dmg > 0) {
             ((Controllable)tar).defHit(this);
         }
     }
+    */
     
     /**
      * hit target Controllable (defensive) after being hit (offensively) by target
      * @param tar 
      */
+    /*
     public void defHit(Controllable tar) {
         if (this.isValidTarget(tar)) {            
             this.hit(tar);
         }
     }
+    */
     
     /**
      * returns whether the targeted Unit is valid target for attacking Controllable
@@ -77,11 +85,11 @@ public abstract class Controllable extends Unit {
     //only necessary to do so where Controllable has to attack
     public boolean isValidTarget(Unit target) { return false; }
     
-    private void hit(Unit tar) {
+    public void hit(Unit tar) {
         tar.currHp -= this.dmg * atkSpd; 
-        if (tar.currHp <= 0) {
+        /*if (tar.currHp <= 0) {
             tar.deathEvent();
-        }
+        }*/
     }
 
     //step moved up to Engine
@@ -102,7 +110,7 @@ public abstract class Controllable extends Unit {
         }
     }   
     
-    public boolean isBuilding() {
+    public boolean isBuildingType() {
         String t = this.type;
         return t.equals("workerspawn") || t.equals("militaryspawn")
                || t.equals("farm") || t.equals("harvestcenter") 
@@ -111,7 +119,7 @@ public abstract class Controllable extends Unit {
     }
     
     public boolean isHuman() {
-        return !isBuilding();
+        return !isBuildingType();
     }
     
     ///// getters, setters
@@ -122,6 +130,34 @@ public abstract class Controllable extends Unit {
 
     public int getTeam() {
         return team;
+    }
+
+    public int getDmg() {
+        return dmg;
+    }
+
+    public boolean isMoving() {
+        return moving;
+    }
+
+    public boolean isAttacking() {
+        return attacking;
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
+    }
+
+    public void setAttacking(boolean attacking) {
+        this.attacking = attacking;
+    }
+
+    public boolean isBuilding() {
+        return building;
+    }
+
+    public void setBuilding(boolean building) {
+        this.building = building;
     }
     
 }

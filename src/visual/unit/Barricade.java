@@ -24,5 +24,14 @@ public class Barricade extends Controllable {
         this.width = 5;
         this.height = 1;
     }
-    
+   
+    /**
+     * rotates Barricade by 90° by swapping its width and height
+     */
+    public void rotate() {
+        int currWidth = this.width;
+        int currHeight = this.height;
+        this.width = currHeight;
+        this.height = currWidth;
+    }
 }

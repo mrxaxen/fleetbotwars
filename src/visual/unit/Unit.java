@@ -43,4 +43,11 @@ public class Unit extends Visual {
     public void inspect() {
         //
     }
+    
+    ///// getters, setters
+
+    public int getCurrHp() {
+        return currHp;
+    }
+    
 }

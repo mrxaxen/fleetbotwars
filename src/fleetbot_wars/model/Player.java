@@ -73,7 +73,18 @@ public class Player {
     public void addControllable(Controllable unit) {
         playerUnits.add(unit);
     }
+    
+    /**
+     * Removing one unit to the Players unit Collection.
+     * 
+     * @param unit The Unit Object which needs to be added.
+     */
+    public void remControllable(Controllable unit) {
+        playerUnits.remove(unit);
+    }
 
+    ///// getters, setters
+    
     /**
      * @return the playerName
      */

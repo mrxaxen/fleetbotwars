@@ -7,7 +7,6 @@ package fleetbot_wars.model;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import visual.ground.Ground;
 import visual.unit.*;
@@ -31,41 +30,21 @@ public class Engine
         this.players = players;
     }
     
-    ///// public methods
-    
-    /**
-     * given Controllable attempts to move to given destination
-     * @param cont: moving Controllable
-     * @param dest: destination on Map
-     */
-    //DONT SHOW BUTTON IS CANNOT MOVE
-    public void yeet(Controllable cont, Point dest) {
-        //SPEED FACTOR
-        Ground destGround = map.groundAt(dest);
-        if (!destGround.isOccupied()) { //availability check (valid target location)
-            LinkedList<Point> pathPoints = path(cont.getReferenceCoords(), dest);
-            pathPoints.add(dest);
-            //ITERATION BASICALLY INSTANT!!
-            for (Point c : pathPoints) {
-                if (!map.groundAt(c).isOccupied()) { //collision check (blocked path)
-                    changeLoc(cont, c);
-                } else {
-                    break;
-                }
-            }
-        }        
-    }
-    
+    ///// main methods
+            
     /**
      * moves given Controllable along given path (just one step)
      * @param cont
      * @param path 
      */
-    //IF EMPTY HIGHER UP
-    public void move(Controllable cont, LinkedList<Point> path) {
+    public void step(Controllable cont, LinkedList<Point> path) {
         Point c = path.pop();
         if (!map.groundAt(c).isOccupied()) { //collision check (blocked path)
             changeLoc(cont, c);
+        } else {
+            cont.setMoving(false); //hit an obstacle
+            cont.setAttacking(false); //hit an obstacle while moving into range
+            cont.setBuilding(false); //hit an obstacle while 
         }    
     }
     
@@ -83,20 +62,18 @@ public class Engine
      * @param atkr: attacker
      * @param tar: target
      */
-    //DONT SHOW BUTTON IF CANNOT ATTACK
-    //LOOP (in GUI?)
     public void attack(Controllable atkr, Unit tar) {
         //REPEAT UNTIL DEATH/STOP COMMAND (in GUI?)
         //MOVE WITHIN: AUTO FOLLOW
         if(atkr.isValidTarget(tar)) { //target is valid
             if (inRange(atkr, tar)) { //target is in range
                 if (losCheck(atkr, tar)) { //target is in line of sight
-                    atkr.offHit(tar);
+                    atkr.hit(tar);
                 }
             } else {
                 //GOES POINT BLANK, SHOULD ONLY GET IN RANGE
                 if (!(atkr instanceof Turret)) {
-                    move(atkr, path(atkr.getReferenceCoords(), tar.getReferenceCoords()));
+                    step(atkr, path(atkr.getReferenceCoords(), tar.getReferenceCoords()));
                 }
             }
         }
@@ -116,24 +93,24 @@ public class Engine
      * @param builder
      * @param buildingRefCoords
      * @param buildingType 
-     * @param team 
      */
-    //DISABLE BUTTON IF NOT ENOUGH RESOURCES
-    //AVAILABITILY CHECK, HIGHLIGHT INTO DIFF: METHOD?
-    //no need to check for Builder: action only accessible if it exists
-    public void build(Controllable builder, Point buildingRefCoords, String buildingType, int team) {
+    public void build(Controllable builder, Point buildingRefCoords, String buildingType) {
         if (!map.groundAt(buildingRefCoords).isOccupied()) {
             //MOUSEOVER CHECK WOULD BE NICE
-            if (areaAvailable(buildingRefCoords, buildingType, team)) {
+            if (areaAvailable(buildingRefCoords, buildingType, builder.getTeam())) {
                 //HIGHLIGHT: VALID
                 //move Builder to LEFT of target location
                 //(in range to build, building won't appear on top of it)
                 Point builderLoc = new Point(buildingRefCoords.x - 1, buildingRefCoords.y);
-                move(builder, path(builder.getReferenceCoords(), buildingRefCoords));
-                //BARRICADE SHOULD BE ABLE TO BE TOTATED 90°
-                Controllable cont = ghostBuilding(buildingRefCoords, buildingType, team);
-                for (Point c : cont.getCoordsArray()) {
-                    map.groundAt(c).setOwnerReference(cont);
+                if (!builder.getReferenceCoords().equals(builderLoc)) {
+                    step(builder, path(builder.getReferenceCoords(), builderLoc));                    
+                } else {
+                    //BARRICADE SHOULD BE ABLE TO BE TOTATED 90°
+                    Controllable cont = ghostBuilding(buildingRefCoords, buildingType, builder.getTeam());
+                    for (Point c : cont.getCoordsArray()) {
+                        map.groundAt(c).setOwnerReference(cont);
+                    }
+                    builder.setBuilding(false); //finished building
                 }
             } else {
                 //HIGHLIGHT: INVALID
@@ -143,7 +120,7 @@ public class Engine
         }
     }
     
-    ///// private helper methods
+    ///// helper methods
     
     /// move
     
@@ -153,7 +130,7 @@ public class Engine
      * @param b: last point (end)
      * @return 
      */
-    private LinkedList<Point> path(Point a, Point b) {
+    public LinkedList<Point> path(Point a, Point b) {
         int ax = a.x;   int ay = a.y;
         int bx = b.x;   int by = b.y;
         int xdist = bx - ax;    int xdir = (int) Math.signum(xdist);
@@ -194,7 +171,7 @@ public class Engine
      * @param target
      * @return 
      */
-    private boolean inRange(Controllable attacker, Unit target) {
+    public boolean inRange(Controllable attacker, Unit target) {
         Rectangle targetBodyRect = new Rectangle(target.getReferenceCoords().x, target.getReferenceCoords().y, target.getWidth(), target.getHeight());
         return attacker.getRngRect().intersects(targetBodyRect);      
     }
@@ -206,7 +183,7 @@ public class Engine
      * @param tar: target
      * @return 
      */
-    private boolean losCheck(Controllable atkr, Unit tar) {
+    public boolean losCheck(Controllable atkr, Unit tar) {
         LinkedList<Point> pathPoints = path(atkr.getReferenceCoords(), tar.getReferenceCoords());
         for (Point p : pathPoints) {
             if (!seeThrough(atkr, map.groundAt(p))) {
@@ -224,7 +201,23 @@ public class Engine
         return u instanceof Controllable 
                && ((Controllable)u).isHuman()
                && ((Controllable)u).getTeam() == cont.getTeam();
-    }   
+    }
+    
+    public void deathEvent(Unit u) {
+        //ADD DROPS
+        cleanUp(u);
+    }
+    
+    private void cleanUp(Unit u) {
+        for (Point c : u.getCoordsArray()) { //delete unit from the map
+            map.groundAt(c).setOwnerReference(null);
+        }
+        if (u instanceof Controllable) { //delete from Player (if Unit was COntrollable)
+            Controllable uCont = (Controllable)u;
+            int playerIndex = uCont.getTeam();
+            players[playerIndex].remControllable(uCont);            
+        }
+    }
     
     ///build
     
@@ -275,7 +268,7 @@ public class Engine
         }    
         return cont;
     }
-    
+            
     ///// getters, setters
 
     public Map getMap() {
