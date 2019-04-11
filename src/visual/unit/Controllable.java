@@ -20,13 +20,13 @@ public abstract class Controllable extends Unit {
     protected int team;
     private Rectangle rngRect;
     //action helpers:
-    private boolean moving = false;
+    //private boolean moving = false;
     private LinkedList<Point> currPath = new LinkedList<>();
-    private boolean attacking = false;
+    //private boolean attacking = false;
     private Unit currTar = null;
-    private boolean building = false;
+    //private boolean building = false;
     private Controllable ghostBuilding = null;
-    private Point builderTarLoc = null;
+    //private Point builderTarLoc = null;
 
     /**
      * create Controllable at (x,y) coordinates, for 'team' team     *
@@ -147,27 +147,15 @@ public abstract class Controllable extends Unit {
     }
 
     public boolean isMoving() {
-        return moving;
+        return !currPath.isEmpty();
     }
 
     public boolean isAttacking() {
-        return attacking;
+        return currTar != null;
     }
-
-    public void setMoving(boolean moving) {
-        this.moving = moving;
-    }
-
-    public void setAttacking(boolean attacking) {
-        this.attacking = attacking;
-    }
-
+    
     public boolean isBuilding() {
-        return building;
-    }
-
-    public void setBuilding(boolean building) {
-        this.building = building;
+        return ghostBuilding != null;
     }
 
     public LinkedList<Point> getCurrPath() {
@@ -195,11 +183,7 @@ public abstract class Controllable extends Unit {
     }
 
     public Point getBuilderTarLoc() {
-        return builderTarLoc;
-    }
-
-    public void setBuilderTarLoc(Point builderTarLoc) {
-        this.builderTarLoc = builderTarLoc;
+        return new Point(ghostBuilding.getReferenceCoords().x - 1, ghostBuilding.getReferenceCoords().y);
     }
     
 }

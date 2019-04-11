@@ -75,7 +75,6 @@ public class Engine
         if (!map.groundAt(tarLoc).isOccupied()) {
             LinkedList<Point> path = path(cont.getReferenceCoords(), tarLoc);
             path.add(tarLoc);
-            cont.setMoving(true);
             cont.setCurrPath(path);
         } else {
             //DISPLAY FAILURE?
@@ -88,7 +87,6 @@ public class Engine
      * @param cont 
      */
     public void stopMove(Controllable cont) {
-        cont.setMoving(false);
         cont.clearPath();
     }
     
@@ -173,7 +171,6 @@ public class Engine
     public void startAttack(Controllable atkr, Point tarLoc) {
         Unit tar = map.groundAt(tarLoc).getOwnerReference();
         if (atkr.isValidTarget(tar)) {
-            atkr.setAttacking(true);
             atkr.setCurrTar(tar);
             if (!inRange(atkr, tar) && !(atkr instanceof Turret)) {
                 startMove(atkr, tar.getReferenceCoords());
@@ -186,7 +183,6 @@ public class Engine
      * @param atkr 
      */
     public void stopAttack(Controllable atkr) {
-        atkr.setAttacking(false);
         atkr.setCurrTar(null);
         stopMove(atkr);
     }
@@ -298,9 +294,7 @@ public class Engine
             && areaAvailable(buildingRefCoords, buildingType, builder.getTeam())) { //area free
             Point builderTarLoc = new Point(buildingRefCoords.x - 1, buildingRefCoords.y);
             if (!map.groundAt(builderTarLoc).isOccupied()){ //builder target position free
-                builder.setBuilding(true);
                 builder.setGhostBuilding(ghostBuilding(buildingRefCoords, buildingType, builder.getTeam()));
-                builder.setBuilderTarLoc(builderTarLoc);
                 if (!builder.getReferenceCoords().equals(builderTarLoc)) {
                     startMove(builder, builderTarLoc);
                 }
@@ -313,9 +307,7 @@ public class Engine
      * @param builder 
      */
     public void stopBuild(Controllable builder) {
-        builder.setBuilding(false);
         builder.setGhostBuilding(null);
-        builder.setBuilderTarLoc(null);
         stopMove(builder);
     }
     
