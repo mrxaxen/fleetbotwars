@@ -5,7 +5,6 @@
  */
 package visual.unit;
 
-import fleetbot_wars.model.Map;
 import java.awt.Image;
 import java.awt.Point;
 import visual.Visual;
@@ -32,8 +31,9 @@ public class Unit extends Visual {
     
     /**
      * events upon death of Unit
+     * @param enemyTeam: team benefitting from Unit death (team that gets the drops)
      */
-    public void deathEvent() {
+    public void deathEvent(int enemyTeam) {
         //
     }
         
@@ -41,7 +41,7 @@ public class Unit extends Visual {
      * display properties and actions of Unit
      */
     public void inspect() {
-        //
+        //RETURN ACTIONSPANE, UNIT MATRIX??
     }
     
     ///// getters, setters

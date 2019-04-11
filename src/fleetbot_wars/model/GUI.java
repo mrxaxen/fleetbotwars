@@ -39,57 +39,41 @@ public class GUI
         return null;
     }
     
-    private void inspectUnit(Unit u) {
-        //DISPLAY UNIT INFO? ACTIONS
-        u.inspect();
+    
+    private void inspectOnClick() {
+        Point location = selectLocation();
+        engine.inspectUnit(location);
+    }    
+    
+    ///// unified update for actions
+    
+    private void actionUpdate() {
+        engine.actionIteration();
     }
     
-    ///// Controllable actions
+    ///// Controllable Actions
+        
+    /// MOVEMENT: display buttons only for mobile units
     
-    /// move
-    
-    //DONT SHOW BUTTON IF UNABLE TO MOVE
-    private void TEMP_moveOnclick(Controllable callerCont) { //who was inspected
-        //Controllable cont = (Controllable)selectedUnit;
-        Point dest = selectLocation();
-        LinkedList<Point> pathPoints = moveHelp_Path(callerCont, dest);
-        callerCont.setMoving(true);
-        if (callerCont.isMoving()) {
-            TEMP_move(callerCont, pathPoints);
-        }
+    private void startMoveButtonClick() {
+        Point tarLoc = selectLocation();
+        engine.startMove(((Controllable)engine.getInspectedUnit()), tarLoc); //will only ever be called this way while Controllable is selected
     }
     
-    /**
-     * given Controllable attempts to move to given destination
-     * @param cont: moving Controllable
-     * @param pathPoints
-     */
-    private void TEMP_move(Controllable cont, LinkedList<Point> pathPoints) { //speed factor removed
-        if (!pathPoints.isEmpty()) {
-            engine.step(cont, pathPoints);
-            //INCLUDE DROWNING
-        } else {
-            cont.setMoving(false);
-        }
+    private void stopMoveButtonClick() {
+        engine.stopMove((Controllable)engine.getInspectedUnit()); //will only ever be called this way while Controllable is selected
     }
     
-    /**
-     * 
-     * @param cont
-     * @param dest
-     * @return empty list if destination is invalid, theoretical path else
-     */
-    private LinkedList<Point> moveHelp_Path(Controllable cont, Point dest) {
-        LinkedList<Point> pathPoints = new LinkedList<>();
-        Ground destGround = engine.getMap().groundAt(dest);
-        if (!destGround.isOccupied()) { //availability check (valid target location)
-            pathPoints = engine.path(cont.getReferenceCoords(), dest);
-            pathPoints.add(dest);
-        }
-        return pathPoints;
+    /// COMBAT: display buttons only for units capable of attacking
+    
+    private void startAttackButtonClick() {
+        Point tarLoc = selectLocation();
+        engine.startAttack(((Controllable)engine.getInspectedUnit()), tarLoc); //will only ever be called this way while Controllable is selected
     }
     
-    /// attack
+    private void stopAttackButtonClick() {
+        engine.stopAttack((Controllable)engine.getInspectedUnit()); //will only ever be called this way while Controllable is selected
+    }
     
     private void TEMP_attackOnclick(Controllable callerCont) {
         Controllable atkr = callerCont;

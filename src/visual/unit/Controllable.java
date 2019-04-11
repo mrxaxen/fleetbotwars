@@ -8,6 +8,7 @@ package visual.unit;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.LinkedList;
 
 /**
  *
@@ -19,7 +20,9 @@ public abstract class Controllable extends Unit {
     protected int team;
     private Rectangle rngRect;
     private boolean moving = false;
+    private LinkedList<Point> currPath = new LinkedList<>();
     private boolean attacking = false;
+    private Unit currTar = null;
     private boolean building = false;
 
     /**
@@ -50,6 +53,12 @@ public abstract class Controllable extends Unit {
                                      this.width + 2 * rng, this.height + 2 * rng);
     }
 
+    /**
+     * clears planned path of Controllable
+     */
+    public void clearPath() {
+        currPath.clear();
+    }
     
     /**
      * hit target Unit (offensive). target will defend itself if able to     *
@@ -158,6 +167,18 @@ public abstract class Controllable extends Unit {
 
     public void setBuilding(boolean building) {
         this.building = building;
+    }
+
+    public LinkedList<Point> getCurrPath() {
+        return currPath;
+    }
+
+    public void setCurrPath(LinkedList<Point> currPath) {
+        this.currPath = currPath;
+    }
+
+    public void setCurrTar(Unit currTar) {
+        this.currTar = currTar;
     }
     
 }

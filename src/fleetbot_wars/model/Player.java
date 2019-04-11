@@ -124,5 +124,4 @@ public class Player {
         return playerNumber;
     }
 
-
 }
