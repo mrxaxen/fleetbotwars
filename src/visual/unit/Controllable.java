@@ -19,11 +19,14 @@ public abstract class Controllable extends Unit {
     private int mvmtSpd, atkSpd, dmg, maxLvl, currLvl, rng;
     protected int team;
     private Rectangle rngRect;
+    //action helpers:
     private boolean moving = false;
     private LinkedList<Point> currPath = new LinkedList<>();
     private boolean attacking = false;
     private Unit currTar = null;
     private boolean building = false;
+    private Controllable ghostBuilding = null;
+    private Point builderTarLoc = null;
 
     /**
      * create Controllable at (x,y) coordinates, for 'team' team     *
@@ -101,8 +104,6 @@ public abstract class Controllable extends Unit {
         }*/
     }
 
-    //step moved up to Engine
-
     /**
      * increase Unit level
      */
@@ -179,6 +180,26 @@ public abstract class Controllable extends Unit {
 
     public void setCurrTar(Unit currTar) {
         this.currTar = currTar;
+    }
+
+    public Unit getCurrTar() {
+        return currTar;
+    }
+
+    public Controllable getGhostBuilding() {
+        return ghostBuilding;
+    }
+
+    public void setGhostBuilding(Controllable ghostBuilding) {
+        this.ghostBuilding = ghostBuilding;
+    }
+
+    public Point getBuilderTarLoc() {
+        return builderTarLoc;
+    }
+
+    public void setBuilderTarLoc(Point builderTarLoc) {
+        this.builderTarLoc = builderTarLoc;
     }
     
 }

@@ -50,9 +50,15 @@ public class Engine
         for (Player p : players) 
         {
             for (Controllable cont : p.getPlayerUnits()) {
-                move(cont);
-                attack(cont);
-                build(cont);
+                if (cont.isMoving()) {
+                    move(cont);                    
+                }
+                if (cont.isAttacking()) {
+                    attack(cont, cont.getCurrTar());                    
+                }
+                if (cont.isBuilding()) {
+                    build(cont);                    
+                }
             }
         }
     }
@@ -93,13 +99,11 @@ public class Engine
      * @param cont 
      */
     private void move(Controllable cont) {
-        if (cont.isMoving()) {
-            if (!cont.getCurrPath().isEmpty()) {
-                step(cont, cont.getCurrPath());
-                //INCLUDE DROWNING
-            } else {
-                cont.setMoving(false);
-            }
+        if (!cont.getCurrPath().isEmpty()) {
+            step(cont, cont.getCurrPath());
+            //INCLUDE DROWNING
+        } else {
+            stopMove(cont);
         }
     }
     
@@ -171,11 +175,14 @@ public class Engine
         if (atkr.isValidTarget(tar)) {
             atkr.setAttacking(true);
             atkr.setCurrTar(tar);
+            if (!inRange(atkr, tar) && !(atkr instanceof Turret)) {
+                startMove(atkr, tar.getReferenceCoords());
+            }
         }        
     }
     
     /**
-     * stops given Controllables attacks
+     * stops given Controllable's attacks
      * @param atkr 
      */
     public void stopAttack(Controllable atkr) {
@@ -184,95 +191,41 @@ public class Engine
         stopMove(atkr);
     }
     
+    /// combat helpers (private)
+    
     /**
      * given Controllable attempts to attack given Unit
      * @param atkr: attacker
      * @param tar: target
      */
-    public void attack(Controllable atkr, Unit tar) {
-        //REPEAT UNTIL DEATH/STOP COMMAND (in GUI?)
-        //MOVE WITHIN: AUTO FOLLOW
-        if(atkr.isValidTarget(tar)) { //target is valid
-            if (inRange(atkr, tar)) { //target is in range
-                if (losCheck(atkr, tar)) { //target is in line of sight
-                    atkr.hit(tar);
-                }
-            } else {
-                //GOES POINT BLANK, SHOULD ONLY GET IN RANGE
-                if (!(atkr instanceof Turret)) {
-                    step(atkr, path(atkr.getReferenceCoords(), tar.getReferenceCoords()));
-                }
+    private void attack(Controllable atkr, Unit tar) {
+        if (inRange(atkr, tar)) { //in range
+            stopMove(atkr);
+            if (losCheck(atkr, tar)) { //in line of sight
+                atkr.hit(tar);
+                selfDef(atkr, tar);
+            } else { //blocked view
+                stopAttack(atkr);
             }
-        }
+        }      
     }
     
-    ///// BUILDING
-    
-    public void startBuild(Controllable cont) {
-        
-    }
-    
-    public void stopBuild(Controllable cont) {
-        
-    }
-    
-    private void build(Controllable cont) {
-        
-    }
-        
-    ///// main methods
-            
-    
-       
-    /**
-     * attempts to build given building at given reference coordinates
-     * @param builder
-     * @param buildingRefCoords
-     * @param buildingType 
-     */
-    public void build(Controllable builder, Point buildingRefCoords, String buildingType) {
-        if (!map.groundAt(buildingRefCoords).isOccupied()) {
-            //MOUSEOVER CHECK WOULD BE NICE
-            if (areaAvailable(buildingRefCoords, buildingType, builder.getTeam())) {
-                //HIGHLIGHT: VALID
-                //move Builder to LEFT of target location
-                //(in range to build, building won't appear on top of it)
-                Point builderLoc = new Point(buildingRefCoords.x - 1, buildingRefCoords.y);
-                if (!builder.getReferenceCoords().equals(builderLoc)) {
-                    step(builder, path(builder.getReferenceCoords(), builderLoc));                    
-                } else {
-                    //BARRICADE SHOULD BE ABLE TO BE TOTATED 90°
-                    Controllable cont = ghostBuilding(buildingRefCoords, buildingType, builder.getTeam());
-                    for (Point c : cont.getCoordsArray()) {
-                        map.groundAt(c).setOwnerReference(cont);
-                    }
-                    builder.setBuilding(false); //finished building
+    private void selfDef(Controllable atkr, Unit tar) {
+        if (tar.getCurrHp() > 0) { //tar alive after being hit
+            if (tar instanceof Controllable) {
+                Controllable tarCont = (Controllable)tar;
+                if (tarCont.getDmg() > 0 && !tarCont.isAttacking()) {     
+                    startAttack(tarCont, atkr.getReferenceCoords());
                 }
-            } else {
-                //HIGHLIGHT: INVALID
-            }
-        } else {
-            //SHOW FAIL
+                if (atkr.getCurrHp() <= 0) { //atkr dead after defense
+                    stopAttack(tarCont); 
+                    deathEvent(atkr);
+                }
+            }                    
+        } else { //target died
+            stopAttack(atkr);                    
+            deathEvent(tar);
         }
-    }
-    
-    ///// helper methods
-    
-    /// move
-    
-    
-    
-    /// attack
-
-    /**
-     * returns whether target Unit is in attacker Controllable's range
-     * @param attacker
-     * @param target
-     * @return 
-     */
-    public boolean inRange(Controllable attacker, Unit target) {
-        Rectangle targetBodyRect = new Rectangle(target.getReferenceCoords().x, target.getReferenceCoords().y, target.getWidth(), target.getHeight());
-        return attacker.getRngRect().intersects(targetBodyRect);      
     }
     
     /**
@@ -302,6 +255,19 @@ public class Engine
                && ((Controllable)u).getTeam() == cont.getTeam();
     }
     
+    /**
+     * returns whether target Unit is in attacker Controllable's range
+     * @param attacker
+     * @param target
+     * @return 
+     */
+    public boolean inRange(Controllable attacker, Unit target) {
+        Rectangle targetBodyRect = new Rectangle(target.getReferenceCoords().x, target.getReferenceCoords().y, target.getWidth(), target.getHeight());
+        return attacker.getRngRect().intersects(targetBodyRect);      
+    }
+    
+    // death
+    
     public void deathEvent(Unit u) {
         //ADD DROPS
         cleanUp(u);
@@ -318,7 +284,51 @@ public class Engine
         }
     }
     
-    ///build
+    ///// BUILDING
+    
+    /**
+     * sends given Builder to build given building, at given location,
+     * if given location is valid
+     * @param builder
+     * @param buildingRefCoords
+     * @param buildingType 
+     */
+    public void startBuild(Controllable builder, Point buildingRefCoords, String buildingType) {
+        if (!map.groundAt(buildingRefCoords).isOccupied()                           //refCoords free
+            && areaAvailable(buildingRefCoords, buildingType, builder.getTeam())) { //area free
+            Point builderTarLoc = new Point(buildingRefCoords.x - 1, buildingRefCoords.y);
+            if (!map.groundAt(builderTarLoc).isOccupied()){ //builder target position free
+                builder.setBuilding(true);
+                builder.setGhostBuilding(ghostBuilding(buildingRefCoords, buildingType, builder.getTeam()));
+                builder.setBuilderTarLoc(builderTarLoc);
+                if (!builder.getReferenceCoords().equals(builderTarLoc)) {
+                    startMove(builder, builderTarLoc);
+                }
+            }
+        }
+    }
+    
+    /**
+     * stops given Builder's building process
+     * @param builder 
+     */
+    public void stopBuild(Controllable builder) {
+        builder.setBuilding(false);
+        builder.setGhostBuilding(null);
+        builder.setBuilderTarLoc(null);
+        stopMove(builder);
+    }
+    
+    /// building helpers (private)
+    
+    private void build(Controllable builder) {
+        if (builder.getReferenceCoords().equals(builder.getBuilderTarLoc())) {
+            for (Point c : builder.getGhostBuilding().getCoordsArray()) {
+                map.groundAt(c).setOwnerReference(builder.getGhostBuilding());
+                stopBuild(builder);
+            }
+        }
+    }
     
     private boolean areaAvailable(Point p, String type, int team) {
         for (Point c : ghostBuilding(p, type, team).getCoordsArray()) {
