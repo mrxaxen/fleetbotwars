@@ -7,7 +7,6 @@ package fleetbot_wars.model;
 
 import java.awt.Point;
 import visual.ground.Ground;
-import visual.unit.Tree;
 
 /**
  *
@@ -16,7 +15,6 @@ import visual.unit.Tree;
 public class Map
 {
     private Ground[][] ground;
-    private Tree[][] trees;
     
     //CONSTR
     
@@ -28,5 +26,9 @@ public class Map
      */
     public Ground groundAt(Point location) {
         return ground[location.x][location.y];
+    }
+    
+    public void remTree(Point refCoords) {
+        ground[refCoords.x][refCoords.y] = null;
     }
 }

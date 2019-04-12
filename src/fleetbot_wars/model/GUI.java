@@ -7,8 +7,9 @@ package fleetbot_wars.model;
 
 import java.awt.Point;
 import visual.ground.Ground;
+import visual.unit.Barricade;
+import visual.unit.Builder;
 import visual.unit.Controllable;
-import visual.unit.Turret;
 import visual.unit.Unit;
 
 /**
@@ -30,13 +31,14 @@ public class GUI
         return null;
     }
     
-    private Unit selectUnit(Point locationClicked) { //assumes existence of method that returns a Point based on mouse location (on click)
+    //UNUSED
+    /*private Unit selectUnit(Point locationClicked) { //assumes existence of method that returns a Point based on mouse location (on click)
         Ground groundClicked = engine.getMap().groundAt(locationClicked);
         if (groundClicked.isOccupied()) {
             return groundClicked.getOwnerReference();
         }
         return null;
-    }
+    }*/
     
     
     private void inspectOnClick() {
@@ -74,7 +76,7 @@ public class GUI
         engine.stopAttack((Controllable)engine.getInspectedUnit()); //will only ever be called this way while Controllable is selected
     }
     
-    /// BUILDING: display buttons only for builders
+    /// BUILDING: display buttons only for Builders
     
     private void UNSPECIFIED_startBuildButtonClick(String buildingType) {
         Point buildingRefCoords = selectLocation();
@@ -84,5 +86,10 @@ public class GUI
     private void stopBuildButtonClick() {
         engine.stopBuild((Controllable)engine.getInspectedUnit());
     }
+    
+    /*
+    private void rotateBarricareOnClick() {
+        engine.rotateGhostBarricade();
+    }*/
     
 }

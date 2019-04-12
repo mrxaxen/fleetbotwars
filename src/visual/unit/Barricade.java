@@ -20,7 +20,7 @@ public class Barricade extends Controllable {
      * @param team 
      */
     public Barricade(Point coords, int team) {
-        super(coords, "barricade", null, 500, 0, 0, 0, 5, 1, 0, team);
+        super(coords, "barricade", null, 500, 0, 0, 0, 1, 1, 0, team);
         this.width = 5;
         this.height = 1;
     }
@@ -28,10 +28,12 @@ public class Barricade extends Controllable {
     /**
      * rotates Barricade by 90° by swapping its width and height
      */
+    //UNUSED
+    /*
     public void rotate() {
         int currWidth = this.width;
         int currHeight = this.height;
         this.width = currHeight;
         this.height = currWidth;
-    }
+    }*/
 }

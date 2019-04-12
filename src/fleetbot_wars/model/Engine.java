@@ -9,6 +9,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.LinkedList;
 import visual.ground.Ground;
+import visual.ground.Water;
 import visual.unit.*;
 
 /**
@@ -61,6 +62,7 @@ public class Engine
                 }
             }
         }
+        cleanUp();
     }
     
     ///// MOVEMENT    
@@ -114,6 +116,11 @@ public class Engine
         Point c = path.pop();
         if (!map.groundAt(c).isOccupied()) { //collision check (blocked path)
             changeLoc(cont, c);
+            if (map.groundAt(c) instanceof Water) { // stepped into water
+                int playerIndex = cont.getTeam();
+                players[playerIndex].addDeadControllable(cont);
+                map.groundAt(cont.getReferenceCoords()).setOwnerReference(null);
+            }
         } else {
             stopMove(cont); //hit an obstacle (in move())
             stopAttack(cont); //hit an obstacle (in attack())
@@ -266,17 +273,20 @@ public class Engine
     
     public void deathEvent(Unit u) {
         //ADD DROPS
-        cleanUp(u);
+        if (u instanceof Controllable) {
+            int playerIndex = ((Controllable) u).getTeam();
+            players[playerIndex].addDeadControllable((Controllable) u);
+            for (Point c : u.getCoordsArray()) { //delete unit from the map
+                map.groundAt(c).setOwnerReference(null);
+            }
+        } else { // u was Tree
+            map.remTree(u.getReferenceCoords());
+        }
     }
     
-    private void cleanUp(Unit u) {
-        for (Point c : u.getCoordsArray()) { //delete unit from the map
-            map.groundAt(c).setOwnerReference(null);
-        }
-        if (u instanceof Controllable) { //delete from Player (if Unit was COntrollable)
-            Controllable uCont = (Controllable)u;
-            int playerIndex = uCont.getTeam();
-            players[playerIndex].remControllable(uCont);            
+    private void cleanUp() {
+        for (Player p : players) {
+            p.remDead();
         }
     }
     
@@ -290,8 +300,8 @@ public class Engine
      * @param buildingType 
      */
     public void startBuild(Controllable builder, Point buildingRefCoords, String buildingType) {
-        if (!map.groundAt(buildingRefCoords).isOccupied()                           //refCoords free
-            && areaAvailable(buildingRefCoords, buildingType, builder.getTeam())) { //area free
+        if (!map.groundAt(buildingRefCoords).isOccupied() && !(map.groundAt(buildingRefCoords) instanceof Water) //refCoords free, not water
+            && areaAvailable(buildingRefCoords, buildingType, builder.getTeam())) { //area free, not water
             Point builderTarLoc = new Point(buildingRefCoords.x - 1, buildingRefCoords.y);
             if (!map.groundAt(builderTarLoc).isOccupied()){ //builder target position free
                 builder.setGhostBuilding(ghostBuilding(buildingRefCoords, buildingType, builder.getTeam()));
@@ -311,6 +321,24 @@ public class Engine
         stopMove(builder);
     }
     
+    /**
+     * rotates ghost Barricade if inspected unit is Builder,
+     * with Barricade selected but not yet placed, 
+     */
+    //UNUSED
+    /*
+    public void rotateGhostBarricade() 
+    {
+        if (inspectedUnit instanceof Builder) {
+            Builder b = (Builder)inspectedUnit;
+            Controllable building = b.getGhostBuilding();
+            //REVISIT: could be in the process of building (if its made not instant)
+            if (building instanceof Barricade && b.isBuilding() && !b.isMoving()) {
+                ((Barricade)building).rotate();
+            }            
+        }
+    }*/
+    
     /// building helpers (private)
     
     private void build(Controllable builder) {
@@ -324,7 +352,7 @@ public class Engine
     
     private boolean areaAvailable(Point p, String type, int team) {
         for (Point c : ghostBuilding(p, type, team).getCoordsArray()) {
-            if (map.groundAt(c).isOccupied()) {
+            if (map.groundAt(c).isOccupied() || map.groundAt(c) instanceof Water) {
                 return false;
             }
         }
