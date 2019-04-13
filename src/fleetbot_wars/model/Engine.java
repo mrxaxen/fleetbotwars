@@ -346,6 +346,7 @@ public class Engine
         if (builder.getReferenceCoords().equals(builder.getBuilderTarLoc())) {
             for (Point c : builder.getGhostBuilding().getCoordsArray()) {
                 map.groundAt(c).setOwnerReference(builder.getGhostBuilding());
+                payForUnit(players[builder.getTeam()], builder.getGhostBuilding());
                 stopBuild(builder);
             }
         }
@@ -359,7 +360,7 @@ public class Engine
                 b = false;
             }
         }
-        return true;
+        return b || mineGroundCheck(p, type, team);
     }
     
     /**
@@ -432,6 +433,13 @@ public class Engine
                 break;  
         }    
         return cont;
+    }
+    
+    ///// CONTROLLABLE CREATION HELPER
+    
+    private void payForUnit(Player p, Controllable cont) {
+        //PLACEHOLDER
+        //take resources required to create unit from player
     }
             
     ///// getters, setters

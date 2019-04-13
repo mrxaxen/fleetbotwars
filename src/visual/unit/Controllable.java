@@ -64,31 +64,6 @@ public abstract class Controllable extends Unit {
     }
     
     /**
-     * hit target Unit (offensive). target will defend itself if able to     *
-     * @param tar: target Unit
-     */
-    /*
-    public void offHit(Unit tar) {
-        this.hit(tar);
-        if (tar instanceof Controllable && ((Controllable)tar).dmg > 0) {
-            ((Controllable)tar).defHit(this);
-        }
-    }
-    */
-    
-    /**
-     * hit target Controllable (defensive) after being hit (offensively) by target
-     * @param tar 
-     */
-    /*
-    public void defHit(Controllable tar) {
-        if (this.isValidTarget(tar)) {            
-            this.hit(tar);
-        }
-    }
-    */
-    
-    /**
      * returns whether the targeted Unit is valid target for attacking Controllable
      * @param target
      * @return 
