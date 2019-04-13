@@ -8,6 +8,8 @@ package visual.unit;
 import java.awt.Image;
 import java.awt.Point;
 
+import fleetbot_wars.model.enums.VisualType;
+
 /**
  *
  * @author asjf86
@@ -16,20 +18,21 @@ public class Farm extends Controllable {
 
     /**
      * create Farm at (x,y) coordinates, for 'team' team
+     * 
      * @param coords
-     * @param team 
+     * @param team
      */
     public Farm(Point coords, int team) {
-        super(coords, "farm", null, 500, 0, 0, 0, 5, 1, 0, team);
+        super(coords, VisualType.farm, null, 500, 0, 0, 0, 5, 1, 0, team);
         this.width = 3;
         this.height = 2;
     }
-    
+
     /**
      * increase Player Food resource
      */
     public void incrFood() {
-        //should be based on num stored in object??
+        // should be based on num stored in object??
     }
-    
+
 }

@@ -1,9 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package visual.ground;
+
+import fleetbot_wars.model.enums.VisualType;
 
 import java.awt.Image;
 import java.awt.Point;
@@ -15,12 +12,13 @@ import java.awt.Point;
 public class Water extends Ground {
 
     /**
-     * create Water
-     * @param x
-     * @param y 
+     * Creating a Mountain element. his element can be collided, ie. an obsiticle.
+     * 
+     * @param coords It's coords.
      */
     public Water(Point coords) {
-        super(coords, "water", null, null);
+        super(coords, VisualType.water, null, null);
+        this.occupied = true;
     }
- 
+
 }

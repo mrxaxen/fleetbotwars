@@ -8,6 +8,8 @@ package visual.unit;
 import java.awt.Image;
 import java.awt.Point;
 
+import fleetbot_wars.model.enums.VisualType;
+
 /**
  *
  * @author asjf86
@@ -16,15 +18,16 @@ public class Barricade extends Controllable {
 
     /**
      * create Barricade at (x,y) coordinates, for 'team' team
+     * 
      * @param coords
-     * @param team 
+     * @param team
      */
     public Barricade(Point coords, int team) {
-        super(coords, "barricade", null, 500, 0, 0, 0, 5, 1, 0, team);
+        super(coords, VisualType.barricade, null, 500, 0, 0, 0, 5, 1, 0, team);
         this.width = 5;
         this.height = 1;
     }
-   
+
     /**
      * rotates Barricade by 90° by swapping its width and height
      */

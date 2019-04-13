@@ -8,6 +8,8 @@ package visual.ground;
 import java.awt.Image;
 import java.awt.Point;
 
+import fleetbot_wars.model.enums.VisualType;
+
 /**
  *
  * @author asjf86
@@ -15,13 +17,13 @@ import java.awt.Point;
 public class Mountain extends Ground {
 
     /**
-     * create Mountain
-     * @param x
-     * @param y 
+     * Creating a Mountain element. This element can be collided, ie. an obsiticle.
+     * 
+     * @param coords It's coords.
      */
     public Mountain(Point coords) {
-        super(coords, "mountain", null, null);
+        super(coords, VisualType.mountain, null, null);
         this.occupied = true;
     }
-    
+
 }

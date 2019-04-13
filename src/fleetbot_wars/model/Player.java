@@ -1,6 +1,7 @@
 
 package fleetbot_wars.model;
 
+import fleetbot_wars.model.enums.VisualType;
 import visual.unit.Controllable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,10 +19,11 @@ public class Player {
     // 8 - Lumberjack, 9 - Miner, 10 - Builder,
     // 11 - Infantry, 12 - Cavalry, 13 - Ranger, 14 - Destroyer, 15 - Medic
 
-    private HashMap resources;
+    private HashMap<String, Integer> resources;
     private ArrayList<Controllable> playerUnits;
     private String playerName;
     private int playerNumber;
+    public final static VisualType[] initialUnits = {VisualType.barricade, VisualType.builder, VisualType.cavalry, VisualType.destroyer, VisualType.farm, VisualType.goldmine, VisualType.harvestcenter, VisualType.infantry, VisualType.lumberjack, VisualType.medic, VisualType.militaryspawn, VisualType.miner, VisualType.ranger, VisualType.stonemine, VisualType.turret, VisualType.workerspawn};
 
     /**
      * Player Object containing an individual player's data such as Units,
@@ -35,14 +37,20 @@ public class Player {
      * @param playerNumber  The number of the Player.
      * 
      */
-    public Player(String playerName, int playerNumber, HashMap<String, Integer> initResources) {
+    public Player(String playerName, int playerNumber){//, HashMap<String, Integer> initResources) {
         this.playerName = playerName;
         this.playerNumber = playerNumber;
-        this.resources = initResources;
+        //this.resources = initResources;
+        this.resources = new HashMap<String, Integer>();
+        resources.put("food", 9999);
+        resources.put("wood", 9999);
+        resources.put("gold", 9999);
+        resources.put("stone", 9999);
+        resources.put("upgrade", 9999);
     }
 
     /**
-     * Convinient way to DECREASE a given resource.
+     * Convenient way to DECREASE a given resource.
      * 
      * @param resourceName Name of the resource intended to be DECREASED from the
      *                     following list: food, wood, stone, gold, upgrade.
@@ -54,7 +62,7 @@ public class Player {
     }
 
     /**
-     * Convinient way to INCREASE a given resource.
+     * Convenient way to INCREASE a given resource.
      * 
      * @param resourceName Name of the resource intended to be INCREASED from the
      *                     following list: food, wood, stone, gold, upgrade.

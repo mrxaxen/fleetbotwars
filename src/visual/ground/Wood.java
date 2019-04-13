@@ -11,7 +11,6 @@ import fleetbot_wars.model.enums.VisualType;
  */
 public class Wood extends Minable {
 
-
     /**
      * Representation of a wood type resource element. This element can be collided,
      * ie. an obsiticle.

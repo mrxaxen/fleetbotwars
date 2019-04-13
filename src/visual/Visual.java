@@ -5,6 +5,8 @@
  */
 package visual;
 
+import fleetbot_wars.model.enums.VisualType;
+
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
@@ -20,12 +22,12 @@ public class Visual {
 
     protected Point referenceCoords;
     private ArrayList<Point> coordsArray;
-    protected String type;
+    protected VisualType type;
     private Image model; // [!]
     protected int width, height;
     private Rectangle rectangle;
-    private int defaultDimX = 10;
-    private int defaultDimY = 10;
+    private int defaultDimX = 1;
+    private int defaultDimY = 1;
     private Point centerCoords;
 
     /**
@@ -33,12 +35,12 @@ public class Visual {
      * defaultDimY
      * 
      * @param referenceCoords Top left coords of the current Visual element.
-     * @param type            Unit name (eg. Cavalary, Destroyer, etc.)
-     * @param model           Serves as the visually represented modell of it's
+     * @param type            Unit name (eg. Cavalry, Destroyer, etc.)
+     * @param model           Serves as the visually represented model of it's
      *                        owner.
      */
 
-    public Visual(Point referenceCoords, String type, Image model) {
+    public Visual(Point referenceCoords, VisualType type, Image model) {
         this.referenceCoords = referenceCoords;
         this.type = type;
         this.model = model;
@@ -49,20 +51,19 @@ public class Visual {
 
         this.coordsArray = new ArrayList<Point>();
         coordsArray = fillOccupiedCoords(referenceCoords, defaultDimX, defaultDimY);
-
     }
 
     /**
      * @param referenceCoords Top left coords of the current Visual element. This
      *                        important if it has any dimension greater then 1.
-     * @param type            Unit name (eg. Cavalary, Destroyer, etc.)
-     * @param model           Serves as the visually represented modell of it's
+     * @param type            Unit name (eg. Cavalry, Destroyer, etc.)
+     * @param model           Serves as the visually represented model of it's
      *                        owner.
      * @param width           Width of the unit.
      * @param height          Height of the unit.
      */
 
-    public Visual(Point referenceCoords, String type, Image model, int width, int height) {
+    public Visual(Point referenceCoords, VisualType type, Image model, int width, int height) {
         this.referenceCoords = referenceCoords;
         this.type = type;
         this.model = model;
@@ -132,7 +133,7 @@ public class Visual {
     /**
      * @return the type
      */
-    public String getType() {
+    public VisualType getType() {
         return type;
     }
 
@@ -181,4 +182,6 @@ public class Visual {
     public void setReferenceCoords(Point referenceCoords) {
         this.referenceCoords = referenceCoords;
     }
+
+
 }

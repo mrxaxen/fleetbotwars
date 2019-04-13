@@ -7,6 +7,8 @@ package visual.unit;
 
 import java.awt.Point;
 
+import fleetbot_wars.model.enums.VisualType;
+
 /**
  *
  * @author WB
@@ -14,19 +16,20 @@ import java.awt.Point;
 public class Builder extends Controllable {
     /**
      * create Builder at (x,y) coordinates, for 'team' team
+     * 
      * @param coords
-     * @param team 
+     * @param team
      */
-    public Builder(Point coords, int team)
-    {
-        super(coords, "builder", null, 100, 1, 0, 0, 1, 1, 1, team);
+    public Builder(Point coords, int team) {
+        super(coords, VisualType.builder, null, 100, 1, 0, 0, 1, 1, 1, team);
     }
-    
+
     /**
      * create 'type' building at 'x,y' coordinates
+     * 
      * @param type
      * @param x
-     * @param y 
+     * @param y
      */
     public void build(String type, int x, int y) {
         //

@@ -7,23 +7,25 @@ package visual.unit;
 
 import java.awt.Point;
 
+import fleetbot_wars.model.enums.VisualType;
+
 /**
  *
  * @author WB
  */
 public class Miner extends Controllable {
-  
-    //paired with Mine
+
+    // paired with Mine
     private boolean busy = false;
-    
+
     /**
      * create Miner at (x,y) coordinates, for 'team' team
+     * 
      * @param coords
-     * @param team 
+     * @param team
      */
-    public Miner(Point coords, int team)
-    {
-        super(coords, "miner", null, 100, 1, 0, 0, 1, 1, 0, team);
+    public Miner(Point coords, int team) {
+        super(coords, VisualType.miner, null, 100, 1, 0, 0, 1, 1, 0, team);
     }
-    
+
 }

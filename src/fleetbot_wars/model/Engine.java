@@ -29,6 +29,7 @@ public class Engine
     public Engine(Map map, Player[] players) {
         this.map = map;
         this.players = players;
+        map.placePlayersOnMap(players);
     }
     
     /**
@@ -156,7 +157,7 @@ public class Engine
     private void changeLoc(Controllable cont, Point tarLoc) {
         Point currLoc = cont.getReferenceCoords();
         cont.setReferenceCoords(tarLoc);
-        map.groundAt(currLoc).setOwnerReference(null);
+        map.groundAt(currLoc).removeOwner();
         map.groundAt(tarLoc).setOwnerReference(cont);
     }
     

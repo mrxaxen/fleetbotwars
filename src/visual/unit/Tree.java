@@ -8,6 +8,8 @@ package visual.unit;
 import java.awt.Image;
 import java.awt.Point;
 
+import fleetbot_wars.model.enums.VisualType;
+
 /**
  *
  * @author asjf86
@@ -16,14 +18,15 @@ public class Tree extends Unit {
 
     /**
      * create Tree at (x,y) coordinates
+     * 
      * @param x
      * @param y
      * @param type
      * @param model
-     * @param hp 
+     * @param hp
      */
     public Tree(Point coords) {
-        super(coords, "tree", null, 50);
+        super(coords, VisualType.tree, null, 50);
     }
-    
+
 }

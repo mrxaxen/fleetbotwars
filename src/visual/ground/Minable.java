@@ -3,6 +3,7 @@ package visual.ground;
 import java.awt.Image;
 import java.awt.Point;
 import visual.unit.Unit;
+import fleetbot_wars.model.enums.VisualType;
 
 public abstract class Minable extends Ground {
 
@@ -20,9 +21,10 @@ public abstract class Minable extends Ground {
      * @param resourceCount  The initial amount of resource available in the
      *                       resource.
      */
-    public Minable(Point coords, String type, Image model, Unit ownerReference, int resourceCount) {
+    public Minable(Point coords, VisualType type, Image model, Unit ownerReference, int resourceCount) {
         super(coords, type, model, ownerReference);
         this.resourceCount = resourceCount;
+        this.occupied = true;
     }
 
     /**
@@ -48,7 +50,7 @@ public abstract class Minable extends Ground {
      * 
      * @return False if the mine is depleted (empty) true else.
      */
-    public Boolean mine() {
+    public boolean mine() {
         if (!depleted) {
             resourceCount = resourceCount - 10;
             if (resourceCount < 1) {

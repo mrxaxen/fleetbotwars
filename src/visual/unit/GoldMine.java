@@ -7,6 +7,8 @@ package visual.unit;
 
 import java.awt.Point;
 
+import fleetbot_wars.model.enums.VisualType;
+
 /**
  *
  * @author asjf86
@@ -15,15 +17,16 @@ public class GoldMine extends Mine {
 
     /**
      * create GoldMine at (x,y) coordinates, for 'team' team
+     * 
      * @param coords
-     * @param team 
+     * @param team
      */
     public GoldMine(Point coords, int team) {
-        super(coords, "goldmine", null, 500, team);
+        super(coords, VisualType.goldmine, null, 500, team);
         this.width = 3;
         this.height = 2;
     }
-    
+
     /**
      * increase Player Gold resource
      */
@@ -31,5 +34,5 @@ public class GoldMine extends Mine {
     public void incrRes() {
         //
     }
-    
+
 }

@@ -1,32 +1,275 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package fleetbot_wars.model;
 
+import java.awt.Dimension;
 import java.awt.Point;
-import visual.ground.Ground;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import visual.ground.*;
+import visual.unit.Controllable;
 import visual.unit.Tree;
+import fleetbot_wars.model.enums.VisualType;
+import visual.unit.Unit;
 
 /**
  *
  * @author WB
  */
-public class Map
-{
+public class Map {
+
     private Ground[][] ground;
-    private Tree[][] trees;
-    
-    //CONSTR
-    
-    
+    private String rawMapFileLocation;
+    private ArrayList<Point> startingZoneCoords;
+    private ArrayList<ArrayList<Point>> startingZoneCoordsArr;
+    private final int startingZoneDimension = 20;
+    private Dimension mapDimension;
+
+    public Map() {
+        this.startingZoneCoords = new ArrayList<Point>();
+        this.rawMapFileLocation = "maps/100x100";
+        File mapFile = new File(rawMapFileLocation);
+        this.ground = parseMapFile(mapFile);
+        /*
+         * for(int i = 0;i<ground.length;i++){ for(int j = 0;j<ground[i].length;j++){
+         * System.out.println(ground[i][j].getOwnerReference());
+         * System.out.println(ground[i][j].isOccupied()); VisualType v =
+         * ground[i][j].getType(); System.out.println(v.name() + ": " +
+         * ground[i][j].getReferenceCoords()); System.out.println(new Point(i, j)); } }
+         */
+
+        System.out.println(this.startingZoneCoords);
+        fillStartingZoneCoords(startingZoneCoords);
+    }
+
     /**
      * returns the Ground object at given location(x, y specified by Point)
+     *
      * @param location
-     * @return 
+     * @return
      */
     public Ground groundAt(Point location) {
         return ground[location.x][location.y];
     }
+
+    private Ground[][] parseMapFile(File mapFile) {
+        String fName = mapFile.getName();
+        this.mapDimension = new Dimension(Integer.parseInt((fName.split("x"))[0]),
+                Integer.parseInt((fName.split("x"))[1]));
+        int x = this.mapDimension.width;
+        int y = this.mapDimension.height;
+        Ground[][] ground = new Ground[x][y];
+
+        try (Scanner mapScanner = new Scanner(mapFile)) {
+            mapScanner.nextLine();
+            mapScanner.nextLine();
+            mapScanner.nextLine();
+            mapScanner.nextLine();
+            int currMapInt;
+
+            for (int i = 0; i < x; i++) {
+                for (int j = 0; j < y; j++) {
+                    if (mapScanner.hasNextLine()) {
+                        currMapInt = Integer.parseInt(mapScanner.nextLine());
+                        ground[i][j] = processMapInput(currMapInt, i, j);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+            e.printStackTrace();
+            System.out.println("error");
+        }
+        return ground;
+    }
+
+    private Ground processMapInput(int inputInt, int i, int j) {
+        Ground retGround = null;
+        Point currLocation = new Point(i, j);
+        switch (inputInt) {
+            case 18:
+                retGround = new Water(currLocation);
+                break;
+            case 237:
+                retGround = new Gold(currLocation, 5);
+                break;
+            case 27:
+                retGround = new Mountain(currLocation);
+                break;
+            case 153:
+                retGround = new Stone(currLocation, 5);
+                break;
+            case 173:
+                retGround = new Base(currLocation);
+                break;
+            case 92:
+                retGround = new Base(currLocation, new Tree(currLocation));
+                break;
+            case 54:
+                startingZoneCoords.add(currLocation);
+                retGround = new Base(currLocation);
+                break;
+            case 201:
+                startingZoneCoords.add(currLocation);
+                retGround = new Base(currLocation);
+                break;
+            case 73:
+                startingZoneCoords.add(currLocation);
+                retGround = new Base(currLocation);
+                break;
+            case 9:
+                startingZoneCoords.add(currLocation);
+                retGround = new Base(currLocation);
+                break;
+            default:
+                retGround = new Base(currLocation);
+                break;
+
+        }
+
+        return retGround;
+    }
+
+    /**
+     * @return the startingZoneCoords
+     */
+    public ArrayList<Point> getStartingZoneCoords() {
+        return startingZoneCoords;
+    }
+
+    private void fillStartingZoneCoords(ArrayList<Point> startingZones) {
+        startingZoneCoordsArr = new ArrayList<ArrayList<Point>>();
+        Point topLeft;
+        int c = 0;
+        for (Point p : startingZones) {
+            topLeft = calcPlayerStartingZone(c);
+            startingZoneCoordsArr.add(new ArrayList<Point>());
+            int topLeftX = topLeft.x;
+            int topLeftY = topLeft.y;
+            while (topLeftX < (topLeft.x + startingZoneDimension) && topLeftX < mapDimension.width) {
+                while (topLeftY < (topLeft.y + startingZoneDimension) && topLeftY < mapDimension.height) {
+                    (startingZoneCoordsArr.get(c)).add(new Point(topLeftX, topLeftY));
+                    topLeftY++;
+                }
+                topLeftX++;
+            }
+            c++;
+        }
+    }
+
+    private Point calcPlayerStartingZone(int zoneId) {
+        int topLeftX = startingZoneCoords.get(zoneId).x - (int) Math.floor(startingZoneDimension / 2);
+        int topLeftY = startingZoneCoords.get(zoneId).y - (int) Math.floor(startingZoneDimension / 2);
+        topLeftX = topLeftX < 0 ? 0 : topLeftX;
+        topLeftY = topLeftY < 0 ? 0 : topLeftY;
+        return new Point(topLeftX, topLeftY);
+    }
+
+    private void clearStartingZone(int playerNum) {
+        startingZoneCoordsArr.get(playerNum).forEach(coord -> {
+            ground[coord.x][coord.y] = new Base(coord);
+        });
+    }
+
+    private void placeUnitOnMap(Point referenceCoord, Controllable unit) {
+        int currX = referenceCoord.x;
+        int currY = referenceCoord.y;
+
+        for (int i = currX; i < referenceCoord.x + unit.getWidth(); i++) {
+            for (int j = currY; j < referenceCoord.y + unit.getWidth(); j++) {
+                ground[i][j].setOwnerReference(unit);
+            }
+        }
+    }
+
+    private boolean isSectionUnOccupied(Point referenceCoords, int width, int height) {
+        int currX = referenceCoords.x;
+        int currY = referenceCoords.y;
+        Ground currentGround = ground[currX][currY];
+        boolean isEmpty = !(currentGround.isOccupied());
+        while ((currX < referenceCoords.x + width) && isEmpty) {
+            while ((currY < referenceCoords.y + height) && isEmpty) {
+                currentGround = ground[currX][currY];
+                isEmpty = !(currentGround.isOccupied());
+                currY++;
+            }
+            currX++;
+        }
+        return isEmpty;
+    }
+
+    private void placeUnitsOnMap(VisualType[] units, int playerNum, ArrayList<Point> startingZone) {
+        Controllable currUnit;
+        int count = 0;
+        Point currentCoord;
+        for (VisualType unit : units) {
+            System.out.println(startingZone.size());
+            System.out.println(count);
+            currentCoord = startingZone.get(count);
+            currUnit = VisualType.createUnit(unit, currentCoord, playerNum);
+            //System.out.println(currUnit.getType().name());
+            while (count < (startingZone.size()-1)
+                    && !(isSectionUnOccupied(currentCoord, currUnit.getWidth(), currUnit.getHeight()))) {
+                count++;
+                currentCoord = startingZone.get(count);
+
+            }
+            if (isSectionUnOccupied(currentCoord, currUnit.getWidth(), currUnit.getHeight()) && count < (startingZone.size()-1)) {
+                placeUnitOnMap(currentCoord, currUnit);
+                count++;
+            }
+        }
+    }
+
+    /*
+     * private ArrayList<Controllable> initUnits(){ ArrayList<Controllable>
+     * initUnits = new ArrayList<Controllable>(); }
+     */
+    public void placePlayersOnMap(Player[] players) {
+        int currZoneId = 0;
+        Point startingZoneTopLeft;
+        for (Player p : players) {
+            clearStartingZone(p.getPlayerNumber());
+            startingZoneTopLeft = calcPlayerStartingZone(currZoneId);
+            ArrayList<Point> currStartingZone = startingZoneCoordsArr.get(p.getPlayerNumber());
+            placeUnitsOnMap(p.initialUnits, p.getPlayerNumber(), currStartingZone);
+        }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < ground.length; i++) {
+            for (int j = 0; j < ground[i].length; j++) {
+                Ground currGround = ground[i][j];
+                Unit unitOnGround = currGround.getOwnerReference();
+                String unitTypeName = "";
+                String unitPosition = "";
+                if(unitOnGround != null){
+                    unitTypeName = unitOnGround.getType().name();
+                    unitPosition = (unitOnGround.getReferenceCoords()).toString();
+                }else{
+                    unitTypeName = "No unit here";
+                    unitPosition = "No unitCoords here";
+                }
+                String posInMapArr = (new Point(i, j)).toString();
+                String groundType = currGround.getType().toString();
+                
+                sb.append("[unitTypeName: "+ unitTypeName +"]");
+                sb.append("[unitPosition: "+ unitPosition +"]");
+                sb.append("[posInMapArr: "+ posInMapArr +"]");
+                sb.append("[groundType: "+ groundType +"]");
+                
+                sb.append("\n");
+                
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public Ground[][] getGround() {
+        return this.ground;
+    }
+
 }
