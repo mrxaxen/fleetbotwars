@@ -5,10 +5,11 @@
  */
 package fleetbot_wars.model;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -16,69 +17,52 @@ import java.util.HashMap;
  */
 public class GUI extends JFrame {
 
+    static Dimension mapSize = new Dimension(30,30); //DUMMY GET FROM ENGINE
     private static GUI instance;
-    private HashMap<String, Menu> menus = new HashMap<>();
-    private JLayeredPane layeredPane = this.getLayeredPane();
+    private HashMap<ComponentType, JComponent> panels = new HashMap<>();
 
-    public static GUI getInstance(Dimension size) {
+    public static GUI getInstance() {
         if (instance == null) {
-            instance = new GUI(size);
+            instance = new GUI();
             return instance;
         } else {
             return instance;
         }
     }
 
-    private GUI(Dimension size) {
+    private GUI() {
         this.setTitle("Fleetbot Wars");
         this.setMinimumSize(new Dimension(400, 400));
-        this.setSize(size);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
-        initMenus();
-        addComponentResizeListeners();
+        initPanels();
+        this.pack();
     }
 
-    private void initMenus() {
-        int width = this.getContentPane().getWidth();
-        int height = this.getContentPane().getHeight();
-
+    private void initPanels() {
         MainMenu mainMenu = new MainMenu(this);
         NewGameMenu newGameMenu = new NewGameMenu(this);
         Options options = new Options(this);
+        GameWindow gameWindow = new GameWindow();
 
-        mainMenu.setBounds(0, 0, width, height);
-        newGameMenu.setBounds(0, 0, width, height);
-        options.setBounds(0, 0, width, height);
+        panels.put(ComponentType.MAIN, mainMenu);
+        panels.put(ComponentType.NEW_GAME, newGameMenu);
+        panels.put(ComponentType.OPTIONS, options);
+        panels.put(ComponentType.GAME_WINDOW, gameWindow);
 
-        layeredPane.add(mainMenu, 0);
-        layeredPane.add(newGameMenu, 1);
-        layeredPane.add(options, 2);
-
-        menus.put("mainmenu", mainMenu);
-        menus.put("play", newGameMenu);
-        menus.put("options", options);
+        this.getContentPane().add(mainMenu);
     }
 
-    //TODO: do something about the delay on fullscreen/windowed change
-    private void addComponentResizeListeners() {
-        layeredPane.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                super.componentResized(e);
-                menus.forEach((key, menu) -> {
-                    menu.setBounds(0, 0, instance.getContentPane().getWidth(), instance.getContentPane().getHeight());
-                });
-                System.out.println("LP RESIZE CALLED");
-            }
-        });
+    void putComponentToFront(JComponent caller, ComponentType type) {
+        JComponent panel = panels.get(type);
+        caller.setVisible(false);
+        panel.setVisible(true);
+        this.getContentPane().remove(caller);
+        this.getContentPane().add(panel);
+        this.pack();
     }
 
-    void putMenuToFront(String name) {
-        Menu menu = menus.get(name);
-        layeredPane.getComponent(0).setVisible(false);
-        menu.setVisible(true);
-        layeredPane.setComponentZOrder(menu, 0);
+    enum ComponentType {
+        MAIN,NEW_GAME,OPTIONS,INGAME,GAME_WINDOW
     }
-
 }

@@ -5,13 +5,10 @@
  */
 package fleetbot_wars.model;
 
-import javafx.scene.control.TextFormatter;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
-import java.util.HashMap;
-
 
 public class Options extends Menu {
 
@@ -57,6 +54,15 @@ public class Options extends Menu {
         JButton defaultButton = new JButton("Default");
         JButton cancelButton = new JButton("Cancel");
 
+        okButton.addActionListener((e) -> {
+
+        });
+        defaultButton.addActionListener((e) -> {
+            backToDefault();
+        });
+        cancelButton.addActionListener((e) -> {
+            gui.putComponentToFront(this, GUI.ComponentType.MAIN);
+        });
 
         return lowerPane;
     }

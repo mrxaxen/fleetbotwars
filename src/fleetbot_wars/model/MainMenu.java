@@ -8,7 +8,6 @@ package fleetbot_wars.model;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.Optional;
 
 /**
  *
@@ -39,16 +38,16 @@ public class MainMenu extends Menu {
     private JButton initPlay() {
         JButton button = new JButton("New Game");
         button.addActionListener((ActionEvent e) -> {
-//            this.setVisible(false);
-//            gui.getMenu("play").setVisible(true);
-            gui.putMenuToFront("play");
+            gui.putComponentToFront(this, GUI.ComponentType.GAME_WINDOW);
+//            gui.putComponentToFront(this,gui.ComponentType.PLAY); FUNCTIONAL CODE RESERVED FOR LATER VERISON
+//            impl. start game for prototype
         });
         return button;
     }
 
     private JButton initExit() {
         JButton button = new JButton("Exit");
-        button.addActionListener((ActionEvent e) -> {
+        button.addActionListener((e) -> {
             System.exit(1);
         });
         return button;

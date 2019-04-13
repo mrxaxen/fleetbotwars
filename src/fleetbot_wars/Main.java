@@ -7,6 +7,7 @@ package fleetbot_wars;
 
 import fleetbot_wars.model.GUI;
 
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -17,8 +18,13 @@ public class Main {
 
     public static void main(String[] args) {
         // TODO code application logic here
-        GUI gui = GUI.getInstance(new Dimension(600, 600));
-        gui.setVisible(true);
+
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                GUI gui = GUI.getInstance();
+//                gui.setVisible(true);
+            }
+        });
     }
     
 }

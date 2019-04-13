@@ -44,6 +44,7 @@ class NewGameMenu extends Menu{
 
     private JButton initJoin() {
         JButton button = new JButton("Join");
+        button.setEnabled(false);
         button.addActionListener((ActionEvent e) -> {
 //            Join lobby at ip
         });
@@ -53,8 +54,7 @@ class NewGameMenu extends Menu{
     private JButton initBack() {
         JButton button = new JButton("Back");
         button.addActionListener((ActionEvent e) -> {
-//            this.setVisible(false);
-            gui.putMenuToFront("mainmenu");
+            gui.putComponentToFront(this, GUI.ComponentType.MAIN);
         });
         return button;
     }

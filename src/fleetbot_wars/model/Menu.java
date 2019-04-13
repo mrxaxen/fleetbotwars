@@ -34,7 +34,7 @@ public abstract class Menu extends JPanel {
     protected JButton initOptions() {
         JButton button = new JButton("Options");
         button.addActionListener(e -> {
-            gui.putMenuToFront("options");
+            gui.putComponentToFront(this, GUI.ComponentType.OPTIONS);
         });
         return button;
     }
