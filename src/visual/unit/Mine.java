@@ -42,4 +42,5 @@ abstract public class Mine extends Controllable {
     }   
     
     abstract protected void incrRes();
+    
 }

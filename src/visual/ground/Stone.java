@@ -15,9 +15,11 @@ public class Stone extends Minable {
      * ie. an obsiticle.
      * 
      * @param coords It's coords.
+     * @param resourceCount
      */
     public Stone(Point coords, int resourceCount) {
         super(coords, "stone", null, null, resourceCount);
+        this.occupied = true;
     }
 
 

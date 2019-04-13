@@ -10,6 +10,7 @@ import visual.Visual;
 import visual.unit.Unit;
 import visual.Visual;
 import java.awt.Point;
+import visual.unit.Tree;
 
 /**
  *
@@ -37,9 +38,18 @@ public class Ground extends Visual {
      * @return true if occupied, false else
      */
     public boolean isOccupied(){
-        return ownerReference != null;
+        return ownerReference != null
+               || type.equals("stone") || type.equals("gold") ||type.equals("mountain");
     }
-
+    
+    /**
+     * used to help building
+     * @return true if unoccupied or has a Tree, false else
+     */
+    public boolean isFreeOrTree(){
+        return !isOccupied() || ownerReference.getType().equals("tree");
+    }
+    
     /**
      * 
      * @return the reference to the Unit Object, 
@@ -52,5 +62,6 @@ public class Ground extends Visual {
     public void setOwnerReference(Unit ownerReference) {
         this.ownerReference = ownerReference;
     }
+
     
 }

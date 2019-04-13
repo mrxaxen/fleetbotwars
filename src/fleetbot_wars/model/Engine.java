@@ -300,8 +300,9 @@ public class Engine
      * @param buildingType 
      */
     public void startBuild(Controllable builder, Point buildingRefCoords, String buildingType) {
-        if (!map.groundAt(buildingRefCoords).isOccupied() && !(map.groundAt(buildingRefCoords) instanceof Water) //refCoords free, not water
+        if (map.groundAt(buildingRefCoords).isFreeOrTree() && !(map.groundAt(buildingRefCoords).getType().equals("water")) //refCoords free, not water
             && areaAvailable(buildingRefCoords, buildingType, builder.getTeam())) { //area free, not water
+            
             Point builderTarLoc = new Point(buildingRefCoords.x - 1, buildingRefCoords.y);
             if (!map.groundAt(builderTarLoc).isOccupied()){ //builder target position free
                 builder.setGhostBuilding(ghostBuilding(buildingRefCoords, buildingType, builder.getTeam()));
@@ -350,13 +351,48 @@ public class Engine
         }
     }
     
+    //REVISIT
     private boolean areaAvailable(Point p, String type, int team) {
+        boolean b = true;
         for (Point c : ghostBuilding(p, type, team).getCoordsArray()) {
-            if (map.groundAt(c).isOccupied() || map.groundAt(c) instanceof Water) {
-                return false;
+            if (!map.groundAt(c).isFreeOrTree() || map.groundAt(c).getType().equals("water")) {
+                b = false;
             }
         }
         return true;
+    }
+    
+    /**
+     * additional ground condition check for Mines
+     * @param refCoords
+     * @param type
+     * @param team
+     * @return 
+     */
+    private boolean mineGroundCheck(Point refCoords, String type, int team) {
+        if (type.equals("stonemine") || type.equals("goldmine")) {
+            Mine mine = (Mine)ghostBuilding(refCoords, type, team);
+            return mGC_helper(mine);
+        }
+        return true;
+    }
+    
+    //REVISIT
+    private boolean mGC_helper(Mine mine) {
+        if (mine instanceof StoneMine) { //stone
+            for (Point c : mine.getCoordsArray()) {
+                if (map.adjMineralCheck(c, "stone")) {
+                    return true;
+                }
+            }
+        } else { //gold
+            for (Point c : mine.getCoordsArray()) {
+                if (map.adjMineralCheck(c, "gold")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
