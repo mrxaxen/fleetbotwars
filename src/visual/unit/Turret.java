@@ -7,6 +7,7 @@ package visual.unit;
 
 import java.awt.Image;
 import java.awt.Point;
+import java.util.HashMap;
 
 import fleetbot_wars.model.enums.VisualType;
 
@@ -16,6 +17,8 @@ import fleetbot_wars.model.enums.VisualType;
  */
 public class Turret extends Controllable {
 
+    public static HashMap<String, Integer> price = new HashMap<>();
+    
     /**
      * create Turret at (x,y) coordinates, for 'team' team
      * 

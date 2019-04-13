@@ -2,7 +2,6 @@ package visual.ground;
 
 import fleetbot_wars.model.enums.VisualType;
 
-import java.awt.Image;
 import java.awt.Point;
 
 /**
@@ -16,9 +15,11 @@ public class Gold extends Minable {
      * ie. an obsiticle.
      * 
      * @param coords It's coords.
+     * @param resourceCount
      */
     public Gold(Point coords, int resourceCount) {
         super(coords, VisualType.gold, null, null, resourceCount);
+        this.occupied = true;
     }
 
 }

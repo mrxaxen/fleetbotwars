@@ -6,6 +6,7 @@
 package visual.unit;
 
 import java.awt.Point;
+import java.util.HashMap;
 
 import fleetbot_wars.model.enums.VisualType;
 
@@ -14,7 +15,9 @@ import fleetbot_wars.model.enums.VisualType;
  * @author asjf86
  */
 public class MilitarySpawn extends Controllable {
-
+    
+    public static HashMap<String, Integer> price = new HashMap<>();
+    
     /**
      * create MilitarySpawn at (x,y) coordinates, for 'team' team
      * 

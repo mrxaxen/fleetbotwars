@@ -16,9 +16,11 @@ public class Stone extends Minable {
      * collided, ie. an obsiticle.
      * 
      * @param coords It's coords.
+     * @param resourceCount
      */
     public Stone(Point coords, int resourceCount) {
         super(coords, VisualType.stone, null, null, resourceCount);
+        this.occupied = true;
     }
 
 }

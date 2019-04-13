@@ -21,6 +21,7 @@ public class Player {
 
     private HashMap<String, Integer> resources;
     private ArrayList<Controllable> playerUnits;
+    private ArrayList<Controllable> deadUnits;
     private String playerName;
     private int playerNumber;
     public final static VisualType[] initialUnits = {VisualType.barricade, VisualType.builder, VisualType.cavalry, VisualType.destroyer, VisualType.farm, VisualType.goldmine, VisualType.harvestcenter, VisualType.infantry, VisualType.lumberjack, VisualType.medic, VisualType.militaryspawn, VisualType.miner, VisualType.ranger, VisualType.stonemine, VisualType.turret, VisualType.workerspawn};
@@ -74,7 +75,7 @@ public class Player {
     }
 
     /**
-     * Adding one unit to the Players unit Collection.
+     * Adding one unit to the Player's unit Collection.
      * 
      * @param unit The Unit Object which needs to be added.
      */
@@ -83,12 +84,25 @@ public class Player {
     }
     
     /**
-     * Removing one unit to the Players unit Collection.
+     * Removing one unit to the Player's unit Collection.
      * 
      * @param unit The Unit Object which needs to be added.
      */
     public void remControllable(Controllable unit) {
         playerUnits.remove(unit);
+    }
+    
+    /**
+     * Adding one unit to the Player's dead unit Collection.
+     * 
+     * @param unit The Unit Object which needs to be added.
+     */
+    public void addDeadControllable(Controllable unit) {
+        deadUnits.add(unit);
+    }
+    
+    public void remDead() {
+        playerUnits.removeAll(deadUnits);
     }
 
     ///// getters, setters

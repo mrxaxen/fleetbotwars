@@ -6,6 +6,7 @@
 package visual.unit;
 
 import java.awt.Point;
+import java.util.HashMap;
 
 import fleetbot_wars.model.enums.VisualType;
 
@@ -16,6 +17,10 @@ import fleetbot_wars.model.enums.VisualType;
 public class Miner extends Controllable {
 
     // paired with Mine
+  
+    public static HashMap<String, Integer> price = new HashMap<>();
+    
+    //paired with Mine
     private boolean busy = false;
 
     /**

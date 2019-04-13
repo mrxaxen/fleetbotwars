@@ -5,8 +5,8 @@
  */
 package visual.unit;
 
-import java.awt.Image;
 import java.awt.Point;
+import java.util.HashMap;
 
 import fleetbot_wars.model.enums.VisualType;
 
@@ -16,6 +16,8 @@ import fleetbot_wars.model.enums.VisualType;
  */
 public class Barricade extends Controllable {
 
+    public static HashMap<String, Integer> price = new HashMap<>();
+    
     /**
      * create Barricade at (x,y) coordinates, for 'team' team
      * 
@@ -24,6 +26,7 @@ public class Barricade extends Controllable {
      */
     public Barricade(Point coords, int team) {
         super(coords, VisualType.barricade, null, 500, 0, 0, 0, 5, 1, 0, team);
+
         this.width = 5;
         this.height = 1;
     }
@@ -31,10 +34,12 @@ public class Barricade extends Controllable {
     /**
      * rotates Barricade by 90° by swapping its width and height
      */
+    //UNUSED
+    /*
     public void rotate() {
         int currWidth = this.width;
         int currHeight = this.height;
         this.width = currHeight;
         this.height = currWidth;
-    }
+    }*/
 }

@@ -9,6 +9,7 @@ import fleetbot_wars.model.enums.VisualType;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -16,6 +17,8 @@ import java.util.LinkedList;
  * @author asjf86
  */
 public abstract class Controllable extends Unit {
+    
+    protected static HashMap<String, Integer> price;
 
     private int mvmtSpd, atkSpd, dmg, maxLvl, currLvl, rng;
     protected int team;
@@ -66,26 +69,6 @@ public abstract class Controllable extends Unit {
     }
 
     /**
-     * hit target Unit (offensive). target will defend itself if able to *
-     * 
-     * @param tar: target Unit
-     */
-    /*
-     * public void offHit(Unit tar) { this.hit(tar); if (tar instanceof Controllable
-     * && ((Controllable)tar).dmg > 0) { ((Controllable)tar).defHit(this); } }
-     */
-
-    /**
-     * hit target Controllable (defensive) after being hit (offensively) by target
-     * 
-     * @param tar
-     */
-    /*
-     * public void defHit(Controllable tar) { if (this.isValidTarget(tar)) {
-     * this.hit(tar); } }
-     */
-
-    /**
      * returns whether the targeted Unit is valid target for attacking Controllable
      * 
      * @param target
@@ -132,7 +115,7 @@ public abstract class Controllable extends Unit {
     }
 
     ///// getters, setters
-
+    
     public Rectangle getRngRect() {
         return rngRect;
     }

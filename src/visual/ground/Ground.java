@@ -2,12 +2,12 @@
 package visual.ground;
 
 import java.awt.Image;
-import java.awt.Point;
 import java.util.Stack;
 
 import fleetbot_wars.model.enums.VisualType;
-import visual.Visual;
 import visual.unit.Unit;
+import visual.Visual;
+import java.awt.Point;
 
 /**
  *
@@ -44,8 +44,23 @@ public class Ground extends Visual {
      */
     public boolean isOccupied() {
         return this.occupied;
-    }
 
+    }
+    
+    /**
+     * used to help building
+     * @return true if unoccupied or has a Tree, false else
+     */
+    public boolean isFreeOrTree(){
+        boolean hasTree = false;
+        Unit owner = getOwnerReference();
+        if(owner != null){
+            hasTree = owner.getType().equals(VisualType.tree);
+        }
+        
+        return !isOccupied() || hasTree;
+    }
+    
     /**
      * 
      * @return the reference to the top Unit Object, who owns/occupies the current
@@ -78,6 +93,5 @@ public class Ground extends Visual {
         }
         this.occupied = !(ownerReference.isEmpty());
     }
-
 
 }
