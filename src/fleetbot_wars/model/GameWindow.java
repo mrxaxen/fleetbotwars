@@ -85,7 +85,6 @@ public class GameWindow extends JPanel {
         StatusBar statusBar = new StatusBar(/*resources*/);
         return statusBar;
     }
-    //TODO: Put it on a JScrollPane to sim a cam
 
     private JPanel initMinMap() {
         //TODO: implement
