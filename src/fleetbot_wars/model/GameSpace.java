@@ -2,6 +2,7 @@ package fleetbot_wars.model;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Point2D;
 
 class GameSpace extends JPanel {
 
@@ -32,7 +33,7 @@ class GameSpace extends JPanel {
         System.out.println("Generating map...");
         for(int y = 0; y < tiles.length; y++) {
             for (int x = 0; x < tiles[y].length; x++) {
-                tiles[y][x] = new Tile(grounds[y][x].getType(), grounds[y][x].getUnit().getType(), new Dimension());
+                tiles[y][x] = new Tile(grounds[y][x].getType(), grounds[y][x].getUnit().getType(), x, y);
                 this.add(tiles[y][x],BorderLayout.CENTER);
             }
         }

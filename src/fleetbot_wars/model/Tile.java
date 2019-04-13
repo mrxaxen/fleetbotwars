@@ -3,8 +3,7 @@ package fleetbot_wars.model;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
@@ -33,13 +32,24 @@ public class Tile extends JPanel {
         }
     }
 
+    private final int x;
+    private final int y;
     private GroundType groundType;
     private UnitType unitType;
 
-    Tile(GroundType groundType, UnitType unitType, Dimension size) {
+    Tile(GroundType groundType, UnitType unitType, int x, int y) {
+        this.x = x;
+        this.y = y;
         this.unitType = unitType;
         this.groundType = groundType;
         this.setPreferredSize(new Dimension(TILE_BASE_SIZE,TILE_BASE_SIZE));
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                //TODO:implement unit/tile selections
+            }
+        });
     }
 
     @Override

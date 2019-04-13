@@ -91,9 +91,9 @@ public class GameWindow extends JPanel {
         return null;
     }
 
-    private JPanel initActionBar() {
-        //TODO: implement
-        return null;
+    private ActionBar initActionBar() {
+        ActionBar actionBar = new ActionBar();
+        return actionBar;
     }
 
     private JPanel initUnitMx() {
