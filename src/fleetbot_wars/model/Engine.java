@@ -9,6 +9,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map.Entry;
 import visual.ground.Ground;
 import visual.ground.Water;
 import visual.unit.*;
@@ -135,7 +136,7 @@ public class Engine
      * @param b: last point (end)
      * @return 
      */
-    public LinkedList<Point> path(Point a, Point b) {
+    private LinkedList<Point> path(Point a, Point b) {
         int ax = a.x;   int ay = a.y;
         int bx = b.x;   int by = b.y;
         int xdist = bx - ax;    int xdir = (int) Math.signum(xdist);
@@ -239,7 +240,7 @@ public class Engine
      * @param tar: target
      * @return 
      */
-    public boolean losCheck(Controllable atkr, Unit tar) {
+    private boolean losCheck(Controllable atkr, Unit tar) {
         LinkedList<Point> pathPoints = path(atkr.getReferenceCoords(), tar.getReferenceCoords());
         for (Point p : pathPoints) {
             if (!seeThrough(atkr, map.groundAt(p))) {
@@ -265,14 +266,14 @@ public class Engine
      * @param target
      * @return 
      */
-    public boolean inRange(Controllable attacker, Unit target) {
+    private boolean inRange(Controllable attacker, Unit target) {
         Rectangle targetBodyRect = new Rectangle(target.getReferenceCoords().x, target.getReferenceCoords().y, target.getWidth(), target.getHeight());
         return attacker.getRngRect().intersects(targetBodyRect);      
     }
     
     // death
     
-    public void deathEvent(Unit u) {
+    private void deathEvent(Unit u) {
         //ADD DROPS
         if (u instanceof Controllable) {
             int playerIndex = ((Controllable) u).getTeam();
@@ -321,6 +322,22 @@ public class Engine
     public void stopBuild(Controllable builder) {
         builder.setGhostBuilding(null);
         stopMove(builder);
+    }
+    
+    /**
+     * 
+     * @param p
+     * @param contType
+     * @return true if given Player has enough resources to create given type Controllable
+     */
+    public boolean gotResForCont(Player p, String contType) {
+        HashMap price = getPriceOfCont(contType);
+        for (Entry e : p.getResourceMap().entrySet()) {
+            if ((int)price.get(e.getKey()) > (int)e.getValue()) {
+                return false;
+            }
+        }
+        return true;
     }
     
     /**
@@ -439,14 +456,13 @@ public class Engine
     ///// CONTROLLABLE CREATION HELPER
     
     private void payForUnit(Player p, Controllable cont) {
-        HashMap<String, Integer> contPrice = getPriceOfCont(cont);
+        HashMap<String, Integer> contPrice = getPriceOfCont(cont.getType());
         p.getResourceMap().replaceAll((key, value) -> value - contPrice.get(key));
     }   
     
     //dont look at this unless you like brute force YIKES
-    private HashMap<String, Integer> getPriceOfCont(Controllable cont) {
+    private HashMap<String, Integer> getPriceOfCont(String type) {
         HashMap<String, Integer> price = null;
-        String type = cont.getType();
         switch (type) { //buildings
             case "workerspawn":
                 price = WorkerSpawn.price;
