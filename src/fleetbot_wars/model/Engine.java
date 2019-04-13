@@ -7,6 +7,7 @@ package fleetbot_wars.model;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.HashMap;
 import java.util.LinkedList;
 import visual.ground.Ground;
 import visual.ground.Water;
@@ -438,8 +439,67 @@ public class Engine
     ///// CONTROLLABLE CREATION HELPER
     
     private void payForUnit(Player p, Controllable cont) {
-        //PLACEHOLDER
-        //take resources required to create unit from player
+        HashMap<String, Integer> contPrice = getPriceOfCont(cont);
+        p.getResourceMap().replaceAll((key, value) -> value - contPrice.get(key));
+    }   
+    
+    //dont look at this unless you like brute force YIKES
+    private HashMap<String, Integer> getPriceOfCont(Controllable cont) {
+        HashMap<String, Integer> price = null;
+        String type = cont.getType();
+        switch (type) { //buildings
+            case "workerspawn":
+                price = WorkerSpawn.price;
+                break;
+            case "militaryspawn":
+                price = MilitarySpawn.price;
+                break;
+            case "farm":
+                price = Farm.price;
+                break;
+            case "harvestcenter":
+                price = HarvestCenter.price;
+                break;
+            case "goldmine":
+                price = GoldMine.price;
+                break;
+            case "stonemine":
+                price = StoneMine.price;
+                break;
+            case "turret":
+                price = Turret.price;
+                break;    
+            case "barricade":
+                price = Barricade.price;
+                break;  
+        }
+        switch (type) { //mobiles
+            case "lumberjack":
+                price = Lumberjack.price;
+                break;
+            case "miner":
+                price = Miner.price;
+                break;
+            case "builder":
+                price = Builder.price;
+                break;
+            case "infantry":
+                price = Infantry.price;
+                break;
+            case "cavalry":
+                price = Cavalry.price;
+                break;
+            case "ranger":
+                price = Ranger.price;
+                break;
+            case "destroyer":
+                price = Destroyer.price;
+                break;    
+            case "medic":
+                price = Medic.price;
+                break;  
+        }
+        return price;
     }
             
     ///// getters, setters

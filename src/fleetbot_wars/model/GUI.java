@@ -6,11 +6,7 @@
 package fleetbot_wars.model;
 
 import java.awt.Point;
-import visual.ground.Ground;
-import visual.unit.Barricade;
-import visual.unit.Builder;
 import visual.unit.Controllable;
-import visual.unit.Unit;
 
 /**
  *

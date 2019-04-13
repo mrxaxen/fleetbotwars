@@ -6,6 +6,7 @@
 package visual.unit;
 
 import java.awt.Point;
+import java.util.HashMap;
 
 /**
  *
@@ -13,6 +14,9 @@ import java.awt.Point;
  */
 public class GoldMine extends Mine {
 
+    public static HashMap<String, Integer> price = new HashMap<>();
+
+    
     /**
      * create GoldMine at (x,y) coordinates, for 'team' team
      * @param coords

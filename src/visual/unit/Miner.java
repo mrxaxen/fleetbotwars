@@ -6,6 +6,7 @@
 package visual.unit;
 
 import java.awt.Point;
+import java.util.HashMap;
 
 /**
  *
@@ -13,6 +14,8 @@ import java.awt.Point;
  */
 public class Miner extends Controllable {
   
+    public static HashMap<String, Integer> price = new HashMap<>();
+    
     //paired with Mine
     private boolean busy = false;
     

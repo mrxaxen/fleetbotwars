@@ -6,12 +6,15 @@
 package visual.unit;
 
 import java.awt.Point;
+import java.util.HashMap;
 
 /**
  *
  * @author WB
  */
 public class Medic extends Controllable {
+    
+    public static HashMap<String, Integer> price = new HashMap<>();
     
     /**
      * create Medic at (x,y) coordinates, for 'team' team

@@ -8,6 +8,7 @@ package visual.unit;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -15,6 +16,8 @@ import java.util.LinkedList;
  * @author asjf86
  */
 public abstract class Controllable extends Unit {
+    
+    protected static HashMap<String, Integer> price;
 
     private int mvmtSpd, atkSpd, dmg, maxLvl, currLvl, rng;
     protected int team;
@@ -108,7 +111,7 @@ public abstract class Controllable extends Unit {
     }
     
     ///// getters, setters
-
+    
     public Rectangle getRngRect() {
         return rngRect;
     }
@@ -160,5 +163,5 @@ public abstract class Controllable extends Unit {
     public Point getBuilderTarLoc() {
         return new Point(ghostBuilding.getReferenceCoords().x - 1, ghostBuilding.getReferenceCoords().y);
     }
-    
+
 }

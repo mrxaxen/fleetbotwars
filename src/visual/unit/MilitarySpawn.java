@@ -6,12 +6,15 @@
 package visual.unit;
 
 import java.awt.Point;
+import java.util.HashMap;
 
 /**
  *
  * @author asjf86
  */
 public class MilitarySpawn extends Controllable {
+    
+    public static HashMap<String, Integer> price = new HashMap<>();
     
     /**
      * create MilitarySpawn at (x,y) coordinates, for 'team' team

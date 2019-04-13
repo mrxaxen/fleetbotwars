@@ -7,6 +7,7 @@ package visual.unit;
 
 import java.awt.Image;
 import java.awt.Point;
+import java.util.HashMap;
 
 /**
  *
@@ -14,6 +15,8 @@ import java.awt.Point;
  */
 public class Lumberjack extends Controllable {
 
+    public static HashMap<String, Integer> price = new HashMap<>();
+    
     /**
      * create Lumberjack at (x,y) coordinates, for 'team' team
      * @param coords
