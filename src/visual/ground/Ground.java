@@ -49,7 +49,11 @@ public class Ground extends Visual {
         return ownerReference;
     }
 
-    public void setOwnerReference(Unit ownerReference) {
+    /**
+     * Put a unit on this Ground.
+     * @param ownerReference The unit that needs to be put here.
+     */
+    public void addOwner(Unit ownerReference){
         this.ownerReference = ownerReference;
     }
     
