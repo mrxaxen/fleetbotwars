@@ -20,8 +20,8 @@ public class Player {
     // 11 - Infantry, 12 - Cavalry, 13 - Ranger, 14 - Destroyer, 15 - Medic
 
     private HashMap<ResourceType, Integer> resources;
-    private ArrayList<Controllable> playerUnits;
-    private ArrayList<Controllable> deadUnits;
+    private ArrayList<Controllable> playerUnits = new ArrayList<>();
+    private ArrayList<Controllable> deadUnits = new ArrayList<>();
     private String playerName;
     private int playerNumber;
     public final static VisualType[] initialUnits = {VisualType.barricade, VisualType.builder, VisualType.cavalry, VisualType.destroyer, VisualType.farm, VisualType.goldmine, VisualType.harvestcenter, VisualType.infantry, VisualType.lumberjack, VisualType.medic, VisualType.militaryspawn, VisualType.miner, VisualType.ranger, VisualType.stonemine, VisualType.turret, VisualType.workerspawn};
@@ -85,7 +85,9 @@ public class Player {
      * @param unit The Unit Object which needs to be added.
      */
     public void addControllable(Controllable unit) {
-        playerUnits.add(unit);
+        if (unit != null) {
+            playerUnits.add(unit);            
+        }
     }
     
     /**
