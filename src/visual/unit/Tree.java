@@ -18,12 +18,7 @@ public class Tree extends Unit {
 
     /**
      * create Tree at (x,y) coordinates
-     * 
-     * @param x
-     * @param y
-     * @param type
-     * @param model
-     * @param hp
+     * @param coords
      */
     public Tree(Point coords) {
         super(coords, VisualType.tree, null, 50);

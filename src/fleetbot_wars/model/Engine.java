@@ -5,6 +5,7 @@
  */
 package fleetbot_wars.model;
 
+import fleetbot_wars.model.enums.VisualType;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.HashMap;
@@ -257,7 +258,7 @@ public class Engine
         }
         Unit u = g.getOwnerReference();
         return u instanceof Controllable 
-               && ((Controllable)u).isHuman()
+               && ((Controllable)u).isHumanType()
                && ((Controllable)u).getTeam() == cont.getTeam();
     }
     
@@ -276,14 +277,12 @@ public class Engine
     
     private void deathEvent(Unit u) {
         //ADD DROPS
-        if (u instanceof Controllable) {
+        if (u instanceof Controllable) { // doesnt apply to trees
             int playerIndex = ((Controllable) u).getTeam();
             players[playerIndex].addDeadControllable((Controllable) u);
-            for (Point c : u.getCoordsArray()) { //delete unit from the map
-                map.groundAt(c).setOwnerReference(null);
-            }
-        } else { // u was Tree
-            map.remTree(u.getReferenceCoords());
+        }
+        for (Point c : u.getCoordsArray()) { //delete unit from the map
+            map.groundAt(c).setOwnerReference(null);
         }
     }
     
@@ -302,8 +301,8 @@ public class Engine
      * @param buildingRefCoords
      * @param buildingType 
      */
-    public void startBuild(Controllable builder, Point buildingRefCoords, String buildingType) {
-        if (map.groundAt(buildingRefCoords).isFreeOrTree() && !(map.groundAt(buildingRefCoords).getType().equals("water")) //refCoords free, not water
+    public void startBuild(Controllable builder, Point buildingRefCoords, Enum buildingType) {
+        if (map.groundAt(buildingRefCoords).isFreeOrTree() && !(map.groundAt(buildingRefCoords).getType().equals(VisualType.water)) //refCoords free, not water
             && areaAvailable(buildingRefCoords, buildingType, builder.getTeam())) { //area free, not water
             
             Point builderTarLoc = new Point(buildingRefCoords.x - 1, buildingRefCoords.y);
@@ -331,7 +330,7 @@ public class Engine
      * @param contType
      * @return true if given Player has enough resources to create given type Controllable
      */
-    public boolean gotResForCont(Player p, String contType) {
+    public boolean gotResForCont(Player p, Enum contType) {
         HashMap price = getPriceOfCont(contType);
         for (Entry e : p.getResourceMap().entrySet()) {
             if ((int)price.get(e.getKey()) > (int)e.getValue()) {
@@ -372,10 +371,10 @@ public class Engine
     }
     
     //REVISIT
-    private boolean areaAvailable(Point p, String type, int team) {
+    private boolean areaAvailable(Point p, Enum type, int team) {
         boolean b = true;
         for (Point c : ghostBuilding(p, type, team).getCoordsArray()) {
-            if (!map.groundAt(c).isFreeOrTree() || map.groundAt(c).getType().equals("water")) {
+            if (!map.groundAt(c).isFreeOrTree() || map.groundAt(c).getType().equals(VisualType.water)) {
                 b = false;
             }
         }
@@ -389,8 +388,8 @@ public class Engine
      * @param team
      * @return 
      */
-    private boolean mineGroundCheck(Point refCoords, String type, int team) {
-        if (type.equals("stonemine") || type.equals("goldmine")) {
+    private boolean mineGroundCheck(Point refCoords, Enum type, int team) {
+        if (type.equals(VisualType.stonemine) || type.equals(VisualType.goldmine)) {
             Mine mine = (Mine)ghostBuilding(refCoords, type, team);
             return mGC_helper(mine);
         }
@@ -401,13 +400,13 @@ public class Engine
     private boolean mGC_helper(Mine mine) {
         if (mine instanceof StoneMine) { //stone
             for (Point c : mine.getCoordsArray()) {
-                if (map.adjMineralCheck(c, "stone")) {
+                if (map.adjMineralCheck(c, VisualType.stone)) {
                     return true;
                 }
             }
         } else { //gold
             for (Point c : mine.getCoordsArray()) {
-                if (map.adjMineralCheck(c, "gold")) {
+                if (map.adjMineralCheck(c, VisualType.gold)) {
                     return true;
                 }
             }
@@ -423,9 +422,10 @@ public class Engine
      * @param team
      * @return 
      */
-    private Controllable ghostBuilding(Point p, String type, int team) {
+    private Controllable ghostBuilding(Point p, Enum type, int team) {
         Controllable cont = null;
-        switch(type) {
+        String typeString = type.name();
+        switch(typeString) {
             case "workerspawn":
                 cont = new WorkerSpawn(p, team);
                 break;
@@ -457,14 +457,15 @@ public class Engine
     ///// CONTROLLABLE CREATION HELPER
     
     private void payForUnit(Player p, Controllable cont) {
-        HashMap<String, Integer> contPrice = getPriceOfCont(cont.getType().name());
+        HashMap<Enum, Integer> contPrice = getPriceOfCont(cont.getType());
         p.getResourceMap().replaceAll((key, value) -> value - contPrice.get(key));
     }   
     
     //dont look at this unless you like brute force YIKES
-    private HashMap<String, Integer> getPriceOfCont(String type) {
-        HashMap<String, Integer> price = null;
-        switch (type) { //buildings
+    private HashMap<Enum, Integer> getPriceOfCont(Enum type) {
+        HashMap<Enum, Integer> price = null;
+        String typeString = type.name();
+        switch (typeString) { //buildings
             case "workerspawn":
                 price = WorkerSpawn.price;
                 break;
@@ -490,7 +491,7 @@ public class Engine
                 price = Barricade.price;
                 break;  
         }
-        switch (type) { //mobiles
+        switch (typeString) { //mobiles
             case "lumberjack":
                 price = Lumberjack.price;
                 break;

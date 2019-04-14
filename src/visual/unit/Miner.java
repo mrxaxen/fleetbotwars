@@ -18,7 +18,7 @@ public class Miner extends Controllable {
 
     // paired with Mine
   
-    public static HashMap<String, Integer> price = new HashMap<>();
+    public static HashMap<Enum, Integer> price = new HashMap<>();
     
     //paired with Mine
     private boolean busy = false;

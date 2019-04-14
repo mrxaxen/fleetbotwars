@@ -16,7 +16,7 @@ import java.util.HashMap;
  */
 public class Lumberjack extends Controllable {
 
-    public static HashMap<String, Integer> price = new HashMap<>();
+    public static HashMap<Enum, Integer> price = new HashMap<>();
     
     /**
      * create Lumberjack at (x,y) coordinates, for 'team' team

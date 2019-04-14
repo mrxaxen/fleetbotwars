@@ -110,7 +110,7 @@ public abstract class Controllable extends Unit {
                 || t.equals("goldmine") || t.equals("stonemine") || t.equals("turret") || t.equals("barricade");
     }
 
-    public boolean isHuman() {
+    public boolean isHumanType() {
         return !isBuildingType();
     }
 

@@ -17,7 +17,7 @@ import fleetbot_wars.model.enums.VisualType;
  */
 public class Farm extends Controllable {
 
-    public static HashMap<String, Integer> price = new HashMap<>();
+    public static HashMap<Enum, Integer> price = new HashMap<>();
     
     /**
      * create Farm at (x,y) coordinates, for 'team' team

@@ -16,7 +16,7 @@ import fleetbot_wars.model.enums.VisualType;
  */
 public class GoldMine extends Mine {
 
-    public static HashMap<String, Integer> price = new HashMap<>();
+    public static HashMap<Enum, Integer> price = new HashMap<>();
 
     
     /**

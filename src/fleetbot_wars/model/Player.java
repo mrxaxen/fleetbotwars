@@ -1,7 +1,7 @@
 
 package fleetbot_wars.model;
 
-import fleetbot_wars.model.enums.VisualType;
+import fleetbot_wars.model.enums.*;
 import visual.unit.Controllable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ public class Player {
     // 8 - Lumberjack, 9 - Miner, 10 - Builder,
     // 11 - Infantry, 12 - Cavalry, 13 - Ranger, 14 - Destroyer, 15 - Medic
 
-    private HashMap<String, Integer> resources;
+    private HashMap<Enum, Integer> resources;
     private ArrayList<Controllable> playerUnits;
     private ArrayList<Controllable> deadUnits;
     private String playerName;
@@ -31,25 +31,26 @@ public class Player {
      * resources, player name and related methods to manipulate these data.
      * 
      * @param initResources It is intended to set the initial resources for given
-     *                      Player. The key list of this Map<String, Integer> should
+     *                      Player. The key list of thisshMap<Enum, Integer> should
      *                      correspond with the following list of String: food,
      *                      wood, stone, gold, upgrade.
      * @param playerName    The name of the Player.
      * @param playerNumber  The number of the Player.
      * 
      */
-    public Player(String playerName, int playerNumber){//, HashMap<String, Integer> initResources) {
+    public Player(String playerName, int playerNumber){//, HasshMap<Enum, Integer> initResources) {
         this.playerName = playerName;
         this.playerNumber = playerNumber;
         //this.resources = initResources;
-        this.resources = new HashMap<String, Integer>();
-        resources.put("food", 9999);
-        resources.put("wood", 9999);
-        resources.put("gold", 9999);
-        resources.put("stone", 9999);
-        resources.put("upgrade", 9999);
+        this.resources = new HashMap<Enum, Integer>();
+        resources.put(ResourceType.food, 9999);
+        resources.put(ResourceType.wood, 9999);
+        resources.put(ResourceType.gold, 9999);
+        resources.put(ResourceType.stone, 9999);
+        resources.put(ResourceType.upgrade, 9999);
     }
 
+    
     /**
      * Convenient way to DECREASE a given resource.
      * 
@@ -57,10 +58,12 @@ public class Player {
      *                     following list: food, wood, stone, gold, upgrade.
      * @param amount       The amount by the given resource needs to be DECREASED.
      */
+    //UNUSED
+    /*
     public void decreaseResource(String resourceName, int amount) {
         int currResource = (int)resources.get(resourceName);
         resources.put(resourceName, currResource - amount);
-    }
+    }*/
 
     /**
      * Convenient way to INCREASE a given resource.
@@ -69,10 +72,12 @@ public class Player {
      *                     following list: food, wood, stone, gold, upgrade.
      * @param amount       The amount by the given resource needs to be INCREASED.
      */
+    //UNUSED
+    /*
     public void increaseResource(String resourceName, int amount) {
         int currResource = (int)resources.get(resourceName);
         resources.put(resourceName, currResource + amount);
-    }
+    }*/
 
     /**
      * Adding one unit to the Player's unit Collection.
@@ -135,7 +140,7 @@ public class Player {
      * 
      * @return All the available resources as raw data.
      */
-    public HashMap<String, Integer> getResourceMap() {
+    public HashMap<Enum, Integer> getResourceMap() {
         return resources;
     }
 

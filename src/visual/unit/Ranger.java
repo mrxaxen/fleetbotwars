@@ -16,13 +16,11 @@ import fleetbot_wars.model.enums.VisualType;
  */
 public class Ranger extends Controllable {
     
-    public static HashMap<String, Integer> price = new HashMap<>();
+    public static HashMap<Enum, Integer> price = new HashMap<>();
     
     /**
-     * create Ranger at (x,y) coordinates, for 'team' team
-     * 
-     * @param x
-     * @param y
+     * create Ranger at (x,y) coordinates, for 'team' team     * 
+     * @param coords
      * @param team
      */
     public Ranger(Point coords, int team) {
