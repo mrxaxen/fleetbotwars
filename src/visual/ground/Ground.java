@@ -16,7 +16,7 @@ import java.awt.Point;
 public class Ground extends Visual {
 
     protected boolean occupied = false;
-    private Stack<Unit> ownerReference;
+    private Unit ownerReference;
 
     /**
      * The Ground Object is a representation of an atomic piece of land placed on
@@ -29,13 +29,9 @@ public class Ground extends Visual {
      * @param model          It's image/sprite representation
      * @param ownerReference The initial unit it's occupying it, else null.
      */
-    public Ground(Point coords, VisualType type, Image model, Unit inOwnerReference) {
+    public Ground(Point coords, VisualType type, Image model, Unit ownerReference) {
         super(coords, type, model, 1, 1);
-        ownerReference = new Stack<Unit>();
-        if (inOwnerReference != null) {
-            this.ownerReference.push(inOwnerReference);
-            this.occupied = true;
-        }
+        this.ownerReference = ownerReference;
     }
 
     /**
@@ -43,7 +39,7 @@ public class Ground extends Visual {
      * @return True if occupied, false else.
      */
     public boolean isOccupied() {
-        return this.occupied;
+        return this.occupied || ownerReference != null;
 
     }
     
@@ -67,11 +63,7 @@ public class Ground extends Visual {
      *         ground
      */
     public Unit getOwnerReference() {
-        if (!ownerReference.empty()) {
-            return ownerReference.peek();
-        }
-        return null;
-
+        return ownerReference;
     }
 
     /**
@@ -80,18 +72,7 @@ public class Ground extends Visual {
      * @param ownerReference The unit that needs to be put here.
      */
     public void setOwnerReference(Unit ownerReference) {
-        this.ownerReference.push(ownerReference);
-        this.occupied = true;
-    }
-
-    /**
-     * Removes the top occupying Unit of the current tile
-     */
-    public void removeOwner() {
-        if (this.occupied) {
-            this.ownerReference.pop();
-        }
-        this.occupied = !(ownerReference.isEmpty());
+        this.ownerReference = ownerReference;
     }
 
 }

@@ -19,7 +19,7 @@ public class Player {
     // 8 - Lumberjack, 9 - Miner, 10 - Builder,
     // 11 - Infantry, 12 - Cavalry, 13 - Ranger, 14 - Destroyer, 15 - Medic
 
-    private HashMap<Enum, Integer> resources;
+    private HashMap<ResourceType, Integer> resources;
     private ArrayList<Controllable> playerUnits;
     private ArrayList<Controllable> deadUnits;
     private String playerName;
@@ -42,7 +42,7 @@ public class Player {
         this.playerName = playerName;
         this.playerNumber = playerNumber;
         //this.resources = initResources;
-        this.resources = new HashMap<Enum, Integer>();
+        this.resources = new HashMap<ResourceType, Integer>();
         resources.put(ResourceType.food, 9999);
         resources.put(ResourceType.wood, 9999);
         resources.put(ResourceType.gold, 9999);
@@ -132,7 +132,7 @@ public class Player {
      * @param name The name of the requested resource.
      * @return The amount of the requested resource.
      */
-    public int getResourceByName(String name) {
+    public int getResourceByName(ResourceType name) {
         return (int)resources.get(name);
     }
 
@@ -140,7 +140,7 @@ public class Player {
      * 
      * @return All the available resources as raw data.
      */
-    public HashMap<Enum, Integer> getResourceMap() {
+    public HashMap<ResourceType, Integer> getResourceMap() {
         return resources;
     }
 

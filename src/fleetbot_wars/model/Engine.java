@@ -5,6 +5,7 @@
  */
 package fleetbot_wars.model;
 
+import fleetbot_wars.model.enums.ResourceType;
 import fleetbot_wars.model.enums.VisualType;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -167,7 +168,7 @@ public class Engine
     private void changeLoc(Controllable cont, Point tarLoc) {
         Point currLoc = cont.getReferenceCoords();
         cont.setReferenceCoords(tarLoc);
-        map.groundAt(currLoc).removeOwner();
+        map.groundAt(currLoc).setOwnerReference(null);
         map.groundAt(tarLoc).setOwnerReference(cont);
     }
     
@@ -457,13 +458,13 @@ public class Engine
     ///// CONTROLLABLE CREATION HELPER
     
     private void payForUnit(Player p, Controllable cont) {
-        HashMap<Enum, Integer> contPrice = getPriceOfCont(cont.getType());
+        HashMap<ResourceType, Integer> contPrice = getPriceOfCont(cont.getType());
         p.getResourceMap().replaceAll((key, value) -> value - contPrice.get(key));
     }   
     
     //dont look at this unless you like brute force YIKES
-    private HashMap<Enum, Integer> getPriceOfCont(Enum type) {
-        HashMap<Enum, Integer> price = null;
+    private HashMap<ResourceType, Integer> getPriceOfCont(Enum type) {
+        HashMap<ResourceType, Integer> price = null;
         String typeString = type.name();
         switch (typeString) { //buildings
             case "workerspawn":

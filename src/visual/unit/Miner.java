@@ -5,6 +5,7 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.enums.ResourceType;
 import java.awt.Point;
 import java.util.HashMap;
 
@@ -18,7 +19,7 @@ public class Miner extends Controllable {
 
     // paired with Mine
   
-    public static HashMap<Enum, Integer> price = new HashMap<>();
+    public static HashMap<ResourceType, Integer> price = new HashMap<>();
     
     //paired with Mine
     private boolean busy = false;
