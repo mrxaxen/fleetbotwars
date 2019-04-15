@@ -38,17 +38,17 @@ public class EngineTest {
         //testIteration_building()
     }
 
-    /// movement   
-    
-    // B B B B
-    // B B B W
-    // B B B B
-    // B S B i
-    private Engine movement_engine = createMovementEngine();
-    private Controllable movement_inf = movement_engine.getPlayers()[0].getPlayerUnits().get(0);
+    /// movement      
     
     @Test
     public void testStartMove_iterationMove() {
+        // B B B B
+        // B B B W
+        // B B B B
+        // B S B i
+        Engine movement_engine = createMovementEngine();
+        Controllable movement_inf = movement_engine.getPlayers()[0].getPlayerUnits().get(0);
+    
         // invalid target location: S(3,1)
         movement_engine.startMove(movement_inf, new Point(3, 1));
         assertFalse(movement_inf.isMoving()); //is moving == current path not empty
@@ -74,6 +74,13 @@ public class EngineTest {
     
     @Test
     public void testIteration_movement() {
+        // B B B B
+        // B B B W
+        // B B B B
+        // B S B i
+        Engine movement_engine = createMovementEngine();
+        Controllable movement_inf = movement_engine.getPlayers()[0].getPlayerUnits().get(0);
+        
         movement_engine.startMove(movement_inf, new Point(0, 1));
         assertTrue(movement_inf.isMoving()); 
         
@@ -133,7 +140,29 @@ public class EngineTest {
 
     @Test
     public void testStartAttack() {
+        // t0 B i0 B r0
+        // B B B B B B
+        // B B B B B B
+        // t1 B i1 B r1
+        Engine attack_engine = createAttackEngine();
+        Controllable tur0 = attack_engine.getPlayers()[0].getPlayerUnits().get(0);
+        Controllable inf0 = attack_engine.getPlayers()[0].getPlayerUnits().get(1);
+        Controllable ran0 = attack_engine.getPlayers()[0].getPlayerUnits().get(2);
+        Controllable tur1 = attack_engine.getPlayers()[1].getPlayerUnits().get(0);
+        Controllable inf1 = attack_engine.getPlayers()[1].getPlayerUnits().get(1);
+        Controllable ran1 = attack_engine.getPlayers()[1].getPlayerUnits().get(2);
+        // check map fill
+        assertEquals(tur0, attack_engine.getMap().groundAt(new Point(0, 0)));
+        assertEquals(inf0, attack_engine.getMap().groundAt(new Point(0, 2)));
+        assertEquals(ran0, attack_engine.getMap().groundAt(new Point(0, 4)));
+        assertEquals(tur1, attack_engine.getMap().groundAt(new Point(3, 0)));
+        assertEquals(inf1, attack_engine.getMap().groundAt(new Point(3, 2)));
+        assertEquals(ran1, attack_engine.getMap().groundAt(new Point(3, 4)));
         
+        
+        // empty target 
+        Point tarLoc = new Point(/**/);
+        //attack_engine.startAttack(, tarLoc);
     }
 
     @Test
@@ -359,7 +388,7 @@ public class EngineTest {
     
     ///// TEST HELPER ENGINES
     
-    public Engine createMovementEngine() {
+    private Engine createMovementEngine() {
         Ground[][] movement_ground = new Ground[4][4];
         // B B B B
         // B B B W
@@ -379,9 +408,38 @@ public class EngineTest {
         jane.addControllable(new Infantry(new Point(3, 3), jane.getPlayerNumber()));
         players[0] = jane;
         
-        Engine movement_engine = new Engine(movement_map, players, 420);
+        Engine new_movement_engine = new Engine(movement_map, players, 420);
         
-        return movement_engine;
+        return new_movement_engine;
     }
     
+    private Engine createAttackEngine() {
+        Ground[][] attack_ground = new Ground[4][5];
+        // t0 B i0 B r0
+        // B B B B B B
+        // B B B B B B
+        // t1 B i1 B r1
+        for (int i = 0; i < 4; ++i) {
+            for (int j = 0; j < 5; ++j) {
+                attack_ground[i][j] = new Base(new Point(i, j));
+            }
+        }
+        Map attack_map = new Map(attack_ground);
+        
+        Player[] players = new Player[2];
+        Player jane_0 = new Player("jane_doe", 0);
+        jane_0.addControllable(new Turret(new Point(0, 0), jane_0.getPlayerNumber()));
+        jane_0.addControllable(new Infantry(new Point(0, 2), jane_0.getPlayerNumber()));
+        jane_0.addControllable(new Ranger(new Point(0, 4), jane_0.getPlayerNumber()));
+        Player john_1 = new Player("john_doe", 1);
+        john_1.addControllable(new Turret(new Point(3, 0), john_1.getPlayerNumber()));
+        john_1.addControllable(new Infantry(new Point(3, 2), john_1.getPlayerNumber()));
+        john_1.addControllable(new Ranger(new Point(3, 4), john_1.getPlayerNumber()));
+        players[0] = jane_0;
+        players[1] = john_1;
+        
+        Engine new_attack_engine = new Engine(attack_map, players, 1337);
+        
+        return new_attack_engine;
+    }
 }
