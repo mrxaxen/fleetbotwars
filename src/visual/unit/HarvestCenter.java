@@ -5,6 +5,7 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.enums.ResourceType;
 import java.awt.Point;
 import java.util.HashMap;
 
@@ -16,7 +17,7 @@ import fleetbot_wars.model.enums.VisualType;
  */
 public class HarvestCenter extends Controllable {
     
-    public static HashMap<String, Integer> price = new HashMap<>();    
+    public static HashMap<ResourceType, Integer> price = new HashMap<>();    
     
     /**
      * create HarvestCenter at (x,y) coordinates, for 'team' team

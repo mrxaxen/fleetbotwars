@@ -5,6 +5,7 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.enums.ResourceType;
 import fleetbot_wars.model.enums.VisualType;
 import java.awt.Image;
 import java.awt.Point;
@@ -16,7 +17,7 @@ import java.util.HashMap;
  */
 public class Lumberjack extends Controllable {
 
-    public static HashMap<String, Integer> price = new HashMap<>();
+    public static HashMap<ResourceType, Integer> price = new HashMap<>();
     
     /**
      * create Lumberjack at (x,y) coordinates, for 'team' team

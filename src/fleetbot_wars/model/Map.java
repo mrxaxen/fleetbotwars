@@ -43,6 +43,10 @@ public class Map {
         fillStartingZoneCoords(startingZoneCoords);
     }
 
+    // used only for easier testing - Bori
+    public Map(Ground[][] ground) {
+        this.ground = ground;
+    }
 
     /**
      * returns the Ground object at given location(x, y specified by Point)
@@ -274,10 +278,11 @@ public class Map {
         return this.ground;
     }
 
-    
+    //UNUSED
+    /*
     public void remTree(Point refCoords) {
         ground[refCoords.x][refCoords.y] = new Base(refCoords);
-    }
+    }*/
     
     /**
      * used to help building
@@ -286,16 +291,20 @@ public class Map {
      * @return true if at least 1 surrounding Ground is stone (check 8 grid points)
      */
     //REVISIT
-    public boolean adjMineralCheck(Point c, String minableType) {
+    public boolean adjMineralCheck(Point c, Enum minableType) {
         int x = c.x;
         int y = c.y;
         //also checks ground at c (redundant cuz cannot be occupied)
+        try {
         for (int i = x - 1; i < x + 2; ++i) {
             for (int j = y - 1; j < y + 2; ++j) {
-                if (ground[i][j].getType().equals("minableType")) {
+                if (ground[i][j].getType().equals(minableType)) {
                     return true;
                 }
             }
+        }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Checked area extends off the map.");
         }
         return false;
     }

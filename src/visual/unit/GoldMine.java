@@ -5,6 +5,7 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.enums.ResourceType;
 import java.awt.Point;
 import java.util.HashMap;
 
@@ -16,7 +17,7 @@ import fleetbot_wars.model.enums.VisualType;
  */
 public class GoldMine extends Mine {
 
-    public static HashMap<String, Integer> price = new HashMap<>();
+    public static HashMap<ResourceType, Integer> price = new HashMap<>();
 
     
     /**

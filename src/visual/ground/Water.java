@@ -18,7 +18,6 @@ public class Water extends Ground {
      */
     public Water(Point coords) {
         super(coords, VisualType.water, null, null);
-        this.occupied = true;
     }
 
 }

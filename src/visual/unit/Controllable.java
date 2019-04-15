@@ -9,7 +9,6 @@ import fleetbot_wars.model.enums.VisualType;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -17,8 +16,6 @@ import java.util.LinkedList;
  * @author asjf86
  */
 public abstract class Controllable extends Unit {
-    
-    protected static HashMap<String, Integer> price;
 
     private int mvmtSpd, atkSpd, dmg, maxLvl, currLvl, rng;
     protected int team;
@@ -82,10 +79,12 @@ public abstract class Controllable extends Unit {
     }
 
     public void hit(Unit tar) {
-        tar.currHp -= this.dmg * atkSpd;
-        /*
-         * if (tar.currHp <= 0) { tar.deathEvent(); }
-         */
+        int resHp = tar.currHp - this.dmg * atkSpd;
+        if (resHp < tar.maxHp) {
+            tar.currHp = resHp;
+        } else {
+            tar.currHp = tar.maxHp;
+        }
     }
 
     /**
@@ -110,7 +109,7 @@ public abstract class Controllable extends Unit {
                 || t.equals("goldmine") || t.equals("stonemine") || t.equals("turret") || t.equals("barricade");
     }
 
-    public boolean isHuman() {
+    public boolean isHumanType() {
         return !isBuildingType();
     }
 
@@ -166,6 +165,10 @@ public abstract class Controllable extends Unit {
 
     public Point getBuilderTarLoc() {
         return new Point(ghostBuilding.getReferenceCoords().x - 1, ghostBuilding.getReferenceCoords().y);
+    }
+
+    public int getAtkSpd() {
+        return atkSpd;
     }
 
 }

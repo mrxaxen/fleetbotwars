@@ -74,7 +74,7 @@ public class GUI
     
     /// BUILDING: display buttons only for Builders
     
-    private void UNSPECIFIED_startBuildButtonClick(String buildingType) {
+    private void UNSPECIFIED_startBuildButtonClick(Enum buildingType) {
         Point buildingRefCoords = selectLocation();
         engine.startBuild((Controllable)engine.getInspectedUnit(), buildingRefCoords, buildingType);
     }
