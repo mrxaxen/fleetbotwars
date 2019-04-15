@@ -5,11 +5,37 @@
  */
 package fleetbot_wars.model;
 
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+
 /**
  *
- * @author WB
+ * @author EG
  */
-public class Menu
-{
-    
+public abstract class Menu extends JPanel {
+
+    protected static final Dimension DEFAULT_BUTTON_SIZE = new Dimension(50,50);
+    protected static final Insets BUTTON_INSET = new Insets(30,80,30,80);
+    protected final Dimension PREFERRED_BUTTON_SIZE = new Dimension(this.getWidth(),100);
+    protected ArrayList<JButton> buttons;
+    protected GUI gui;
+
+    protected Menu(GUI gui) {
+        super(new GridBagLayout());
+        buttons = new ArrayList<>();
+        initButtons();
+        this.gui = gui;
+        this.setVisible(false);
+    }
+
+    protected abstract void initButtons();
+
+    protected JButton initOptions() {
+        JButton button = new JButton("Options");
+        button.addActionListener(e -> {
+            gui.putComponentToFront(this, GUI.ComponentType.OPTIONS);
+        });
+        return button;
+    }
 }

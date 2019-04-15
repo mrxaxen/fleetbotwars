@@ -5,87 +5,64 @@
  */
 package fleetbot_wars.model;
 
-import java.awt.Point;
-import visual.unit.Controllable;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
 
 /**
- *
  * @author WB
  */
-public class GUI
-{
-    private Engine engine;
-    
-    //CONSTR
-    
-    /**
-     * 
-     * @return clicked location on Map
-     */
-    private Point selectLocation() {
-        //PLACEHOLDER
-        return null;
-    }
-    
-    //UNUSED
-    /*private Unit selectUnit(Point locationClicked) { //assumes existence of method that returns a Point based on mouse location (on click)
-        Ground groundClicked = engine.getMap().groundAt(locationClicked);
-        if (groundClicked.isOccupied()) {
-            return groundClicked.getOwnerReference();
+public class GUI extends JFrame {
+
+    static Dimension mapSize = new Dimension(100,100); //DUMMY GET FROM ENGINE
+    private static GUI instance;
+    private HashMap<ComponentType, JComponent> panels = new HashMap<>();
+
+    public static GUI getInstance() {
+        if (instance == null) {
+            instance = new GUI();
+            return instance;
+        } else {
+            return instance;
         }
-        return null;
-    }*/
-    
-    
-    private void inspectOnClick() {
-        Point location = selectLocation();
-        engine.inspectUnit(location);
-    }    
-    
-    ///// unified update for actions
-    
-    private void actionUpdate() {
-        engine.actionIteration();
     }
-    
-    ///// Controllable Actions
-        
-    /// MOVEMENT: display buttons only for mobile units
-    
-    private void startMoveButtonClick() {
-        Point tarLoc = selectLocation();
-        engine.startMove(((Controllable)engine.getInspectedUnit()), tarLoc); //will only ever be called this way while Controllable is selected
+
+    private GUI() {
+        this.setTitle("Fleetbot Wars");
+        this.setMinimumSize(new Dimension(400, 400));
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setUndecorated(true);
+        this.setExtendedState(MAXIMIZED_BOTH);
+        this.setVisible(true);
+        initPanels();
     }
-    
-    private void stopMoveButtonClick() {
-        engine.stopMove((Controllable)engine.getInspectedUnit()); //will only ever be called this way while Controllable is selected
+
+    private void initPanels() {
+        MainMenu mainMenu = new MainMenu(this);
+        NewGameMenu newGameMenu = new NewGameMenu(this);
+        Options options = new Options(this);
+        GameWindow gameWindow = new GameWindow();
+
+        panels.put(ComponentType.MAIN, mainMenu);
+        panels.put(ComponentType.NEW_GAME, newGameMenu);
+        panels.put(ComponentType.OPTIONS, options);
+        panels.put(ComponentType.GAME_WINDOW, gameWindow);
+
+        this.getContentPane().add(mainMenu);
     }
-    
-    /// COMBAT: display buttons only for units capable of attacking
-    
-    private void startAttackButtonClick() {
-        Point tarLoc = selectLocation();
-        engine.startAttack(((Controllable)engine.getInspectedUnit()), tarLoc); //will only ever be called this way while Controllable is selected
+
+    void putComponentToFront(JComponent caller, ComponentType type) {
+        JComponent panel = panels.get(type);
+        caller.setVisible(false);
+        panel.setVisible(true);
+        this.getContentPane().remove(caller);
+        this.getContentPane().add(panel);
     }
-    
-    private void stopAttackButtonClick() {
-        engine.stopAttack((Controllable)engine.getInspectedUnit()); //will only ever be called this way while Controllable is selected
+
+    enum ComponentType {
+        MAIN,NEW_GAME,OPTIONS,INGAME,GAME_WINDOW
     }
-    
-    /// BUILDING: display buttons only for Builders
-    
-    private void UNSPECIFIED_startBuildButtonClick(Enum buildingType) {
-        Point buildingRefCoords = selectLocation();
-        engine.startBuild((Controllable)engine.getInspectedUnit(), buildingRefCoords, buildingType);
-    }
-    
-    private void stopBuildButtonClick() {
-        engine.stopBuild((Controllable)engine.getInspectedUnit());
-    }
-    
-    /*
-    private void rotateBarricareOnClick() {
-        engine.rotateGhostBarricade();
-    }*/
-    
 }
