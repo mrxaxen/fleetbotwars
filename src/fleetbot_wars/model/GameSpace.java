@@ -10,7 +10,7 @@ import java.awt.*;
 
 class GameSpace extends JPanel implements Talkative{
 
-    private Ground[][] grounds = new Ground[GUI.mapSize.height][GUI.mapSize.width];// DUMMY
+    private Ground[][] grounds = new Ground[GUI.mapSize.height][GUI.mapSize.width];
     private Translation serverComm = Translation.getInstance();
     static Tile[][] tiles; //not static just for testing
     private static GameSpace instance;
