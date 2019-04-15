@@ -17,7 +17,18 @@ import fleetbot_wars.model.enums.VisualType;
  */
 public class StoneMine extends Mine {
         
-    public static HashMap<ResourceType, Integer> price = new HashMap<>();
+    public static HashMap<ResourceType, Integer> price = StoneMine.initPrice();
+    
+    //REVISIT
+    private static HashMap<ResourceType, Integer> initPrice() {
+        HashMap<ResourceType, Integer> new_price = new HashMap<>();
+        new_price.put(ResourceType.food, 1);
+        new_price.put(ResourceType.wood, 1);
+        new_price.put(ResourceType.gold, 1);
+        new_price.put(ResourceType.stone, 1);
+        new_price.put(ResourceType.upgrade, 1);
+        return new_price;
+    }
     
     /**
      * create StoneMine at (x,y) coordinates, for 'team' team

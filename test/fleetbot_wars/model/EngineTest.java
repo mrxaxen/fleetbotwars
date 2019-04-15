@@ -278,17 +278,52 @@ public class EngineTest {
     /// building
     @Test
     public void testStartBuild() {
-
+        // b B B B Tr B
+        // B B W B B B
+        // B B B S B B
+        Engine building_engine = createBuildingEngine();
+        Controllable bui = building_engine.getPlayers()[0].getPlayerUnits().get(0);
+        // check map fill
+        assertEquals(bui, building_engine.getMap().groundAt(new Point(0, 0)).getOwnerReference());
+        
+        // occupied target location
+        building_engine.startBuild(bui, new Point(2, 3), VisualType.stonemine);
+        assertFalse(bui.isBuilding());
+        assertFalse(bui.isMoving());
+        
+        // failed area availability (covered area condition)
+        building_engine.startBuild(bui, new Point(0, 1), VisualType.stonemine);
+        assertEquals(VisualType.water, building_engine.getMap().groundAt(new Point(1, 2)).getType());
+        assertFalse(bui.isBuilding());
+        assertFalse(bui.isMoving());
+        building_engine.startBuild(bui, new Point(1, 1), VisualType.stonemine);
+        assertFalse(bui.isBuilding());
+        assertFalse(bui.isMoving());
+        
     }
 
     @Test
     public void testStopBuild() {
 
     }
+    
+    @Test
+    public void testIteration_building() {
+        
+    }
 
     @Test
     public void testGotResForCont() {
-
+        // b0 b1
+        Engine building_engine = createBuildingEngine_gRFC();
+        Controllable b0 = building_engine.getPlayers()[0].getPlayerUnits().get(0);
+        Controllable b1 = building_engine.getPlayers()[1].getPlayerUnits().get(0);
+        // check map fill
+        assertEquals(b0, building_engine.getMap().groundAt(new Point(0, 0)).getOwnerReference());
+        assertEquals(b1, building_engine.getMap().groundAt(new Point(0, 1)).getOwnerReference());
+        
+        assertTrue(building_engine.gotResForCont(building_engine.getPlayers()[0], VisualType.stonemine));
+        assertFalse(building_engine.gotResForCont(building_engine.getPlayers()[1], VisualType.stonemine));
     }
 
     ///// ENGINE HELPERS
@@ -364,7 +399,7 @@ public class EngineTest {
         assertFalse(map.adjMineralCheck(new Point(1, 4), VisualType.gold));
         //doesnt like println
         map.adjMineralCheck(new Point(1, 5), VisualType.gold);
-        assertEquals("Checked area extends off the map." + System.lineSeparator(), outContent.toString());
+        assertEquals("Checked area extends off the map. (mineral check)" + System.lineSeparator(), outContent.toString());
     }
 
     // Controllable:
@@ -487,6 +522,7 @@ public class EngineTest {
     }
 
     ///// TEST HELPER ENGINES
+    
     private Engine createMovementEngine() {
         Ground[][] movement_ground = new Ground[4][4];
         // B B B B
@@ -568,4 +604,51 @@ public class EngineTest {
 
         return new_attack_engine;
     }
+    
+    private Engine createBuildingEngine() {
+        Ground[][] building_ground = new Ground[4][6];
+        // b B B B Tr B
+        // B B W B B B
+        // B B B S B B
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 6; ++j) {
+                building_ground[i][j] = new Base(new Point(i, j));
+            }
+        }
+        building_ground[0][4].setOwnerReference(new Tree(new Point(0, 4)));
+        building_ground[1][2] = new Water(new Point(1, 2));
+        building_ground[2][3] = new Stone(new Point(2, 3), 1);
+        Map building_map = new Map(building_ground);
+        
+        Player[] players = new Player[1];
+        Player jane = new Player("jane_doe", 0);
+        jane.addControllable(new Builder(new Point(0, 0), jane.getPlayerNumber()));
+        players[0] = jane;
+        
+        Engine new_building_engine = new Engine(building_map, players, 57);
+        
+        return new_building_engine;
+    }
+    
+    private Engine createBuildingEngine_gRFC() {
+        Ground[][] building_ground = new Ground[1][2];
+        // b0 b1
+        building_ground[0][0] = new Base(new Point(0, 0));
+        building_ground[0][1] = new Base(new Point(0, 1));
+        Map building_map = new Map(building_ground);
+        
+        Player[] players = new Player[2];
+        Player jane_0 = new Player("jane_doe", 0);
+        jane_0.addControllable(new Builder(new Point(0, 0), jane_0.getPlayerNumber()));
+        Player john_1 = new Player("john_doe", 1);
+        john_1.addControllable(new Builder(new Point(0, 1), john_1.getPlayerNumber()));
+        john_1.nullifyResources();
+        players[0] = jane_0;
+        players[1] = john_1;
+        
+        Engine new_building_engine = new Engine(building_map, players, 57);
+        
+        return new_building_engine;
+    }
+    
 }

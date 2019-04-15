@@ -304,7 +304,7 @@ public class Map {
             }
         }
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Checked area extends off the map.");
+            System.out.println("Checked area extends off the map. (mineral check)");
         }
         return false;
     }

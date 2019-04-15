@@ -18,7 +18,7 @@ import fleetbot_wars.model.enums.VisualType;
  */
 public class Turret extends Controllable {
 
-    public static HashMap<ResourceType, Integer> price = new HashMap<>();
+    public static HashMap<ResourceType, Integer> price = new HashMap<>();         
     
     /**
      * create Turret at (x,y) coordinates, for 'team' team

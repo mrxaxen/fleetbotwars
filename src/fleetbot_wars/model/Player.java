@@ -50,6 +50,14 @@ public class Player {
         resources.put(ResourceType.upgrade, 9999);
     }
 
+    // used for testing only - Bori
+    public void nullifyResources() {
+        resources.put(ResourceType.food, 0);
+        resources.put(ResourceType.wood, 0);
+        resources.put(ResourceType.gold, 0);
+        resources.put(ResourceType.stone, 0);
+        resources.put(ResourceType.upgrade, 0);
+    }
     
     /**
      * Convenient way to DECREASE a given resource.
@@ -58,12 +66,10 @@ public class Player {
      *                     following list: food, wood, stone, gold, upgrade.
      * @param amount       The amount by the given resource needs to be DECREASED.
      */
-    //UNUSED
-    /*
-    public void decreaseResource(String resourceName, int amount) {
+    public void decreaseResource(ResourceType resourceName, int amount) {
         int currResource = (int)resources.get(resourceName);
         resources.put(resourceName, currResource - amount);
-    }*/
+    }
 
     /**
      * Convenient way to INCREASE a given resource.
@@ -72,12 +78,10 @@ public class Player {
      *                     following list: food, wood, stone, gold, upgrade.
      * @param amount       The amount by the given resource needs to be INCREASED.
      */
-    //UNUSED
-    /*
-    public void increaseResource(String resourceName, int amount) {
+    public void increaseResource(ResourceType resourceName, int amount) {
         int currResource = (int)resources.get(resourceName);
         resources.put(resourceName, currResource + amount);
-    }*/
+    }
 
     /**
      * Adding one unit to the Player's unit Collection.

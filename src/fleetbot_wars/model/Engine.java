@@ -43,7 +43,7 @@ public class Engine
         //bind Controllables to map
         for (Player p : players) {
             for (Controllable cont : p.getPlayerUnits()) {
-                for (Point c : cont.getCoordsArray()) {
+                for (Point c : cont.getCoordsArray()) { 
                     map.groundAt(c).setOwnerReference(cont);
                 }
             }
@@ -335,11 +335,11 @@ public class Engine
      * @param buildingType 
      */
     public void startBuild(Controllable builder, Point buildingRefCoords, Enum buildingType) {
-        if (map.groundAt(buildingRefCoords).isFreeOrTree() && !(map.groundAt(buildingRefCoords).getType().equals(VisualType.water)) //refCoords free, not water
-            && areaAvailable(buildingRefCoords, buildingType, builder.getTeam())) { //area free, not water
-            
-            Point builderTarLoc = new Point(buildingRefCoords.x - 1, buildingRefCoords.y);
-            if (!map.groundAt(builderTarLoc).isOccupied()){ //builder target position free
+        if (/*map.groundAt(buildingRefCoords).isFreeOrTree() && !(map.groundAt(buildingRefCoords).getType().equals(VisualType.water)) //refCoords free, not water
+            &&*/ areaAvailable(buildingRefCoords, buildingType, builder.getTeam())) { //area free/tree, not water            
+            Point builderTarLoc = new Point(buildingRefCoords.x, buildingRefCoords.y - 1);
+            if (!map.groundAt(builderTarLoc).isOccupied()                            // builder target position free, 
+                || map.groundAt(builderTarLoc).getOwnerReference().equals(builder)){ // or builder already there
                 builder.setGhostBuilding(ghostBuilding(buildingRefCoords, buildingType, builder.getTeam()));
                 if (!builder.getReferenceCoords().equals(builderTarLoc)) {
                     startMove(builder, builderTarLoc);
@@ -373,24 +373,6 @@ public class Engine
         return true;
     }
     
-    /**
-     * rotates ghost Barricade if inspected unit is Builder,
-     * with Barricade selected but not yet placed, 
-     */
-    //UNUSED
-    /*
-    public void rotateGhostBarricade() 
-    {
-        if (inspectedUnit instanceof Builder) {
-            Builder b = (Builder)inspectedUnit;
-            Controllable building = b.getGhostBuilding();
-            //REVISIT: could be in the process of building (if its made not instant)
-            if (building instanceof Barricade && b.isBuilding() && !b.isMoving()) {
-                ((Barricade)building).rotate();
-            }            
-        }
-    }*/
-    
     /// building helpers (private)
     
     private void build(Controllable builder) {
@@ -398,8 +380,9 @@ public class Engine
             for (Point c : builder.getGhostBuilding().getCoordsArray()) {
                 map.groundAt(c).setOwnerReference(builder.getGhostBuilding());
                 payForUnit(players[builder.getTeam()], builder.getGhostBuilding());
-                stopBuild(builder);
             }
+            stopBuild(builder);
+            stopMove(builder);
         }
     }
     
@@ -410,7 +393,7 @@ public class Engine
                 b = false;
             }
         }
-        return b || mineGroundCheck(p, type, team);
+        return b; //|| mineGroundCheck(p, type, team);
     }
     
     /**
@@ -453,7 +436,7 @@ public class Engine
      * @param team
      * @return 
      */
-    private Controllable ghostBuilding(Point p, Enum type, int team) {
+    public static Controllable ghostBuilding(Point p, Enum type, int team) {
         Controllable cont = null;
         String typeString = type.name();
         switch(typeString) {
@@ -563,6 +546,24 @@ public class Engine
 
     public Unit getInspectedUnit() {
         return inspectedUnit;
-    }
+    }    
+    
+    /**
+     * rotates ghost Barricade if inspected unit is Builder,
+     * with Barricade selected but not yet placed, 
+     */
+    //UNUSED
+    /*
+    public void rotateGhostBarricade() 
+    {
+        if (inspectedUnit instanceof Builder) {
+            Builder b = (Builder)inspectedUnit;
+            Controllable building = b.getGhostBuilding();
+            //REVISIT: could be in the process of building (if its made not instant)
+            if (building instanceof Barricade && b.isBuilding() && !b.isMoving()) {
+                ((Barricade)building).rotate();
+            }            
+        }
+    }*/
     
 }

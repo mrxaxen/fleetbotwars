@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class Visual {
 
     protected Point referenceCoords;
-    private ArrayList<Point> coordsArray;
+    //private ArrayList<Point> coordsArray;
     protected VisualType type;
     private Image model; // [!]
     protected int width, height;
@@ -46,8 +46,10 @@ public class Visual {
         this.width = defaultDimX;
         this.height = defaultDimY;
 
+        /*
         this.coordsArray = new ArrayList<Point>();
         coordsArray = fillOccupiedCoords(referenceCoords, defaultDimX, defaultDimY);
+        */
     }
 
     /**
@@ -67,10 +69,14 @@ public class Visual {
         this.width = width;
         this.height = height;
 
+        /*
         this.coordsArray = new ArrayList<Point>();
         coordsArray = fillOccupiedCoords(referenceCoords, width, height);
+        */
     }
 
+    //UNUSED
+    /*
     private ArrayList<Point> fillOccupiedCoords(Point referenceCoords, int width, int height) {
         ArrayList<Point> retArr = new ArrayList<Point>();
         for (int i = referenceCoords.x; i < referenceCoords.x + width; i++) {
@@ -80,6 +86,7 @@ public class Visual {
         }
         return retArr;
     }
+    */
 
     /**
      * graphic display of Visual
@@ -133,12 +140,17 @@ public class Visual {
      * @return the coordsArray
      */
     public ArrayList<Point> getCoordsArray() {
-        return coordsArray;
+        ArrayList<Point> cA = new ArrayList<>();
+        for (int i = referenceCoords.x; i < referenceCoords.x + height; i++) {
+            for (int j = referenceCoords.y; j < referenceCoords.y + width; j++) {
+                cA.add(new Point(i, j));
+            }
+        }
+        return cA;
     }
     
     public void setReferenceCoords(Point referenceCoords) {
         this.referenceCoords = referenceCoords;
     }
-
 
 }
