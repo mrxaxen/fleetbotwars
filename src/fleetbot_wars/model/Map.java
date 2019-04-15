@@ -26,6 +26,23 @@ public class Map {
     private final int startingZoneDimension = 20;
     private Dimension mapDimension;
 
+    /**
+     * Generates a Map based on the given raw file.
+     * You can make a map by using a simple drawer application like MS Paint, GIMP etc.
+     * A parser will generate a map based on the given color-codes:
+     * #ff0000 - Starting Zone 1
+     * #00ffff - Starting Zone 2
+     * #000080 - Starting Zone 3
+     * #ff00ff - Starting Zone 4
+     * #008000 - Wood
+     * #800000 - Mountain
+     * #0000ff - Water
+     * #999999 - Stone
+     * #ffff00 - Gold
+     * DEFAULT - Ground (any other color will translate to Ground)
+     * 
+     * @param rawMapFileLocation
+     */
     public Map() {
         this.startingZoneCoords = new ArrayList<Point>();
         this.rawMapFileLocation = "maps/100x100";
@@ -204,8 +221,9 @@ public class Map {
         return isEmpty;
     }
 
-    private void placeUnitsOnMap(VisualType[] units, int playerNum, ArrayList<Point> startingZone) {
+    private void placeUnitsOnMap(VisualType[] units, Player player, ArrayList<Point> startingZone) {
         Controllable currUnit;
+        int playerNum = player.getPlayerNumber();
         int count = 0;
         Point currentCoord;
         for (VisualType unit : units) {
@@ -213,6 +231,7 @@ public class Map {
             System.out.println(count);
             currentCoord = startingZone.get(count);
             currUnit = VisualType.createUnit(unit, currentCoord, playerNum);
+            player.addControllable(currUnit);
             //System.out.println(currUnit.getType().name());
             while (count < (startingZone.size()-1)
                     && !(isSectionUnOccupied(currentCoord, currUnit.getWidth(), currUnit.getHeight()))) {
@@ -231,6 +250,15 @@ public class Map {
      * private ArrayList<Controllable> initUnits(){ ArrayList<Controllable>
      * initUnits = new ArrayList<Controllable>(); }
      */
+
+    /**
+     * Places players units on the map. Based on their playerNumber, 
+     * their units and buildings will be placed in one of the starting zones 
+     * matching up with their numbers.
+     *  
+     * @param players The players that need to be placed on the map.
+     */
+
     public void placePlayersOnMap(Player[] players) {
         int currZoneId = 0;
         Point startingZoneTopLeft;
@@ -238,7 +266,7 @@ public class Map {
             clearStartingZone(p.getPlayerNumber());
             startingZoneTopLeft = calcPlayerStartingZone(currZoneId);
             ArrayList<Point> currStartingZone = startingZoneCoordsArr.get(p.getPlayerNumber());
-            placeUnitsOnMap(p.initialUnits, p.getPlayerNumber(), currStartingZone);
+            placeUnitsOnMap(p.initialUnits, p, currStartingZone);
         }
     }
 
@@ -261,10 +289,10 @@ public class Map {
                 String posInMapArr = (new Point(i, j)).toString();
                 String groundType = currGround.getType().toString();
                 
-                sb.append("[unitTypeName: "+ unitTypeName +"]");
-                sb.append("[unitPosition: "+ unitPosition +"]");
-                sb.append("[posInMapArr: "+ posInMapArr +"]");
-                sb.append("[groundType: "+ groundType +"]");
+                sb.append("[unitTypeName: ").append(unitTypeName).append("]");
+                sb.append("[unitPosition: ").append(unitPosition).append("]");
+                sb.append("[posInMapArr: ").append(posInMapArr).append("]");
+                sb.append("[groundType: ").append(groundType).append("]");
                 
                 sb.append("\n");
                 

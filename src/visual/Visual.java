@@ -34,7 +34,7 @@ public class Visual {
      * create Visual Object with default dimensions specified by defaultDimX,
      * defaultDimY
      * 
-     * @param referenceCoords Top left coords of the current Visual element.
+     * @param referenceCoords Top left coordinates of the current Visual element.
      * @param type            Unit name (eg. Cavalry, Destroyer, etc.)
      * @param model           Serves as the visually represented model of it's
      *                        owner.
@@ -54,7 +54,7 @@ public class Visual {
     }
 
     /**
-     * @param referenceCoords Top left coords of the current Visual element. This
+     * @param referenceCoords Top left coordinates of the current Visual element. This
      *                        important if it has any dimension greater then 1.
      * @param type            Unit name (eg. Cavalry, Destroyer, etc.)
      * @param model           Serves as the visually represented model of it's
@@ -117,9 +117,9 @@ public class Visual {
 
     /**
      * Calculates the difference between the given coordinates and the current
-     * Visual's coordinates as signed value. To achive this the calculation expect to receive the
+     * Visual's coordinates as signed value. To achieve this the calculation expect to receive the
      * center coordinates as parameter and uses the current Visual objects center
-     * coordinas as well.
+     * coordinates as well.
      * 
      * @param coordsFrom Center coordinates of the corresponding Visual Object.
      * @return The signed difference between the two center coordinates as Point Object.
