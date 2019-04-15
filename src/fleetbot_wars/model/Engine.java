@@ -70,14 +70,14 @@ public class Engine
         for (Player p : players) 
         {
             for (Controllable cont : p.getPlayerUnits()) {
-                if (cont.isMoving()) {
-                    move(cont);                    
-                }
                 if (cont.isAttacking()) {
                     attack(cont, cont.getCurrTar());                    
                 }
                 if (cont.isBuilding()) {
                     build(cont);                    
+                }
+                if (cont.isMoving()) {
+                    move(cont);                    
                 }
             }
         }
@@ -199,8 +199,12 @@ public class Engine
         Unit tar = map.groundAt(tarLoc).getOwnerReference();
         if (atkr.isValidTarget(tar)) {
             atkr.setCurrTar(tar);
-            if (!inRange(atkr, tar) && !(atkr instanceof Turret)) {
-                startMove(atkr, tar.getReferenceCoords());
+            if (!inRange(atkr, tar)) {
+                if (atkr instanceof Turret) {
+                    stopAttack(atkr);
+                } else {
+                    startMove(atkr, tar);
+                }
             }
         }        
     }
@@ -214,7 +218,19 @@ public class Engine
         stopMove(atkr);
     }
     
-    /// combat helpers (private)
+    /// combat helpers (private)    
+    
+    /**
+     * same logic as startMove(Controllable, Unit),
+     * without the initial occupation check (will always be occupied by terget)
+     * @param cont
+     * @param tar 
+     */    
+    private void startMove(Controllable cont, Unit tar) {
+        LinkedList<Point> path = path(cont.getReferenceCoords(), tar.getReferenceCoords());
+            path.add(tar.getReferenceCoords());
+            cont.setCurrPath(path);
+    }
     
     /**
      * given Controllable attempts to attack given Unit
@@ -285,8 +301,8 @@ public class Engine
      * @return 
      */
     private boolean inRange(Controllable attacker, Unit target) {
-        Rectangle targetBodyRect = new Rectangle(target.getReferenceCoords().x, target.getReferenceCoords().y, target.getWidth(), target.getHeight());
-        return attacker.getRngRect().intersects(targetBodyRect);      
+        //return attacker.getRngRect().intersects(target.getBodyRect());      
+        return attacker.getRngRect().contains(target.getReferenceCoords()); 
     }
     
     // death

@@ -25,10 +25,10 @@ public class Visual {
     protected VisualType type;
     private Image model; // [!]
     protected int width, height;
-    private Rectangle rectangle;
+    //private Rectangle rectangle;
     private int defaultDimX = 1;
     private int defaultDimY = 1;
-    private Point centerCoords;
+    //private Point centerCoords;
 
     /**
      * create Visual Object with default dimensions specified by defaultDimX,
@@ -44,8 +44,8 @@ public class Visual {
         this.referenceCoords = referenceCoords;
         this.type = type;
         this.model = model;
-        this.rectangle = new Rectangle(referenceCoords, new Dimension(this.defaultDimX, this.defaultDimY));
-        this.centerCoords = new Point((int)rectangle.getCenterX(), (int)rectangle.getCenterY());
+        //this.rectangle = new Rectangle(referenceCoords, new Dimension(this.defaultDimX, this.defaultDimY));
+        //this.centerCoords = new Point((int)rectangle.getCenterX(), (int)rectangle.getCenterY());
         this.width = defaultDimX;
         this.height = defaultDimY;
 
@@ -67,8 +67,8 @@ public class Visual {
         this.referenceCoords = referenceCoords;
         this.type = type;
         this.model = model;
-        this.rectangle = new Rectangle(referenceCoords, new Dimension(width, height));
-        this.centerCoords = new Point((int)this.rectangle.getCenterX(), (int)this.rectangle.getCenterY());
+        //this.rectangle = new Rectangle(referenceCoords, new Dimension(width, height));
+        //this.centerCoords = new Point((int)this.rectangle.getCenterX(), (int)this.rectangle.getCenterY());
         this.width = width;
         this.height = height;
 
@@ -100,9 +100,12 @@ public class Visual {
      * @param coords The coords where intersection needs to be checked.
      * @return True if intersect, false else.
      */
+    //UNUSED
+    /*
     public Boolean containsPoint(Point coords) {
         return this.rectangle.contains(coords);
     }
+    */
 
     /**
      * Returns the distance between the given coords and the center of the Visual
@@ -111,9 +114,12 @@ public class Visual {
      * @param coordsFrom The coords from where it needs to be checked.
      * @return The distance in int type.
      */
+    //UNUSED
+    /*
     public Integer distanceFrom(Point coordsFrom) {
         return (int) (Point2D.distance(coordsFrom.x, coordsFrom.y, centerCoords.x, centerCoords.y));
     }
+    */
 
     /**
      * Calculates the difference between the given coordinates and the current
@@ -124,12 +130,21 @@ public class Visual {
      * @param coordsFrom Center coordinates of the corresponding Visual Object.
      * @return The signed difference between the two center coordinates as Point Object.
      */
+    //UNUSED
+    /*
     public Point getDirectionFrom(Point coordsFrom) {
         int x = coordsFrom.x - centerCoords.x;
         int y = coordsFrom.y - centerCoords.y;
         return new Point(x, y);
     }
+    */
 
+    ///// getters, setters
+    
+    public Rectangle getBodyRect() {
+        return new Rectangle(referenceCoords, new Dimension(width, height));
+    }
+    
     /**
      * @return the type
      */
@@ -161,9 +176,12 @@ public class Visual {
     /**
      * @return the centerCoords
      */
+    //UNUSED
+    /*
     public Point getCenterCoords() {
         return centerCoords;
     }
+    */
 
     /**
      * @return the referenceCoords
