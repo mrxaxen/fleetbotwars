@@ -11,7 +11,6 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 /**
@@ -44,8 +43,6 @@ public class Visual {
         this.referenceCoords = referenceCoords;
         this.type = type;
         this.model = model;
-        //this.rectangle = new Rectangle(referenceCoords, new Dimension(this.defaultDimX, this.defaultDimY));
-        //this.centerCoords = new Point((int)rectangle.getCenterX(), (int)rectangle.getCenterY());
         this.width = defaultDimX;
         this.height = defaultDimY;
 
@@ -67,8 +64,6 @@ public class Visual {
         this.referenceCoords = referenceCoords;
         this.type = type;
         this.model = model;
-        //this.rectangle = new Rectangle(referenceCoords, new Dimension(width, height));
-        //this.centerCoords = new Point((int)this.rectangle.getCenterX(), (int)this.rectangle.getCenterY());
         this.width = width;
         this.height = height;
 
@@ -92,52 +87,6 @@ public class Visual {
     public void draw() {
         //PLACEHOLDER
     }
-
-    /**
-     * Checks if the given coords are colliding/intersecting the current Visual
-     * element.
-     * 
-     * @param coords The coords where intersection needs to be checked.
-     * @return True if intersect, false else.
-     */
-    //UNUSED
-    /*
-    public Boolean containsPoint(Point coords) {
-        return this.rectangle.contains(coords);
-    }
-    */
-
-    /**
-     * Returns the distance between the given coords and the center of the Visual
-     * Object
-     * 
-     * @param coordsFrom The coords from where it needs to be checked.
-     * @return The distance in int type.
-     */
-    //UNUSED
-    /*
-    public Integer distanceFrom(Point coordsFrom) {
-        return (int) (Point2D.distance(coordsFrom.x, coordsFrom.y, centerCoords.x, centerCoords.y));
-    }
-    */
-
-    /**
-     * Calculates the difference between the given coordinates and the current
-     * Visual's coordinates as signed value. To achive this the calculation expect to receive the
-     * center coordinates as parameter and uses the current Visual objects center
-     * coordinas as well.
-     * 
-     * @param coordsFrom Center coordinates of the corresponding Visual Object.
-     * @return The signed difference between the two center coordinates as Point Object.
-     */
-    //UNUSED
-    /*
-    public Point getDirectionFrom(Point coordsFrom) {
-        int x = coordsFrom.x - centerCoords.x;
-        int y = coordsFrom.y - centerCoords.y;
-        return new Point(x, y);
-    }
-    */
 
     ///// getters, setters
     
@@ -172,16 +121,6 @@ public class Visual {
     public int getHeight() {
         return height;
     }
-
-    /**
-     * @return the centerCoords
-     */
-    //UNUSED
-    /*
-    public Point getCenterCoords() {
-        return centerCoords;
-    }
-    */
 
     /**
      * @return the referenceCoords

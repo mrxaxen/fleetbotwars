@@ -8,7 +8,6 @@ package fleetbot_wars.model;
 import fleetbot_wars.model.enums.ResourceType;
 import fleetbot_wars.model.enums.VisualType;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
@@ -183,7 +182,7 @@ public class Engine
     private void changeLoc(Controllable cont, Point tarLoc) {
         Point currLoc = cont.getReferenceCoords();
         cont.setReferenceCoords(tarLoc);
-        map.groundAt(currLoc).setOwnerReference(null); //lefut
+        map.groundAt(currLoc).setOwnerReference(null);
         map.groundAt(tarLoc).setOwnerReference(cont);
     }
     
@@ -238,7 +237,7 @@ public class Engine
      * @param tar: target
      */
     private void attack(Controllable atkr, Unit tar) {
-        if (inRange(atkr, tar)) { //in range
+        if (inRange(atkr, tar) && atkr.getCurrHp() > 0) { //in range, not dead (died but not yet removed)
             stopMove(atkr);
             if (losCheck(atkr, tar)) { //in line of sight
                 atkr.hit(tar);
@@ -302,7 +301,9 @@ public class Engine
      */
     private boolean inRange(Controllable attacker, Unit target) {
         //return attacker.getRngRect().intersects(target.getBodyRect());      
-        return attacker.getRngRect().contains(target.getReferenceCoords()); 
+        //return attacker.getRngRect().contains(target.getReferenceCoords()); 
+        return Math.abs(attacker.getReferenceCoords().x - target.getReferenceCoords().x) <= attacker.getRng()
+               && Math.abs(attacker.getReferenceCoords().y - target.getReferenceCoords().y) <= attacker.getRng();
     }
     
     // death
@@ -402,7 +403,6 @@ public class Engine
         }
     }
     
-    //REVISIT
     private boolean areaAvailable(Point p, Enum type, int team) {
         boolean b = true;
         for (Point c : ghostBuilding(p, type, team).getCoordsArray()) {
@@ -428,7 +428,6 @@ public class Engine
         return true;
     }
     
-    //REVISIT
     private boolean mGC_helper(Mine mine) {
         if (mine instanceof StoneMine) { //stone
             for (Point c : mine.getCoordsArray()) {
