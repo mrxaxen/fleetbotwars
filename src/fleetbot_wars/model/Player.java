@@ -6,13 +6,15 @@ import visual.unit.Controllable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import fleetbot_wars.model.enums.ResourceType;
+
 /**
  *
  * @author trmx
  */
 public class Player {
 
-    // 0 - food, 1 - wood, 2 - stone, 3 - gold, 4 - upgrade
+    // 0 - food, 1 - WOOD, 2 - STONE, 3 - GOLD, 4 - upgrade
 
     // 0 - Farm, 1 - HarvestCenter, 2 - StoneMine, 3 - GoldMine, 4 - WorkerSpawn, 5
     // - MilitarySpawm, 6 - Turret, 7 - Barricade,
@@ -24,16 +26,16 @@ public class Player {
     private ArrayList<Controllable> deadUnits = new ArrayList<>();
     private String playerName;
     private int playerNumber;
-    public final static VisualType[] initialUnits = {VisualType.barricade, VisualType.builder, VisualType.cavalry, VisualType.destroyer, VisualType.farm, VisualType.goldmine, VisualType.harvestcenter, VisualType.infantry, VisualType.lumberjack, VisualType.medic, VisualType.militaryspawn, VisualType.miner, VisualType.ranger, VisualType.stonemine, VisualType.turret, VisualType.workerspawn};
+    public final static VisualType[] initialUnits = {VisualType.BARRICADE, VisualType.BUILDER, VisualType.CAVALRY, VisualType.DESTROYER, VisualType.FARM, VisualType.GOLDMINE, VisualType.HARVESTCENTER, VisualType.INFANTRY, VisualType.LUMBERJACK, VisualType.MEDIC, VisualType.MILITARYSPAWN, VisualType.MINER, VisualType.RANGER, VisualType.STONEMINE, VisualType.TURRET, VisualType.WORKERSPAWN};
 
     /**
      * Player Object containing an individual player's data such as Units,
      * resources, player name and related methods to manipulate these data.
      * 
-     * @param initResources It is intended to set the initial resources for given
+     * //@param initResources It is intended to set the initial resources for given
      *                      Player. The key list of thisshMap<Enum, Integer> should
      *                      correspond with the following list of String: food,
-     *                      wood, stone, gold, upgrade.
+     *                      WOOD, STONE, GOLD, upgrade.
      * @param playerName    The name of the Player.
      * @param playerNumber  The number of the Player.
      * 
@@ -55,7 +57,7 @@ public class Player {
      * Convenient way to DECREASE a given resource.
      * 
      * @param resourceName Name of the resource intended to be DECREASED from the
-     *                     following list: food, wood, stone, gold, upgrade.
+     *                     following list: food, WOOD, STONE, GOLD, upgrade.
      * @param amount       The amount by the given resource needs to be DECREASED.
      */
     //UNUSED
@@ -69,7 +71,7 @@ public class Player {
      * Convenient way to INCREASE a given resource.
      * 
      * @param resourceName Name of the resource intended to be INCREASED from the
-     *                     following list: food, wood, stone, gold, upgrade.
+     *                     following list: food, WOOD, STONE, GOLD, upgrade.
      * @param amount       The amount by the given resource needs to be INCREASED.
      */
     //UNUSED

@@ -26,7 +26,7 @@ public class Medic extends Controllable {
      * @param team
      */
     public Medic(Point coords, int team) {
-        super(coords, VisualType.medic, null, 100, 1, 1, -10, 5, 1, 1, team);
+        super(coords, VisualType.MEDIC, null, 100, 1, 1, -10, 5, 1, 1, team);
     }
 
     @Override

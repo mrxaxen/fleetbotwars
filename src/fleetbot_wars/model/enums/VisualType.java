@@ -1,12 +1,34 @@
 package fleetbot_wars.model.enums;
 
 import java.awt.Point;
+import fleetbot_wars.model.GroundType;
+import fleetbot_wars.model.UnitType;
 import visual.unit.*;
 
 public enum VisualType {
 
-    barricade, builder, cavalry, destroyer, farm, goldmine, harvestcenter, infantry, lumberjack, medic, militaryspawn,
-    miner, ranger, stonemine, tree, turret, workerspawn, base, gold, stone, water, mountain, wood;
+    BUILDER(UnitType.BUILDER), CAVALRY(UnitType.BUILDER), DESTROYER(UnitType.BUILDER), INFANTRY(UnitType.BUILDER), LUMBERJACK(UnitType.BUILDER), MEDIC(UnitType.BUILDER), MINER(UnitType.BUILDER), RANGER(UnitType.BUILDER),
+    GOLDMINE(UnitType.GOLDMINE), HARVESTCENTER(UnitType.TURRET),FARM(UnitType.FARM), BARRICADE(UnitType.BARRICADE),MILITARYSPAWN(UnitType.MILITARYSPAWN), STONEMINE(UnitType.STONEMINE), TURRET(UnitType.TURRET), WORKERSPAWN(UnitType.WORKERSPAWN),
+    BASE(GroundType.DIRT), GOLD(GroundType.GOLD), STONE(GroundType.STONE), WATER(GroundType.WATER), MOUNTAIN(GroundType.MOUNTAIN), WOOD(UnitType.BUILDER) ,TREE(UnitType.TREE);
+
+    private GroundType groundType;
+    private UnitType unitType;
+
+    VisualType(GroundType groudType) {
+        this.groundType = groudType;
+    }
+
+    VisualType(UnitType unitType) {
+        this.unitType = unitType;
+    }
+
+    public GroundType getGroundType() {
+        return groundType;
+    }
+
+    public UnitType getUnitType() {
+        return unitType;
+    }
 
     @Override
     public String toString() {
@@ -16,52 +38,52 @@ public enum VisualType {
     public static Controllable createUnit(VisualType name, Point coords, int playerNum) {
         Controllable retUnit = null;
         switch (name) {
-        case barricade:
+        case BARRICADE:
             retUnit = new Barricade(coords, playerNum);
             break;
-        case builder:
+        case BUILDER:
             retUnit = new Builder(coords, playerNum);
             break;
-        case cavalry:
+        case CAVALRY:
             retUnit = new Cavalry(coords, playerNum);
             break;
-        case destroyer:
+        case DESTROYER:
             retUnit = new Destroyer(coords, playerNum);
             break;
-        case farm:
+        case FARM:
             retUnit = new Farm(coords, playerNum);
             break;
-        case goldmine:
+        case GOLDMINE:
             retUnit = new GoldMine(coords, playerNum);
             break;
-        case harvestcenter:
+        case HARVESTCENTER:
             retUnit = new HarvestCenter(coords, playerNum);
             break;
-        case infantry:
+        case INFANTRY:
             retUnit = new Infantry(coords, playerNum);
             break;
-        case lumberjack:
+        case LUMBERJACK:
             retUnit = new Lumberjack(coords, playerNum);
             break;
-        case medic:
+        case MEDIC:
             retUnit = new Medic(coords, playerNum);
             break;
-        case militaryspawn:
+        case MILITARYSPAWN:
             retUnit = new MilitarySpawn(coords, playerNum);
             break;
-        case miner:
+        case MINER:
             retUnit = new Miner(coords, playerNum);
             break;
-        case ranger:
+        case RANGER:
             retUnit = new Ranger(coords, playerNum);
             break;
-        case stonemine:
+        case STONEMINE:
             retUnit = new StoneMine(coords, playerNum);
             break;
-        case turret:
+        case TURRET:
             retUnit = new Turret(coords, playerNum);
             break;
-        case workerspawn:
+        case WORKERSPAWN:
             retUnit = new WorkerSpawn(coords, playerNum);
             break;
         default:

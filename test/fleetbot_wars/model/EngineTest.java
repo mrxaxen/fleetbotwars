@@ -121,7 +121,7 @@ public class EngineTest {
         movement_engine.startMove(movement_inf, new Point(3, 3));        
         movement_engine.actionIteration();
         
-        // walked into water
+        // walked into WATER
         movement_engine.startMove(movement_inf, new Point(0, 3));                
         movement_engine.actionIteration();        
         movement_engine.actionIteration();
@@ -297,7 +297,7 @@ public class EngineTest {
         assertFalse(destroyer.isValidTarget(turret)); //friendly building
         assertFalse(destroyer.isValidTarget(e_infantry)); //enemy human
         assertFalse(destroyer.isValidTarget(infantry)); //friendly human
-        assertFalse(destroyer.isValidTarget(tree)); //tree
+        assertFalse(destroyer.isValidTarget(tree)); //TREE
 
         assertTrue(infantry.isValidTarget(e_turret));
         assertFalse(infantry.isValidTarget(turret));

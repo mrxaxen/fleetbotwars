@@ -19,7 +19,7 @@ public class MiniMap extends JPanel {
     MiniMap(Tile[][] map) {
         this.map = map;
     }
-
+/*
     @Override
     public void paintComponent(Graphics g) {
         int side = (getWidth()/GUI.mapSize.width) == 1 ? 2 : getWidth()/GUI.mapSize.width;
@@ -28,13 +28,13 @@ public class MiniMap extends JPanel {
         for (Tile[] arr : map) {
             for (Tile t : arr) {
                 if (t.getUnitType() == null) {
-//                    t.getGroundType();// getColor
+                    g.setColor(t.getGroundType().getColor());// getColor
                     g.drawRect(t.getX()*side,t.getY()*side,side,side);
                 } else {
                     g.setColor(t.getUnitType().getColor());
-                    g.fillRect(t.getCoordX()*side,t.getCoordY()*side,side,side);
+                    g.fillRect(t.getCoordX() * side, t.getCoordY() * side, side, side);
                 }
             }
         }
-    }
+    }*/
 }

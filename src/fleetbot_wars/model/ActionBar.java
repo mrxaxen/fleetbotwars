@@ -34,9 +34,9 @@ class ActionBar extends JPanel {
         addBar(attack);
         this.setBackground(GameWindow.backgroundColor);
         this.setBorder(GameWindow.uiBorder);
-//        builder.setBackground(GameWindow.backgroundColor);
+//        BUILDER.setBackground(GameWindow.backgroundColor);
 //        buildMenu.setBackground(GameWindow.backgroundColor);
-        oneToRuleThemAll.put("builder",builder);
+        oneToRuleThemAll.put("BUILDER",builder);
         oneToRuleThemAll.put("buildmenu",buildMenu);
         oneToRuleThemAll.put("attack",attack);
     }
@@ -59,7 +59,7 @@ class ActionBar extends JPanel {
             case TREE:
                 return;
             case BUILDER:
-                changeActionBar("builder");
+                changeActionBar("BUILDER");
                 break;
         }
     }
@@ -115,25 +115,25 @@ class ActionBar extends JPanel {
         JButton barricade = new JButton("Barricade");
         //TODO: implement actionbar menus and functions
         workerSpawn.addActionListener(e -> {
-
+            selectionController.setBuildingToBuild(UnitType.WORKERSPAWN);
         });
         militarySpawn.addActionListener(e -> {
-
+            selectionController.setBuildingToBuild(UnitType.MILITARYSPAWN);
         });
         farm.addActionListener(e -> {
-
+            selectionController.setBuildingToBuild(UnitType.FARM);
         });
         stoneMine.addActionListener(e -> {
-
+            selectionController.setBuildingToBuild(UnitType.STONEMINE);
         });
         goldMine.addActionListener(e -> {
-
+            selectionController.setBuildingToBuild(UnitType.GOLDMINE);
         });
         turret.addActionListener(e -> {
             selectionController.setBuildingToBuild(UnitType.TURRET);
         });
         barricade.addActionListener(e -> {
-
+            selectionController.setBuildingToBuild(UnitType.BARRICADE);
         });
 
         workerSpawn.setEnabled(false);

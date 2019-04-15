@@ -1,5 +1,7 @@
 package fleetbot_wars.model;
 
+import visual.unit.Unit;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -20,6 +22,7 @@ public class Tile extends JPanel {
     private GroundType groundType;
     private UnitType unitType;
     private SelectionController selectionController = SelectionController.getInstance();
+    private Translation serverComm = Translation.getInstance();
 
     Tile(GroundType groundType, UnitType unitType, int x, int y) {
         this.xCoord = x;
@@ -64,8 +67,17 @@ public class Tile extends JPanel {
                 if(e.getButton() == MouseEvent.BUTTON1) {
                     selectionController.select(tile);
                 }
-                if(e.getButton() == MouseEvent.BUTTON2) {
-                    //move
+                if(e.getButton() == MouseEvent.BUTTON3) {
+                    if(selectionController.getSelectedTile().unitType == UnitType.BUILDER) {
+                        serverComm.move(new Point(selectionController.getSelectedTile().getCoordX(), selectionController.getSelectedTile().getCoordY()), new Point(tile.getCoordX(), tile.getCoordY()));
+                        tile.unitType = selectionController.getSelectedTile().unitType;
+                        selectionController.getSelectedTile().unitType = null;
+                        System.out.println("MOVE");
+                        tile.repaint();
+                        selectionController.getSelectedTile().repaint();
+                        selectionController.select(tile);
+                    }
+
                 }
                 //TODO:implement unit/tile selections
             }
@@ -74,6 +86,11 @@ public class Tile extends JPanel {
 
     UnitType getUnitType() {
         return unitType;
+    }
+
+    void setUnitType(UnitType ut) {
+        unitType = ut;
+        this.repaint();
     }
 
     GroundType getGroundType() {

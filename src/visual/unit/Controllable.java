@@ -105,8 +105,8 @@ public abstract class Controllable extends Unit {
 
     public boolean isBuildingType() {
         String t = this.type.name();
-        return t.equals("workerspawn") || t.equals("militaryspawn") || t.equals("farm") || t.equals("harvestcenter")
-                || t.equals("goldmine") || t.equals("stonemine") || t.equals("turret") || t.equals("barricade");
+        return t.equals("WORKERSPAWN") || t.equals("MILITARYSPAWN") || t.equals("FARM") || t.equals("HARVESTCENTER")
+                || t.equals("GOLDMINE") || t.equals("STONEMINE") || t.equals("TURRET") || t.equals("BARRICADE");
     }
 
     public boolean isHumanType() {

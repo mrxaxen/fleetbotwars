@@ -147,7 +147,6 @@ public class Map {
             default:
                 retGround = new Base(currLocation);
                 break;
-
         }
 
         return retGround;
@@ -316,7 +315,7 @@ public class Map {
      * used to help building
      * @param c
      * @param minableType
-     * @return true if at least 1 surrounding Ground is stone (check 8 grid points)
+     * @return true if at least 1 surrounding Ground is STONE (check 8 grid points)
      */
     //REVISIT
     public boolean adjMineralCheck(Point c, Enum minableType) {

@@ -69,7 +69,7 @@ class GameWindow extends JPanel {
     }
 
     private JScrollPane initGameSpace() {
-        GameSpace gameSpace = new GameSpace();
+        GameSpace gameSpace = GameSpace.getInstance();
         int max = 100;
         int min = 0;
         int unitIncrement = 40;
@@ -117,8 +117,8 @@ class GameWindow extends JPanel {
     private UnitMatrix initUnitMx() {
         //TODO: implement
         UnitMatrix unitMX = new UnitMatrix();
-        JButton button = new JButton("PLACEHOLDER UNITMX");
-        unitMX.add(button);
+//        JButton button = new JButton("PLACEHOLDER UNITMX");
+//        unitMX.add(button);
         return unitMX;
     }
 //    private void initMenu() {} ?

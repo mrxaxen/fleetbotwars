@@ -30,16 +30,21 @@ class SelectionController {
 //        return instance;
     }
 
+    Tile getSelectedTile() {
+        return selectedTile;
+    }
+
     void select(Tile tile) {
         if (!tileSelected) {
             selectedTile = tile;
             tileSelected = true;
             selectedTile.setBorder(new LineBorder(new Color(20, 149, 255),5,true));
             actionBar.changeActionBar(selectedTile.getUnitType());
-
         } else {
             if(buildMode) {
-                serverComm.createUnit(buildingToBuild,selectedTile,tile);
+//                serverComm.createUnit(buildingToBuild,selectedTile,tile);
+                tile.setUnitType(buildingToBuild);
+                buildMode = false;
             } else if(attackMode){
                 //do attack
             }

@@ -8,7 +8,6 @@ package fleetbot_wars;
 import fleetbot_wars.model.GUI;
 
 import javax.swing.*;
-import java.awt.*;
 
 import fleetbot_wars.model.Engine;
 import fleetbot_wars.model.Map;
@@ -20,16 +19,14 @@ import fleetbot_wars.model.Player;
  */
 public class Main {
 
+    private static Engine e;
+    public static Engine getEngine() {
+        return e;
+    }
+
     public static void main(String[] args) {
         // TODO code application logic here
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                GUI gui = GUI.getInstance();
-//                gui.setVisible(true);
-            }
-        });
-        //iufjgafEIFJPAIEHGTIWUETVOIWHUJORFI
         Player[] players = new Player[4];
         players[0] = new Player("bori", 0);
         players[1] = new Player("gabor", 1);
@@ -37,9 +34,15 @@ public class Main {
         players[3] = new Player("drszendrey", 3);
 
 
-        Engine e = new Engine(new Map(), players);
+        e = Engine.getInstance(new Map(), players);
 
         System.out.println(e.getMap());
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                GUI gui = GUI.getInstance();
+//                gui.setVisible(true);
+            }
+        });
     }
     
 }
