@@ -2,6 +2,7 @@ package fleetbot_wars.model;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -13,6 +14,21 @@ public class Tile extends JPanel {
     static final int TILE_BASE_SIZE = 128;
     private static HashMap<GroundType, Image> groundImages;
     private static HashMap<UnitType, Image> unitImages;
+
+    private final int xCoord;
+    private final int yCoord;
+    private GroundType groundType;
+    private UnitType unitType;
+    private SelectionController selectionController = SelectionController.getInstance();
+
+    Tile(GroundType groundType, UnitType unitType, int x, int y) {
+        this.xCoord = x;
+        this.yCoord = y;
+        this.unitType = unitType;
+        this.groundType = groundType;
+        this.setPreferredSize(new Dimension(TILE_BASE_SIZE,TILE_BASE_SIZE));
+        setMouseListener();
+    }
 
     static void loadImages() {
         Tile.groundImages = new HashMap<>();
@@ -31,25 +47,37 @@ public class Tile extends JPanel {
             e.printStackTrace();
         }
     }
+    int getCoordX() {
+        return xCoord;
+    }
 
-    private final int x;
-    private final int y;
-    private GroundType groundType;
-    private UnitType unitType;
+    int getCoordY() {
+        return yCoord;
+    }
 
-    Tile(GroundType groundType, UnitType unitType, int x, int y) {
-        this.x = x;
-        this.y = y;
-        this.unitType = unitType;
-        this.groundType = groundType;
-        this.setPreferredSize(new Dimension(TILE_BASE_SIZE,TILE_BASE_SIZE));
+    private void setMouseListener() {
+        Tile tile = this;
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                if(e.getButton() == MouseEvent.BUTTON1) {
+                    selectionController.select(tile);
+                }
+                if(e.getButton() == MouseEvent.BUTTON2) {
+                    //move
+                }
                 //TODO:implement unit/tile selections
             }
         });
+    }
+
+    UnitType getUnitType() {
+        return unitType;
+    }
+
+    GroundType getGroundType() {
+        return groundType;
     }
 
     @Override

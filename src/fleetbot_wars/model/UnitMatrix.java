@@ -5,11 +5,13 @@
  */
 package fleetbot_wars.model;
 
+import javax.swing.*;
+
 /**
  *
  * @author WB
  */
-public class UnitMatrix
+class UnitMatrix extends JPanel
 {
     
 }

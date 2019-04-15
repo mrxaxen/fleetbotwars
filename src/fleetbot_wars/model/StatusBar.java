@@ -11,17 +11,16 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Map;
 
-class StatusBar extends JPanel {
+class StatusBar extends JPanel implements Talkative {
 
     StatusBar(/*HashMap<ResourceType, Integer> resources*/) {
 
         FlowLayout layout = new FlowLayout();
         layout.setAlignment(FlowLayout.LEFT);
         this.setLayout(layout);
-        this.setBackground(new Color(0,0,0));
+        this.setBackground(new Color(67, 41, 24));
         init(genResources());
     }
-
     //DUMMY
     private HashMap<ResourceType, Integer> genResources() {
         HashMap<ResourceType, Integer> resources = new HashMap<>();

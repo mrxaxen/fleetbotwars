@@ -17,7 +17,7 @@ import java.util.HashMap;
  */
 public class GUI extends JFrame {
 
-    static Dimension mapSize = new Dimension(30,30); //DUMMY GET FROM ENGINE
+    static Dimension mapSize = new Dimension(100,100); //DUMMY GET FROM ENGINE
     private static GUI instance;
     private HashMap<ComponentType, JComponent> panels = new HashMap<>();
 
@@ -34,9 +34,10 @@ public class GUI extends JFrame {
         this.setTitle("Fleetbot Wars");
         this.setMinimumSize(new Dimension(400, 400));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setUndecorated(true);
+        this.setExtendedState(MAXIMIZED_BOTH);
         this.setVisible(true);
         initPanels();
-        this.pack();
     }
 
     private void initPanels() {
@@ -59,7 +60,6 @@ public class GUI extends JFrame {
         panel.setVisible(true);
         this.getContentPane().remove(caller);
         this.getContentPane().add(panel);
-        this.pack();
     }
 
     enum ComponentType {

@@ -5,30 +5,23 @@
  */
 package fleetbot_wars.model;
 
-import com.sun.xml.internal.messaging.saaj.soap.JpegDataContentHandler;
-import jdk.net.SocketFlow;
-
 import javax.swing.*;
-import javax.swing.event.MouseInputAdapter;
-import javax.swing.plaf.basic.BasicTreeUI;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 
 /**
  *
  * @author WB
  */
-public class GameWindow extends JPanel {
+class GameWindow extends JPanel {
 
+    static Border uiBorder = new CompoundBorder(new LineBorder(new Color(127, 78, 45)),new EtchedBorder(new Color(39, 19, 18),new Color(127, 78, 45)));
+    static Color backgroundColor = new Color(39, 19, 18);
 
-    GameWindow(/*HashMap<ResourceType,Integer> resources,*/) {
+    GameWindow(/*HashMap<ResourceType,Integer> resources*/) {
         initGameWindow(/*resources*/);
     }
 
@@ -39,17 +32,40 @@ public class GameWindow extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 1;
-        gbc.weighty = 1;
+        gbc.weighty = 0.89;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.BOTH;
         this.add(initGameSpace(),gbc);
 
+        gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.weightx = 1;
         gbc.weighty = 0.01;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         this.add(initStatusBar(/*resources*/),gbc);
-//        this.add(initMinMap(),gbc); //set GBC
-//        this.add(initActionBar(), gbc); //set GBC
-//        this.add(initUnitMx, gbc);
+
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridwidth = 1;
+        gbc.gridheight = GridBagConstraints.REMAINDER;
+        gbc.weighty = 0.1;
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 0.2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        MiniMap miniMap = initMinMap();
+        this.add(miniMap,gbc); //set GBC
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.weightx = 0.7;
+        this.add(initActionBar(), gbc); //set GBC
+
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        gbc.weightx = 0.1;
+        this.add(initUnitMx(), gbc);
     }
 
     private JScrollPane initGameSpace() {
@@ -83,22 +99,27 @@ public class GameWindow extends JPanel {
     //TODO: Sync with engine
     private StatusBar initStatusBar(/*HashMap<ResourceType,Integer> resources*/) {
         StatusBar statusBar = new StatusBar(/*resources*/);
+        statusBar.setBorder(GameWindow.uiBorder);
         return statusBar;
     }
 
-    private JPanel initMinMap() {
+    private MiniMap initMinMap() {
         //TODO: implement
-        return null;
+        MiniMap minMap = new MiniMap(GameSpace.tiles);
+        minMap.setBorder(GameWindow.uiBorder);
+        return minMap;
     }
 
     private ActionBar initActionBar() {
-        ActionBar actionBar = new ActionBar();
-        return actionBar;
+        return ActionBar.getInstance();
     }
 
-    private JPanel initUnitMx() {
+    private UnitMatrix initUnitMx() {
         //TODO: implement
-        return null;
+        UnitMatrix unitMX = new UnitMatrix();
+        JButton button = new JButton("PLACEHOLDER UNITMX");
+        unitMX.add(button);
+        return unitMX;
     }
 //    private void initMenu() {} ?
 
