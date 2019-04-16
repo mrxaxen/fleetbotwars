@@ -36,7 +36,7 @@ public class Main {
 
         e = Engine.getInstance(new Map(), players);
 
-        System.out.println(e.getMap());
+        //System.out.println(e.getMap());
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 GUI gui = GUI.getInstance();
