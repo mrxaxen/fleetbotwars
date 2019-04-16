@@ -6,8 +6,13 @@
 package fleetbot_wars;
 
 import fleetbot_wars.model.Engine;
+import static fleetbot_wars.model.Engine.ghostBuilding;
 import fleetbot_wars.model.Map;
 import fleetbot_wars.model.Player;
+import fleetbot_wars.model.enums.VisualType;
+import java.awt.Point;
+import visual.unit.Controllable;
+import visual.unit.Infantry;
 
 /**
  *
@@ -20,7 +25,7 @@ public class Main {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        //iufjgafEIFJPAIEHGTIWUETVOIWHUJORFI
+        /*
         Player[] players = new Player[4];
         players[0] = new Player("bori", 0);
         players[1] = new Player("gabor", 1);
@@ -31,6 +36,11 @@ public class Main {
         Engine e = new Engine(new Map(), players);
         
         System.out.println(e.getMap());
+*/
+        Infantry inf = new Infantry(new Point(1, 1), 1);
+        Controllable sm = Engine.ghostBuilding(new Point(0, 1), VisualType.stonemine, 0);
+        System.out.println(inf.getCoordsArray());
+        System.out.println(sm.getCoordsArray());        
     }
     
 }

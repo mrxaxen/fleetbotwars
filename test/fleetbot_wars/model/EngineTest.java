@@ -22,6 +22,19 @@ import visual.unit.*;
  * @author 3rd
  */
 public class EngineTest {
+    
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final PrintStream originalOut = System.out;
+
+    @Before
+    public void setUpStreams() {
+        System.setOut(new PrintStream(outContent));
+    }
+
+    @After
+    public void restoreStreams() {
+        System.setOut(originalOut);
+    }
 
     ///// ENGINE METHODS
     // General Info:
@@ -142,10 +155,11 @@ public class EngineTest {
     /// combat
     @Test
     public void testStartAttack() {
-        // t0 B i0 B r0
-        // B B B B B B
-        // B B B B B B
-        // t1 B i1 B r1
+        // t0 t0 i0 B r0
+        // t0 t0 B  B B 
+        // B  B  B  B B
+        // t1 t1 i1 B r1
+        // t1 t1 B  B B
         Engine attack_engine = createAttackEngine();
         Controllable tur0 = attack_engine.getPlayers()[0].getPlayerUnits().get(0);
         Controllable inf0 = attack_engine.getPlayers()[0].getPlayerUnits().get(1);
@@ -189,10 +203,11 @@ public class EngineTest {
 
     @Test
     public void testStopAttack() {
-        // t0 B i0 B r0
-        // B B B B B B
-        // B B B B B B
-        // t1 B i1 B r1
+        // t0 t0 i0 B r0
+        // t0 t0 B  B B 
+        // B  B  B  B B
+        // t1 t1 i1 B r1
+        // t1 t1 B  B B
         Engine attack_engine = createAttackEngine();
         Controllable inf0 = attack_engine.getPlayers()[0].getPlayerUnits().get(1);
         Controllable inf1 = attack_engine.getPlayers()[1].getPlayerUnits().get(1);
@@ -206,10 +221,11 @@ public class EngineTest {
     
     @Test
     public void testIteration_combat() {
-        // t0 B i0 B r0
-        // B B B B B 
-        // B B B B B 
-        // t1 B i1 B r1
+        // t0 t0 i0 B r0
+        // t0 t0 B  B B 
+        // B  B  B  B B
+        // t1 t1 i1 B r1
+        // t1 t1 B  B B
         Engine attack_engine = createAttackEngine();
         Controllable inf0 = attack_engine.getPlayers()[0].getPlayerUnits().get(1);
         Controllable inf1 = attack_engine.getPlayers()[1].getPlayerUnits().get(1);
@@ -286,19 +302,22 @@ public class EngineTest {
         // check map fill
         assertEquals(bui, building_engine.getMap().groundAt(new Point(0, 0)).getOwnerReference());
         
-        // occupied target location
+        // occupied target location: now covered by area availability
         building_engine.startBuild(bui, new Point(2, 3), VisualType.stonemine);
         assertFalse(bui.isBuilding());
         assertFalse(bui.isMoving());
+        assertEquals("Checked area extends off the map. (area check)" + System.lineSeparator(), outContent.toString());
         
         // failed area availability (covered area condition)
         building_engine.startBuild(bui, new Point(0, 1), VisualType.stonemine);
         assertEquals(VisualType.water, building_engine.getMap().groundAt(new Point(1, 2)).getType());
         assertFalse(bui.isBuilding());
         assertFalse(bui.isMoving());
+        assertEquals("Checked area extends off the map. (area check)" + System.lineSeparator(), outContent.toString());
         building_engine.startBuild(bui, new Point(1, 1), VisualType.stonemine);
         assertFalse(bui.isBuilding());
         assertFalse(bui.isMoving());
+        assertEquals("Checked area extends off the map. (area check)" + System.lineSeparator(), outContent.toString());
         
     }
 
@@ -364,19 +383,7 @@ public class EngineTest {
         assertFalse(mountain.isFreeOrTree());
     }
 
-    /// Map:
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
-
-    @Before
-    public void setUpStreams() {
-        System.setOut(new PrintStream(outContent));
-    }
-
-    @After
-    public void restoreStreams() {
-        System.setOut(originalOut);
-    }
+    /// Map:    
 
     @Test
     public void testAdjMineralCheck() {
@@ -549,12 +556,13 @@ public class EngineTest {
     }
 
     private Engine createAttackEngine() {
-        Ground[][] attack_ground = new Ground[4][5];
-        // t0 B i0 B r0
-        // B B B B B B
-        // B B B B B B
-        // t1 B i1 B r1
-        for (int i = 0; i < 4; ++i) {
+        Ground[][] attack_ground = new Ground[5][5];
+        // t0 t0 i0 B r0
+        // t0 t0 B  B B 
+        // B  B  B  B B
+        // t1 t1 i1 B r1
+        // t1 t1 B  B B
+        for (int i = 0; i < 5; ++i) {
             for (int j = 0; j < 5; ++j) {
                 attack_ground[i][j] = new Base(new Point(i, j));
             }

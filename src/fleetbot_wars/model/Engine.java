@@ -335,8 +335,7 @@ public class Engine
      * @param buildingType 
      */
     public void startBuild(Controllable builder, Point buildingRefCoords, Enum buildingType) {
-        if (/*map.groundAt(buildingRefCoords).isFreeOrTree() && !(map.groundAt(buildingRefCoords).getType().equals(VisualType.water)) //refCoords free, not water
-            &&*/ areaAvailable(buildingRefCoords, buildingType, builder.getTeam())) { //area free/tree, not water            
+        if (areaAvailable(buildingRefCoords, buildingType, builder.getTeam())) { //area free/tree, not water            
             Point builderTarLoc = new Point(buildingRefCoords.x, buildingRefCoords.y - 1);
             if (!map.groundAt(builderTarLoc).isOccupied()                            // builder target position free, 
                 || map.groundAt(builderTarLoc).getOwnerReference().equals(builder)){ // or builder already there
@@ -389,11 +388,16 @@ public class Engine
     private boolean areaAvailable(Point p, Enum type, int team) {
         boolean b = true;
         for (Point c : ghostBuilding(p, type, team).getCoordsArray()) {
-            if (!map.groundAt(c).isFreeOrTree() || map.groundAt(c).getType().equals(VisualType.water)) {
-                b = false;
+            try {
+                if (!map.groundAt(c).isFreeOrTree() || map.groundAt(c).getType().equals(VisualType.water)) {
+                    b = false;
+                }
+            } catch (NullPointerException e) {
+                System.out.println("Checked area extends off the map. (area check)");
+                return false;
             }
         }
-        return b; //|| mineGroundCheck(p, type, team);
+        return b && mineGroundCheck(p, type, team);
     }
     
     /**
