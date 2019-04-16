@@ -40,7 +40,7 @@ public class Player {
      * @param playerNumber  The number of the Player.
      * 
      */
-    public Player(String playerName, int playerNumber){//, HasshMap<Enum, Integer> initResources) {
+    public Player(String playerName, int playerNumber){//, HashMap<Enum, Integer> initResources) {
         this.playerName = playerName;
         this.playerNumber = playerNumber;
         //this.resources = initResources;
@@ -136,7 +136,7 @@ public class Player {
      * @param name The name of the requested resource.
      * @return The amount of the requested resource.
      */
-    public int getResourceByName(ResourceType name) {
+    public int getResourceByName(ResourceType name){
         return (int)resources.get(name);
     }
 

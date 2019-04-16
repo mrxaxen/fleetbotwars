@@ -1,5 +1,7 @@
 package fleetbot_wars.model;
 
+import exceptions.OutOfMapBoundsException;
+import exceptions.PlayersExceedStartingZoneCountException;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.io.File;
@@ -25,6 +27,8 @@ public class Map {
     private ArrayList<ArrayList<Point>> startingZoneCoordsArr;
     private final int startingZoneDimension = 20;
     private Dimension mapDimension;
+    private int groundWidth;
+    private int groundHeight;
 
     /**
      * Generates a Map based on the given raw file.
@@ -56,7 +60,7 @@ public class Map {
          * ground[i][j].getReferenceCoords()); System.out.println(new Point(i, j)); } }
          */
 
-        System.out.println(this.startingZoneCoords);
+        //System.out.println(this.startingZoneCoords);
         fillStartingZoneCoords(startingZoneCoords);
     }
 
@@ -71,7 +75,10 @@ public class Map {
      * @param location
      * @return
      */
-    public Ground groundAt(Point location) {
+    public Ground groundAt(Point location){
+        if(location.x < 0 || location.y < 0 || location.x > groundWidth || location.y > groundHeight){
+            throw new OutOfMapBoundsException(location);
+        }
         return ground[location.x][location.y];
     }
 
@@ -79,9 +86,9 @@ public class Map {
         String fName = mapFile.getName();
         this.mapDimension = new Dimension(Integer.parseInt((fName.split("x"))[0]),
                 Integer.parseInt((fName.split("x"))[1]));
-        int x = this.mapDimension.width;
-        int y = this.mapDimension.height;
-        Ground[][] ground = new Ground[x][y];
+        groundWidth = this.mapDimension.width;
+        groundHeight = this.mapDimension.height;
+        Ground[][] ground = new Ground[groundWidth][groundHeight];
 
         try (Scanner mapScanner = new Scanner(mapFile)) {
             mapScanner.nextLine();
@@ -90,8 +97,8 @@ public class Map {
             mapScanner.nextLine();
             int currMapInt;
 
-            for (int i = 0; i < x; i++) {
-                for (int j = 0; j < y; j++) {
+            for (int i = 0; i < groundWidth; i++) {
+                for (int j = 0; j < groundHeight; j++) {
                     if (mapScanner.hasNextLine()) {
                         currMapInt = Integer.parseInt(mapScanner.nextLine());
                         ground[i][j] = processMapInput(currMapInt, i, j);
@@ -226,8 +233,8 @@ public class Map {
         int count = 0;
         Point currentCoord;
         for (VisualType unit : units) {
-            System.out.println(startingZone.size());
-            System.out.println(count);
+            //System.out.println(startingZone.size());
+            //System.out.println(count);
             currentCoord = startingZone.get(count);
             currUnit = VisualType.createUnit(unit, currentCoord, playerNum);
             player.addControllable(currUnit);
@@ -259,11 +266,13 @@ public class Map {
      */
 
     public void placePlayersOnMap(Player[] players) {
-        int currZoneId = 0;
-        Point startingZoneTopLeft;
+        int startingZoneCount = startingZoneCoords.size();
+        int playerCount = players.length;
+        if(playerCount > startingZoneCount){
+            throw new PlayersExceedStartingZoneCountException(playerCount, startingZoneCount);
+        }
         for (Player p : players) {
             clearStartingZone(p.getPlayerNumber());
-            startingZoneTopLeft = calcPlayerStartingZone(currZoneId);
             ArrayList<Point> currStartingZone = startingZoneCoordsArr.get(p.getPlayerNumber());
             placeUnitsOnMap(p.initialUnits, p, currStartingZone);
         }
@@ -335,4 +344,13 @@ public class Map {
         }
         return false;
     }
+    
+    /**
+     *
+     * @return Dimensions of the map.
+     */
+    public Dimension getMapDimension() {
+        return mapDimension;
+    }
+
 }

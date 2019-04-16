@@ -12,6 +12,7 @@ import javax.swing.*;
 import fleetbot_wars.model.Engine;
 import fleetbot_wars.model.Map;
 import fleetbot_wars.model.Player;
+import fleetbot_wars.model.enums.ResourceType;
 
 /**
  *
@@ -35,7 +36,7 @@ public class Main {
 
 
         e = Engine.getInstance(new Map(), players);
-
+        
         //System.out.println(e.getMap());
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {

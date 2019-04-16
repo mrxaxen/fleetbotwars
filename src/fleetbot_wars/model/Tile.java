@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class Tile extends JPanel {
 
-    static final int TILE_BASE_SIZE = 48;
+    static final int TILE_BASE_SIZE = 24;
     private static HashMap<GroundType, Image> groundImages;
     private static HashMap<UnitType, Image> unitImages;
 
