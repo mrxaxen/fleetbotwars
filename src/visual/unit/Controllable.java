@@ -19,7 +19,7 @@ public abstract class Controllable extends Unit {
 
     private int mvmtSpd, atkSpd, dmg, maxLvl, currLvl, rng;
     protected int team;
-    private Rectangle rngRect;
+    //private Rectangle rngRect;
     // action helpers:
     // private boolean moving = false;
     private LinkedList<Point> currPath = new LinkedList<>();
@@ -54,8 +54,6 @@ public abstract class Controllable extends Unit {
         this.currLvl = lvl;
         this.rng = rng;
         this.team = team;
-        this.rngRect = new Rectangle(this.referenceCoords.x - rng, this.referenceCoords.y - rng, this.width + 2 * rng,
-                this.height + 2 * rng);
     }
 
     /**
@@ -115,10 +113,6 @@ public abstract class Controllable extends Unit {
 
     ///// getters, setters
     
-    public Rectangle getRngRect() {
-        return rngRect;
-    }
-
     public int getTeam() {
         return team;
     }
@@ -169,6 +163,10 @@ public abstract class Controllable extends Unit {
 
     public int getAtkSpd() {
         return atkSpd;
+    }
+
+    public int getRng() {
+        return rng;
     }
 
 }

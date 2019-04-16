@@ -11,7 +11,6 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 /**
@@ -25,10 +24,10 @@ public class Visual {
     protected VisualType type;
     private Image model; // [!]
     protected int width, height;
-    private Rectangle rectangle;
+    //private Rectangle rectangle;
     private int defaultDimX = 1;
     private int defaultDimY = 1;
-    private Point centerCoords;
+    //private Point centerCoords;
 
     /**
      * create Visual Object with default dimensions specified by defaultDimX,
@@ -44,8 +43,6 @@ public class Visual {
         this.referenceCoords = referenceCoords;
         this.type = type;
         this.model = model;
-        this.rectangle = new Rectangle(referenceCoords, new Dimension(this.defaultDimX, this.defaultDimY));
-        this.centerCoords = new Point((int)rectangle.getCenterX(), (int)rectangle.getCenterY());
         this.width = defaultDimX;
         this.height = defaultDimY;
 
@@ -67,8 +64,6 @@ public class Visual {
         this.referenceCoords = referenceCoords;
         this.type = type;
         this.model = model;
-        this.rectangle = new Rectangle(referenceCoords, new Dimension(width, height));
-        this.centerCoords = new Point((int)this.rectangle.getCenterX(), (int)this.rectangle.getCenterY());
         this.width = width;
         this.height = height;
 
@@ -93,6 +88,7 @@ public class Visual {
         //PLACEHOLDER
     }
 
+<<<<<<< src/visual/Visual.java
     /**
      * Checks if the given coords are colliding/intersecting the current Visual
      * element.
@@ -128,8 +124,14 @@ public class Visual {
         int x = coordsFrom.x - centerCoords.x;
         int y = coordsFrom.y - centerCoords.y;
         return new Point(x, y);
+=======
+    ///// getters, setters
+    
+    public Rectangle getBodyRect() {
+        return new Rectangle(referenceCoords, new Dimension(width, height));
+>>>>>>> src/visual/Visual.java
     }
-
+    
     /**
      * @return the type
      */
@@ -156,13 +158,6 @@ public class Visual {
      */
     public int getHeight() {
         return height;
-    }
-
-    /**
-     * @return the centerCoords
-     */
-    public Point getCenterCoords() {
-        return centerCoords;
     }
 
     /**
