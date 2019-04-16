@@ -88,7 +88,6 @@ public class Visual {
         //PLACEHOLDER
     }
 
-<<<<<<< src/visual/Visual.java
     /**
      * Checks if the given coords are colliding/intersecting the current Visual
      * element.
@@ -96,9 +95,9 @@ public class Visual {
      * @param coords The coords where intersection needs to be checked.
      * @return True if intersect, false else.
      */
-    public Boolean containsPoint(Point coords) {
+    /*public Boolean containsPoint(Point coords) {
         return this.rectangle.contains(coords);
-    }
+    }*/
 
     /**
      * Returns the distance between the given coords and the center of the Visual
@@ -107,9 +106,9 @@ public class Visual {
      * @param coordsFrom The coords from where it needs to be checked.
      * @return The distance in int type.
      */
-    public Integer distanceFrom(Point coordsFrom) {
+    /*public Integer distanceFrom(Point coordsFrom) {
         return (int) (Point2D.distance(coordsFrom.x, coordsFrom.y, centerCoords.x, centerCoords.y));
-    }
+    }*/
 
     /**
      * Calculates the difference between the given coordinates and the current
@@ -120,17 +119,11 @@ public class Visual {
      * @param coordsFrom Center coordinates of the corresponding Visual Object.
      * @return The signed difference between the two center coordinates as Point Object.
      */
-    public Point getDirectionFrom(Point coordsFrom) {
+   /* public Point getDirectionFrom(Point coordsFrom) {
         int x = coordsFrom.x - centerCoords.x;
         int y = coordsFrom.y - centerCoords.y;
         return new Point(x, y);
-=======
-    ///// getters, setters
-    
-    public Rectangle getBodyRect() {
-        return new Rectangle(referenceCoords, new Dimension(width, height));
->>>>>>> src/visual/Visual.java
-    }
+    }*/
     
     /**
      * @return the type
