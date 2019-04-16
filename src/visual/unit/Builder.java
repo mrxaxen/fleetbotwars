@@ -29,7 +29,7 @@ public class Builder extends Controllable {
      * @param team
      */
     public Builder(Point coords, int team) {
-        super(coords, VisualType.builder, null, 100, 1, 0, 0, 1, 1, 1, team);
+        super(coords, VisualType.BUILDER, null, 100, 1, 0, 0, 1, 1, 1, team);
     }
 
     /**

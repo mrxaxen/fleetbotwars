@@ -37,7 +37,7 @@ public class StoneMine extends Mine {
      * @param team
      */
     public StoneMine(Point coords, int team) {
-        super(coords, VisualType.stonemine, null, 500, team);
+        super(coords, VisualType.STONEMINE, null, 500, team);
         this.width = 3;
         this.height = 2;
     }

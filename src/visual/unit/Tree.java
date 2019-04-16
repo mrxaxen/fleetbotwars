@@ -5,7 +5,6 @@
  */
 package visual.unit;
 
-import java.awt.Image;
 import java.awt.Point;
 
 import fleetbot_wars.model.enums.VisualType;
@@ -21,7 +20,7 @@ public class Tree extends Unit {
      * @param coords
      */
     public Tree(Point coords) {
-        super(coords, VisualType.tree, null, 50);
+        super(coords, VisualType.TREE, null, 50);
     }
 
 }

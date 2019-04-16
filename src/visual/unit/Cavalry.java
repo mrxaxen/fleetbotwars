@@ -26,7 +26,7 @@ public class Cavalry extends Controllable {
      * @param team
      */
     public Cavalry(Point coords, int team) {
-        super(coords, VisualType.cavalry, null, 100, 1, 1, 10, 5, 1, 1, team);
+        super(coords, VisualType.CAVALRY, null, 100, 1, 1, 10, 5, 1, 1, team);
     }
 
     @Override

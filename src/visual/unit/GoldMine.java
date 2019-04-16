@@ -27,7 +27,7 @@ public class GoldMine extends Mine {
      * @param team
      */
     public GoldMine(Point coords, int team) {
-        super(coords, VisualType.goldmine, null, 500, team);
+        super(coords, VisualType.GOLDMINE, null, 500, team);
         this.width = 3;
         this.height = 2;
     }

@@ -1,6 +1,5 @@
 package visual.ground;
 
-import java.awt.Image;
 import java.awt.Point;
 
 import fleetbot_wars.model.enums.VisualType;
@@ -12,13 +11,13 @@ import fleetbot_wars.model.enums.VisualType;
 public class Wood extends Minable {
 
     /**
-     * Representation of a wood type resource element. This element can be collided,
+     * Representation of a WOOD type resource element. This element can be collided,
      * ie. an obsiticle.
      * 
      * @param coords It's coords.
      */
     public Wood(Point coords, int resourceCount) {
-        super(coords, VisualType.wood, null, null, resourceCount);
+        super(coords, VisualType.WOOD, null, null, resourceCount);
         this.occupied = true;
     }
 

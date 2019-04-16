@@ -6,10 +6,9 @@
 package visual.ground;
 
 import fleetbot_wars.model.enums.VisualType;
-import visual.ground.Ground;
-import java.awt.Image;
+
 import java.awt.Point;
-import visual.unit.Tree;
+
 import visual.unit.Unit;
 
 /**
@@ -25,11 +24,11 @@ public class Base extends Ground {
      * @param coords It's coords.
      */
     public Base(Point coords) {
-        super(coords, VisualType.base, null, null);
+        super(coords, VisualType.BASE, null, null);
     }
 
     public Base(Point coords, Unit owner) {
-        super(coords, VisualType.base, null, owner);
+        super(coords, VisualType.BASE, null, owner);
     }
 
 }

@@ -6,7 +6,7 @@
 package visual.unit;
 
 import fleetbot_wars.model.enums.ResourceType;
-import java.awt.Image;
+
 import java.awt.Point;
 import java.util.HashMap;
 
@@ -27,7 +27,7 @@ public class Farm extends Controllable {
      * @param team
      */
     public Farm(Point coords, int team) {
-        super(coords, VisualType.farm, null, 500, 0, 0, 0, 5, 1, 0, team);
+        super(coords, VisualType.FARM, null, 500, 0, 0, 0, 5, 1, 0, team);
         this.width = 3;
         this.height = 2;
     }

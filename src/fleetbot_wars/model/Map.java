@@ -1,5 +1,7 @@
 package fleetbot_wars.model;
 
+import exceptions.OutOfMapBoundsException;
+import exceptions.PlayersExceedStartingZoneCountException;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.io.File;
@@ -25,7 +27,26 @@ public class Map {
     private ArrayList<ArrayList<Point>> startingZoneCoordsArr;
     private final int startingZoneDimension = 20;
     private Dimension mapDimension;
+    private int groundWidth;
+    private int groundHeight;
 
+    /**
+     * Generates a Map based on the given raw file.
+     * You can make a map by using a simple drawer application like MS Paint, GIMP etc.
+     * A parser will generate a map based on the given color-codes:
+     * #ff0000 - Starting Zone 1
+     * #00ffff - Starting Zone 2
+     * #000080 - Starting Zone 3
+     * #ff00ff - Starting Zone 4
+     * #008000 - Wood
+     * #800000 - Mountain
+     * #0000ff - Water
+     * #999999 - Stone
+     * #ffff00 - Gold
+     * DEFAULT - Ground (any other color will translate to Ground)
+     * 
+     * 
+     */
     public Map() {
         this.startingZoneCoords = new ArrayList<Point>();
         this.rawMapFileLocation = "maps/100x100";
@@ -39,7 +60,7 @@ public class Map {
          * ground[i][j].getReferenceCoords()); System.out.println(new Point(i, j)); } }
          */
 
-        System.out.println(this.startingZoneCoords);
+        //System.out.println(this.startingZoneCoords);
         fillStartingZoneCoords(startingZoneCoords);
     }
 
@@ -54,7 +75,10 @@ public class Map {
      * @param location
      * @return
      */
-    public Ground groundAt(Point location) {
+    public Ground groundAt(Point location){
+        if(location.x < 0 || location.y < 0 || location.x > groundWidth || location.y > groundHeight){
+            throw new OutOfMapBoundsException(location);
+        }
         return ground[location.x][location.y];
     }
 
@@ -62,9 +86,9 @@ public class Map {
         String fName = mapFile.getName();
         this.mapDimension = new Dimension(Integer.parseInt((fName.split("x"))[0]),
                 Integer.parseInt((fName.split("x"))[1]));
-        int x = this.mapDimension.width;
-        int y = this.mapDimension.height;
-        Ground[][] ground = new Ground[x][y];
+        groundWidth = this.mapDimension.width;
+        groundHeight = this.mapDimension.height;
+        Ground[][] ground = new Ground[groundWidth][groundHeight];
 
         try (Scanner mapScanner = new Scanner(mapFile)) {
             mapScanner.nextLine();
@@ -73,8 +97,8 @@ public class Map {
             mapScanner.nextLine();
             int currMapInt;
 
-            for (int i = 0; i < x; i++) {
-                for (int j = 0; j < y; j++) {
+            for (int i = 0; i < groundWidth; i++) {
+                for (int j = 0; j < groundHeight; j++) {
                     if (mapScanner.hasNextLine()) {
                         currMapInt = Integer.parseInt(mapScanner.nextLine());
                         ground[i][j] = processMapInput(currMapInt, i, j);
@@ -130,7 +154,6 @@ public class Map {
             default:
                 retGround = new Base(currLocation);
                 break;
-
         }
 
         return retGround;
@@ -204,15 +227,17 @@ public class Map {
         return isEmpty;
     }
 
-    private void placeUnitsOnMap(VisualType[] units, int playerNum, ArrayList<Point> startingZone) {
+    private void placeUnitsOnMap(VisualType[] units, Player player, ArrayList<Point> startingZone) {
         Controllable currUnit;
+        int playerNum = player.getPlayerNumber();
         int count = 0;
         Point currentCoord;
         for (VisualType unit : units) {
-            System.out.println(startingZone.size());
-            System.out.println(count);
+            //System.out.println(startingZone.size());
+            //System.out.println(count);
             currentCoord = startingZone.get(count);
             currUnit = VisualType.createUnit(unit, currentCoord, playerNum);
+            player.addControllable(currUnit);
             //System.out.println(currUnit.getType().name());
             while (count < (startingZone.size()-1)
                     && !(isSectionUnOccupied(currentCoord, currUnit.getWidth(), currUnit.getHeight()))) {
@@ -231,14 +256,25 @@ public class Map {
      * private ArrayList<Controllable> initUnits(){ ArrayList<Controllable>
      * initUnits = new ArrayList<Controllable>(); }
      */
+
+    /**
+     * Places players units on the map. Based on their playerNumber, 
+     * their units and buildings will be placed in one of the starting zones 
+     * matching up with their numbers.
+     *  
+     * @param players The players that need to be placed on the map.
+     */
+
     public void placePlayersOnMap(Player[] players) {
-        int currZoneId = 0;
-        Point startingZoneTopLeft;
+        int startingZoneCount = startingZoneCoords.size();
+        int playerCount = players.length;
+        if(playerCount > startingZoneCount){
+            throw new PlayersExceedStartingZoneCountException(playerCount, startingZoneCount);
+        }
         for (Player p : players) {
             clearStartingZone(p.getPlayerNumber());
-            startingZoneTopLeft = calcPlayerStartingZone(currZoneId);
             ArrayList<Point> currStartingZone = startingZoneCoordsArr.get(p.getPlayerNumber());
-            placeUnitsOnMap(p.initialUnits, p.getPlayerNumber(), currStartingZone);
+            placeUnitsOnMap(p.initialUnits, p, currStartingZone);
         }
     }
 
@@ -261,10 +297,10 @@ public class Map {
                 String posInMapArr = (new Point(i, j)).toString();
                 String groundType = currGround.getType().toString();
                 
-                sb.append("[unitTypeName: "+ unitTypeName +"]");
-                sb.append("[unitPosition: "+ unitPosition +"]");
-                sb.append("[posInMapArr: "+ posInMapArr +"]");
-                sb.append("[groundType: "+ groundType +"]");
+                sb.append("[unitTypeName: ").append(unitTypeName).append("]");
+                sb.append("[unitPosition: ").append(unitPosition).append("]");
+                sb.append("[posInMapArr: ").append(posInMapArr).append("]");
+                sb.append("[groundType: ").append(groundType).append("]");
                 
                 sb.append("\n");
                 
@@ -288,7 +324,7 @@ public class Map {
      * used to help building
      * @param c
      * @param minableType
-     * @return true if at least 1 surrounding Ground is stone (check 8 grid points)
+     * @return true if at least 1 surrounding Ground is STONE (check 8 grid points)
      */
     //REVISIT
     public boolean adjMineralCheck(Point c, Enum minableType) {
@@ -308,4 +344,13 @@ public class Map {
         }
         return false;
     }
+    
+    /**
+     *
+     * @return Dimensions of the map.
+     */
+    public Dimension getMapDimension() {
+        return mapDimension;
+    }
+
 }

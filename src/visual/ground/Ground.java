@@ -2,7 +2,6 @@
 package visual.ground;
 
 import java.awt.Image;
-import java.util.Stack;
 
 import fleetbot_wars.model.enums.VisualType;
 import visual.unit.Unit;
@@ -24,8 +23,8 @@ public class Ground extends Visual {
      * its coordinates.
      * 
      * @param coords         The coordinates.
-     * @param type           The name of it's type: water, mountain, resource (gold,
-     *                       stone), or clear ground (base).
+     * @param type           The name of it's type: WATER, MOUNTAIN, resource (GOLD,
+     *                       STONE), or clear ground (BASE).
      * @param model          It's image/sprite representation
      * @param ownerReference The initial unit it's occupying it, else null.
      */
@@ -51,7 +50,7 @@ public class Ground extends Visual {
         boolean hasTree = false;
         Unit owner = getOwnerReference();
         if(owner != null){
-            hasTree = owner.getType().equals(VisualType.tree);
+            hasTree = owner.getType().equals(VisualType.TREE);
         }
         
         return !isOccupied() || hasTree;

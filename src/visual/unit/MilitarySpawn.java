@@ -26,7 +26,7 @@ public class MilitarySpawn extends Controllable {
      * @param team
      */
     public MilitarySpawn(Point coords, int team) {
-        super(coords, VisualType.militaryspawn, null, 500, 0, 0, 0, 1, 1, 0, team);
+        super(coords, VisualType.MILITARYSPAWN, null, 500, 0, 0, 0, 1, 1, 0, team);
         this.width = 3;
         this.height = 2;
     }

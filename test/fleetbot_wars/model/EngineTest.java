@@ -400,10 +400,10 @@ public class EngineTest {
         ground[2][2] = new Stone(new Point(2, 2), 1);
         Map map = new Map(ground);
 
-        assertTrue(map.adjMineralCheck(new Point(1, 1), VisualType.stone));
-        assertTrue(map.adjMineralCheck(new Point(1, 1), VisualType.gold));
-        assertFalse(map.adjMineralCheck(new Point(1, 4), VisualType.stone));
-        assertFalse(map.adjMineralCheck(new Point(1, 4), VisualType.gold));
+        assertTrue(map.adjMineralCheck(new Point(1, 1), VisualType.STONE));
+        assertTrue(map.adjMineralCheck(new Point(1, 1), VisualType.GOLD));
+        assertFalse(map.adjMineralCheck(new Point(1, 4), VisualType.STONE));
+        assertFalse(map.adjMineralCheck(new Point(1, 4), VisualType.GOLD));
         //doesnt like println
         map.adjMineralCheck(new Point(1, 5), VisualType.gold);
         assertEquals("Checked area extends off the map. (mineral check)" + System.lineSeparator(), outContent.toString());
@@ -468,7 +468,7 @@ public class EngineTest {
         assertFalse(destroyer.isValidTarget(turret)); //friendly building
         assertFalse(destroyer.isValidTarget(e_infantry)); //enemy human
         assertFalse(destroyer.isValidTarget(infantry)); //friendly human
-        assertFalse(destroyer.isValidTarget(tree)); //tree
+        assertFalse(destroyer.isValidTarget(tree)); //TREE
 
         assertTrue(infantry.isValidTarget(e_turret));
         assertFalse(infantry.isValidTarget(turret));
