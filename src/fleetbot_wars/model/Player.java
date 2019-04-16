@@ -33,7 +33,7 @@ public class Player {
      * resources, player name and related methods to manipulate these data.
      * 
      * //@param initResources It is intended to set the initial resources for given
-     *                      Player. The key list of thisshMap<Enum, Integer> should
+     *                      Player. The key list of this HashMap should
      *                      correspond with the following list of String: food,
      *                      WOOD, STONE, GOLD, upgrade.
      * @param playerName    The name of the Player.

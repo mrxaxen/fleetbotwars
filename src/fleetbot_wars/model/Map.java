@@ -45,7 +45,7 @@ public class Map {
      * #ffff00 - Gold
      * DEFAULT - Ground (any other color will translate to Ground)
      * 
-     * @param rawMapFileLocation
+     * 
      */
     public Map() {
         this.startingZoneCoords = new ArrayList<Point>();
