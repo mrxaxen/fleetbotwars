@@ -399,7 +399,7 @@ public class Engine
         boolean b = true;
         for (Point c : ghostBuilding(p, type, team).getCoordsArray()) {
             try {
-                if (!map.groundAt(c).isFreeOrTree() || map.groundAt(c).getType().equals(VisualType.water)) {
+                if (!map.groundAt(c).isFreeOrTree() || map.groundAt(c).getType().equals(VisualType.WATER)) {
                     b = false;
                 }
             } catch (NullPointerException e) {

@@ -27,11 +27,7 @@ public class Turret extends Controllable {
      * @param team
      */
     public Turret(Point coords, int team) {
-<<<<<<< src/visual/unit/Turret.java
-        super(coords, VisualType.turret, null, 500, 0, 1, 10, 5, 1, 2, team);
-=======
-        super(coords, VisualType.TURRET, null, 500, 0, 1, 10, 5, 1, 3, team);
->>>>>>> src/visual/unit/Turret.java
+        super(coords, VisualType.TURRET, null, 500, 0, 1, 10, 5, 1, 2, team);
         this.width = 2;
         this.height = 2;
     }

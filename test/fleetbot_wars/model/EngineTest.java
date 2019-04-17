@@ -303,18 +303,18 @@ public class EngineTest {
         assertEquals(bui, building_engine.getMap().groundAt(new Point(0, 0)).getOwnerReference());
         
         // occupied target location: now covered by area availability
-        building_engine.startBuild(bui, new Point(2, 3), VisualType.stonemine);
+        building_engine.startBuild(bui, new Point(2, 3), VisualType.STONEMINE);
         assertFalse(bui.isBuilding());
         assertFalse(bui.isMoving());
         assertEquals("Checked area extends off the map. (area check)" + System.lineSeparator(), outContent.toString());
         
         // failed area availability (covered area condition)
-        building_engine.startBuild(bui, new Point(0, 1), VisualType.stonemine);
-        assertEquals(VisualType.water, building_engine.getMap().groundAt(new Point(1, 2)).getType());
+        building_engine.startBuild(bui, new Point(0, 1), VisualType.STONEMINE);
+        assertEquals(VisualType.WATER, building_engine.getMap().groundAt(new Point(1, 2)).getType());
         assertFalse(bui.isBuilding());
         assertFalse(bui.isMoving());
         assertEquals("Checked area extends off the map. (area check)" + System.lineSeparator(), outContent.toString());
-        building_engine.startBuild(bui, new Point(1, 1), VisualType.stonemine);
+        building_engine.startBuild(bui, new Point(1, 1), VisualType.STONEMINE);
         assertFalse(bui.isBuilding());
         assertFalse(bui.isMoving());
         assertEquals("Checked area extends off the map. (area check)" + System.lineSeparator(), outContent.toString());
@@ -341,8 +341,8 @@ public class EngineTest {
         assertEquals(b0, building_engine.getMap().groundAt(new Point(0, 0)).getOwnerReference());
         assertEquals(b1, building_engine.getMap().groundAt(new Point(0, 1)).getOwnerReference());
         
-        assertTrue(building_engine.gotResForCont(building_engine.getPlayers()[0], VisualType.stonemine));
-        assertFalse(building_engine.gotResForCont(building_engine.getPlayers()[1], VisualType.stonemine));
+        assertTrue(building_engine.gotResForCont(building_engine.getPlayers()[0], VisualType.STONEMINE));
+        assertFalse(building_engine.gotResForCont(building_engine.getPlayers()[1], VisualType.STONEMINE));
     }
 
     ///// ENGINE HELPERS
@@ -405,7 +405,7 @@ public class EngineTest {
         assertFalse(map.adjMineralCheck(new Point(1, 4), VisualType.STONE));
         assertFalse(map.adjMineralCheck(new Point(1, 4), VisualType.GOLD));
         //doesnt like println
-        map.adjMineralCheck(new Point(1, 5), VisualType.gold);
+        map.adjMineralCheck(new Point(1, 5), VisualType.GOLD);
         assertEquals("Checked area extends off the map. (mineral check)" + System.lineSeparator(), outContent.toString());
     }
 
