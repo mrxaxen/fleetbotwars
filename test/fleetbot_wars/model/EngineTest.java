@@ -14,6 +14,7 @@ import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
+import visual.Visual;
 import visual.ground.*;
 import visual.unit.*;
 
@@ -294,10 +295,10 @@ public class EngineTest {
     /// building
     @Test
     public void testStartBuild() {
-        // b B B B Tr B
-        // B B W B B B
-        // B B B S B B
-        // B B B B B B
+        // b B B B Tr B B
+        // B B W B B B B
+        // B B B S B B B
+        // B B B B B B B
         Engine building_engine = createBuildingEngine();
         Controllable bui = building_engine.getPlayers()[0].getPlayerUnits().get(0);
         // check map fill
@@ -311,7 +312,6 @@ public class EngineTest {
         
         // failed area availability (covered area condition)
         building_engine.startBuild(bui, new Point(0, 1), VisualType.STONEMINE);
-        assertEquals(VisualType.WATER, building_engine.getMap().groundAt(new Point(1, 2)).getType());
         assertFalse(bui.isBuilding());
         assertFalse(bui.isMoving());
         assertEquals("Checked area extends off the map. (area check)" + System.lineSeparator(), outContent.toString());
@@ -321,6 +321,15 @@ public class EngineTest {
         assertEquals("Checked area extends off the map. (area check)" + System.lineSeparator(), outContent.toString());
         
         //occupied builder target location
+        building_engine.startBuild(bui, new Point(4, 2), VisualType.STONEMINE);
+        assertFalse(bui.isBuilding());
+        assertFalse(bui.isMoving());
+        
+        //builder at loc
+        building_engine.startBuild(bui, new Point(0, 1), VisualType.BARRICADE);
+        building_engine.actionIteration(); //??
+        assertFalse(bui.isMoving());
+        assertEquals(VisualType.BARRICADE, ((Visual)building_engine.getMap().groundAt(new Point(0, 1)).getOwnerReference()).getType());
     }
 
     @Test
@@ -616,13 +625,13 @@ public class EngineTest {
     }
     
     private Engine createBuildingEngine() {
-        Ground[][] building_ground = new Ground[4][6];
-        // b B B B Tr B
-        // B B W B B B
-        // B B B S B B
-        // B B B B B B
+        Ground[][] building_ground = new Ground[4][7];
+        // b B B B Tr B B
+        // B B W B B B B
+        // B B B S B B B
+        // B B B B B B B
         for (int i = 0; i < 4; ++i) {
-            for (int j = 0; j < 6; ++j) {
+            for (int j = 0; j < 7; ++j) {
                 building_ground[i][j] = new Base(new Point(i, j));
             }
         }
