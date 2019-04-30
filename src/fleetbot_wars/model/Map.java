@@ -67,6 +67,8 @@ public class Map {
     // used only for easier testing - Bori
     public Map(Ground[][] ground) {
         this.ground = ground;
+        this.groundHeight = ground[0].length;
+        this.groundWidth = ground.length;
     }
 
     /**
