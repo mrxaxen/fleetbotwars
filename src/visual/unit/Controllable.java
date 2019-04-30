@@ -8,7 +8,6 @@ package visual.unit;
 import fleetbot_wars.model.enums.VisualType;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.util.LinkedList;
 
 /**
@@ -103,8 +102,8 @@ public abstract class Controllable extends Unit {
 
     public boolean isBuildingType() {
         String t = this.type.name();
-        return t.equals("workerspawn") || t.equals("militaryspawn") || t.equals("farm") || t.equals("harvestcenter")
-                || t.equals("goldmine") || t.equals("stonemine") || t.equals("turret") || t.equals("barricade");
+        return t.equals("WORKERSPAWN") || t.equals("MILITARYSPAWN") || t.equals("FARM") || t.equals("HARVESTCENTER")
+                || t.equals("GOLDMINE") || t.equals("STONEMINE") || t.equals("TURRET") || t.equals("BARRICADE");
     }
 
     public boolean isHumanType() {
@@ -158,7 +157,7 @@ public abstract class Controllable extends Unit {
     }
 
     public Point getBuilderTarLoc() {
-        return new Point(ghostBuilding.getReferenceCoords().x - 1, ghostBuilding.getReferenceCoords().y);
+        return new Point(ghostBuilding.getReferenceCoords().x, ghostBuilding.getReferenceCoords().y - 1);
     }
 
     public int getAtkSpd() {

@@ -25,7 +25,7 @@ public class Ranger extends Controllable {
      * @param team
      */
     public Ranger(Point coords, int team) {
-        super(coords, VisualType.ranger, null, 100, 1, 1, 10, 5, 1, 2, team);
+        super(coords, VisualType.RANGER, null, 100, 1, 1, 10, 5, 1, 2, team);
     }
 
     @Override

@@ -2,7 +2,6 @@ package visual.ground;
 
 import fleetbot_wars.model.enums.VisualType;
 
-import java.awt.Image;
 import java.awt.Point;
 
 /**
@@ -17,7 +16,7 @@ public class Water extends Ground {
      * @param coords It's coords.
      */
     public Water(Point coords) {
-        super(coords, VisualType.water, null, null);
+        super(coords, VisualType.WATER, null, null);
     }
 
 }

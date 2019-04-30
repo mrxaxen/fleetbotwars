@@ -6,7 +6,7 @@
 package visual.unit;
 
 import fleetbot_wars.model.enums.ResourceType;
-import java.awt.Image;
+
 import java.awt.Point;
 import java.util.HashMap;
 
@@ -27,7 +27,7 @@ public class Infantry extends Controllable {
      * @param team
      */
     public Infantry(Point coords, int team) {
-        super(coords, VisualType.infantry, null, 100, 1, 1, 10, 5, 1, 1, team);
+        super(coords, VisualType.INFANTRY, null, 100, 1, 1, 10, 5, 1, 1, team);
     }
 
     @Override

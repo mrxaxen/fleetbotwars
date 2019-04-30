@@ -17,7 +17,18 @@ import fleetbot_wars.model.enums.VisualType;
  */
 public class Barricade extends Controllable {
 
-    public static HashMap<ResourceType, Integer> price = new HashMap<>();
+    public static HashMap<ResourceType, Integer> price = Barricade.initPrice();
+    
+    //REVISIT
+    private static HashMap<ResourceType, Integer> initPrice() {
+        HashMap<ResourceType, Integer> new_price = new HashMap<>();
+        new_price.put(ResourceType.food, 1);
+        new_price.put(ResourceType.wood, 1);
+        new_price.put(ResourceType.gold, 1);
+        new_price.put(ResourceType.stone, 1);
+        new_price.put(ResourceType.upgrade, 1);
+        return new_price;
+    }
     
     /**
      * create Barricade at (x,y) coordinates, for 'team' team
@@ -26,9 +37,9 @@ public class Barricade extends Controllable {
      * @param team
      */
     public Barricade(Point coords, int team) {
-        super(coords, VisualType.barricade, null, 500, 0, 0, 0, 5, 1, 0, team);
+        super(coords, VisualType.BARRICADE, null, 500, 0, 0, 0, 5, 1, 0, team);
 
-        this.width = 5;
+        this.width = 1;
         this.height = 1;
     }
 

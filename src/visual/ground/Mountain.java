@@ -5,7 +5,6 @@
  */
 package visual.ground;
 
-import java.awt.Image;
 import java.awt.Point;
 
 import fleetbot_wars.model.enums.VisualType;
@@ -22,7 +21,7 @@ public class Mountain extends Ground {
      * @param coords It's coords.
      */
     public Mountain(Point coords) {
-        super(coords, VisualType.mountain, null, null);
+        super(coords, VisualType.MOUNTAIN, null, null);
         this.occupied = true;
     }
 

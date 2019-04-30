@@ -6,7 +6,7 @@
 package visual.unit;
 
 import fleetbot_wars.model.enums.ResourceType;
-import java.awt.Image;
+
 import java.awt.Point;
 import java.util.HashMap;
 
@@ -27,7 +27,7 @@ public class Turret extends Controllable {
      * @param team
      */
     public Turret(Point coords, int team) {
-        super(coords, VisualType.turret, null, 500, 0, 1, 10, 5, 1, 3, team);
+        super(coords, VisualType.TURRET, null, 500, 0, 1, 10, 5, 1, 2, team);
         this.width = 2;
         this.height = 2;
     }

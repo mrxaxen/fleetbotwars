@@ -14,6 +14,7 @@ import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
+import visual.Visual;
 import visual.ground.*;
 import visual.unit.*;
 
@@ -22,6 +23,19 @@ import visual.unit.*;
  * @author 3rd
  */
 public class EngineTest {
+    
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final PrintStream originalOut = System.out;
+
+    @Before
+    public void setUpStreams() {
+        System.setOut(new PrintStream(outContent));
+    }
+
+    @After
+    public void restoreStreams() {
+        System.setOut(originalOut);
+    }
 
     ///// ENGINE METHODS
     // General Info:
@@ -142,10 +156,11 @@ public class EngineTest {
     /// combat
     @Test
     public void testStartAttack() {
-        // t0 B i0 B r0
-        // B B B B B B
-        // B B B B B B
-        // t1 B i1 B r1
+        // t0 t0 i0 B r0
+        // t0 t0 B  B B 
+        // B  B  B  B B
+        // t1 t1 i1 B r1
+        // t1 t1 B  B B
         Engine attack_engine = createAttackEngine();
         Controllable tur0 = attack_engine.getPlayers()[0].getPlayerUnits().get(0);
         Controllable inf0 = attack_engine.getPlayers()[0].getPlayerUnits().get(1);
@@ -182,17 +197,17 @@ public class EngineTest {
         assertEquals(ran1, ran0.getCurrTar());
         // reset: tested stopAttack() at this point
         attack_engine.stopAttack(inf0);
-        attack_engine.stopAttack(ran0);
-        
+        attack_engine.stopAttack(ran0);       
         
     }
 
     @Test
     public void testStopAttack() {
-        // t0 B i0 B r0
-        // B B B B B B
-        // B B B B B B
-        // t1 B i1 B r1
+        // t0 t0 i0 B r0
+        // t0 t0 B  B B 
+        // B  B  B  B B
+        // t1 t1 i1 B r1
+        // t1 t1 B  B B
         Engine attack_engine = createAttackEngine();
         Controllable inf0 = attack_engine.getPlayers()[0].getPlayerUnits().get(1);
         Controllable inf1 = attack_engine.getPlayers()[1].getPlayerUnits().get(1);
@@ -206,10 +221,11 @@ public class EngineTest {
     
     @Test
     public void testIteration_combat() {
-        // t0 B i0 B r0
-        // B B B B B 
-        // B B B B B 
-        // t1 B i1 B r1
+        // t0 t0 i0 B r0
+        // t0 t0 B  B B 
+        // B  B  B  B B
+        // t1 t1 i1 B r1
+        // t1 t1 B  B B
         Engine attack_engine = createAttackEngine();
         Controllable inf0 = attack_engine.getPlayers()[0].getPlayerUnits().get(1);
         Controllable inf1 = attack_engine.getPlayers()[1].getPlayerUnits().get(1);
@@ -278,38 +294,97 @@ public class EngineTest {
     /// building
     @Test
     public void testStartBuild() {
-        // b B B B Tr B
-        // B B W B B B
-        // B B B S B B
+        // b B B B Tr B B
+        // B B W B B B B
+        // B B B S B B B
+        // B B B B B B B
         Engine building_engine = createBuildingEngine();
         Controllable bui = building_engine.getPlayers()[0].getPlayerUnits().get(0);
         // check map fill
         assertEquals(bui, building_engine.getMap().groundAt(new Point(0, 0)).getOwnerReference());
         
-        // occupied target location
-        building_engine.startBuild(bui, new Point(2, 3), VisualType.stonemine);
+        // occupied target location: now covered by area availability
+        building_engine.startBuild(bui, new Point(3, 3), VisualType.STONEMINE);
         assertFalse(bui.isBuilding());
         assertFalse(bui.isMoving());
+        assertEquals("Checked area extends off the map. (area check)" + System.lineSeparator(), outContent.toString());
         
         // failed area availability (covered area condition)
-        building_engine.startBuild(bui, new Point(0, 1), VisualType.stonemine);
-        assertEquals(VisualType.water, building_engine.getMap().groundAt(new Point(1, 2)).getType());
+        building_engine.startBuild(bui, new Point(0, 1), VisualType.STONEMINE);
         assertFalse(bui.isBuilding());
         assertFalse(bui.isMoving());
-        building_engine.startBuild(bui, new Point(1, 1), VisualType.stonemine);
+        assertEquals("Checked area extends off the map. (area check)" + System.lineSeparator(), outContent.toString());
+        building_engine.startBuild(bui, new Point(1, 1), VisualType.STONEMINE);
+        assertFalse(bui.isBuilding());
+        assertFalse(bui.isMoving());
+        assertEquals("Checked area extends off the map. (area check)" + System.lineSeparator(), outContent.toString());
+        
+        //occupied builder target location
+        building_engine.startBuild(bui, new Point(4, 2), VisualType.STONEMINE);
         assertFalse(bui.isBuilding());
         assertFalse(bui.isMoving());
         
+        //builder at loc
+        building_engine.startBuild(bui, new Point(0, 1), VisualType.BARRICADE);
+        Controllable ghostBuilding = bui.getGhostBuilding();
+        assertTrue(bui.isBuilding());
+        assertFalse(bui.isMoving());
+        assertEquals(new Point(0, 1), ghostBuilding.getReferenceCoords());
+        assertEquals(new Point(0, 0), bui.getBuilderTarLoc());
+        assertEquals(VisualType.BARRICADE, bui.getGhostBuilding().getType());
+        //created building
+        building_engine.actionIteration();
+        assertFalse(bui.isBuilding());
+        assertFalse(bui.isMoving());
+        assertEquals(VisualType.BARRICADE, ((Visual)building_engine.getMap().groundAt(new Point(0, 1)).getOwnerReference()).getType());
+        assertTrue(building_engine.getPlayers()[0].getPlayerUnits().contains(ghostBuilding));
+        //reset
+        building_engine = createBuildingEngine();
+        bui = building_engine.getPlayers()[0].getPlayerUnits().get(0);
+        
+        //builder further away, locations valid
+        building_engine.startBuild(bui, new Point(0, 3), VisualType.BARRICADE);
+        assertEquals(new Point(0, 3), bui.getGhostBuilding().getReferenceCoords());
+        assertEquals(new Point(0, 2), bui.getBuilderTarLoc());
+        assertTrue(bui.isBuilding());
+        assertTrue(bui.isMoving());        
     }
 
     @Test
     public void testStopBuild() {
-
+        // b B B B Tr B B
+        // B B W B B B B
+        // B B B S B B B
+        // B B B B B B B
+        Engine building_engine = createBuildingEngine();
+        Controllable bui = building_engine.getPlayers()[0].getPlayerUnits().get(0);
+        
+        building_engine.startBuild(bui, new Point(0, 3), VisualType.BARRICADE);
+        building_engine.stopBuild(bui);
+        assertFalse(bui.isBuilding());
+        assertFalse(bui.isMoving());
     }
     
     @Test
     public void testIteration_building() {
+        // b B B B Tr B B
+        // B B W B B B B
+        // B B B S B B B
+        // B B B B B B B
+        Engine building_engine = createBuildingEngine();
+        Controllable bui = building_engine.getPlayers()[0].getPlayerUnits().get(0);
         
+        building_engine.startBuild(bui, new Point(0, 2), VisualType.BARRICADE);
+        assertTrue(bui.isBuilding());
+        assertTrue(bui.isMoving());
+        building_engine.actionIteration();
+        assertEquals(new Point(0, 1), bui.getReferenceCoords());
+        assertTrue(bui.isBuilding());
+        assertFalse(bui.isMoving());
+        building_engine.actionIteration();
+        assertEquals(VisualType.BARRICADE, ((Visual)building_engine.getMap().groundAt(new Point(0, 2)).getOwnerReference()).getType());
+        assertFalse(bui.isBuilding());
+        assertFalse(bui.isMoving());
     }
 
     @Test
@@ -322,8 +397,8 @@ public class EngineTest {
         assertEquals(b0, building_engine.getMap().groundAt(new Point(0, 0)).getOwnerReference());
         assertEquals(b1, building_engine.getMap().groundAt(new Point(0, 1)).getOwnerReference());
         
-        assertTrue(building_engine.gotResForCont(building_engine.getPlayers()[0], VisualType.stonemine));
-        assertFalse(building_engine.gotResForCont(building_engine.getPlayers()[1], VisualType.stonemine));
+        assertTrue(building_engine.gotResForCont(building_engine.getPlayers()[0], VisualType.STONEMINE));
+        assertFalse(building_engine.gotResForCont(building_engine.getPlayers()[1], VisualType.STONEMINE));
     }
 
     ///// ENGINE HELPERS
@@ -364,19 +439,7 @@ public class EngineTest {
         assertFalse(mountain.isFreeOrTree());
     }
 
-    /// Map:
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
-
-    @Before
-    public void setUpStreams() {
-        System.setOut(new PrintStream(outContent));
-    }
-
-    @After
-    public void restoreStreams() {
-        System.setOut(originalOut);
-    }
+    /// Map:    
 
     @Test
     public void testAdjMineralCheck() {
@@ -393,12 +456,12 @@ public class EngineTest {
         ground[2][2] = new Stone(new Point(2, 2), 1);
         Map map = new Map(ground);
 
-        assertTrue(map.adjMineralCheck(new Point(1, 1), VisualType.stone));
-        assertTrue(map.adjMineralCheck(new Point(1, 1), VisualType.gold));
-        assertFalse(map.adjMineralCheck(new Point(1, 4), VisualType.stone));
-        assertFalse(map.adjMineralCheck(new Point(1, 4), VisualType.gold));
+        assertTrue(map.adjMineralCheck(new Point(1, 1), VisualType.STONE));
+        assertTrue(map.adjMineralCheck(new Point(1, 1), VisualType.GOLD));
+        assertFalse(map.adjMineralCheck(new Point(1, 4), VisualType.STONE));
+        assertFalse(map.adjMineralCheck(new Point(1, 4), VisualType.GOLD));
         //doesnt like println
-        map.adjMineralCheck(new Point(1, 5), VisualType.gold);
+        map.adjMineralCheck(new Point(1, 5), VisualType.GOLD);
         assertEquals("Checked area extends off the map. (mineral check)" + System.lineSeparator(), outContent.toString());
     }
 
@@ -446,7 +509,7 @@ public class EngineTest {
     @Test
     public void testIsValidTarget() {
         //isValidTarget has 4 versions implemented,
-        //the default false wont be called
+        //the default false won't be called
         Controllable turret = new Turret(new Point(1, 1), 1);
         Controllable destroyer = new Destroyer(new Point(1, 1), 1);
         Controllable infantry = new Infantry(new Point(1, 1), 1);
@@ -461,7 +524,7 @@ public class EngineTest {
         assertFalse(destroyer.isValidTarget(turret)); //friendly building
         assertFalse(destroyer.isValidTarget(e_infantry)); //enemy human
         assertFalse(destroyer.isValidTarget(infantry)); //friendly human
-        assertFalse(destroyer.isValidTarget(tree)); //tree
+        assertFalse(destroyer.isValidTarget(tree)); //TREE
 
         assertTrue(infantry.isValidTarget(e_turret));
         assertFalse(infantry.isValidTarget(turret));
@@ -549,12 +612,13 @@ public class EngineTest {
     }
 
     private Engine createAttackEngine() {
-        Ground[][] attack_ground = new Ground[4][5];
-        // t0 B i0 B r0
-        // B B B B B B
-        // B B B B B B
-        // t1 B i1 B r1
-        for (int i = 0; i < 4; ++i) {
+        Ground[][] attack_ground = new Ground[5][5];
+        // t0 t0 i0 B r0
+        // t0 t0 B  B B 
+        // B  B  B  B B
+        // t1 t1 i1 B r1
+        // t1 t1 B  B B
+        for (int i = 0; i < 5; ++i) {
             for (int j = 0; j < 5; ++j) {
                 attack_ground[i][j] = new Base(new Point(i, j));
             }
@@ -606,12 +670,13 @@ public class EngineTest {
     }
     
     private Engine createBuildingEngine() {
-        Ground[][] building_ground = new Ground[4][6];
-        // b B B B Tr B
-        // B B W B B B
-        // B B B S B B
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 6; ++j) {
+        Ground[][] building_ground = new Ground[4][7];
+        // b B B B Tr B B
+        // B B W B B B B
+        // B B B S B B B
+        // B B B B B B B
+        for (int i = 0; i < 4; ++i) {
+            for (int j = 0; j < 7; ++j) {
                 building_ground[i][j] = new Base(new Point(i, j));
             }
         }

@@ -15,7 +15,7 @@ public abstract class Minable extends Ground {
      * elements. It can be mined trough the mine method
      * 
      * @param coords         It's coordinates.
-     * @param type           The name of it's type (gold, stone)
+     * @param type           The name of it's type (GOLD, STONE)
      * @param model          It's image representation.
      * @param ownerReference
      * @param resourceCount  The initial amount of resource available in the

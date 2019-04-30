@@ -31,7 +31,7 @@ public class Miner extends Controllable {
      * @param team
      */
     public Miner(Point coords, int team) {
-        super(coords, VisualType.miner, null, 100, 1, 0, 0, 1, 1, 0, team);
+        super(coords, VisualType.MINER, null, 100, 1, 0, 0, 1, 1, 0, team);
     }
 
 }

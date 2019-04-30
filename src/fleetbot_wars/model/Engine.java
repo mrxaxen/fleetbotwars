@@ -24,13 +24,23 @@ public class Engine
     private Map map;
     private Player[] players;
     private Unit inspectedUnit;
+    private static Engine instance;
+
+    public static Engine getInstance(Map map, Player[] players) {
+        if (instance == null) {
+            instance = new Engine(map, players);
+            return instance;
+        } else {
+            return instance;
+        }
+    }
 
     /**
      * create Engine
      * @param map
      * @param players 
      */
-    public Engine(Map map, Player[] players) {
+    private Engine(Map map, Player[] players) {
         this.map = map;
         this.players = players;
         map.placePlayersOnMap(players);
@@ -129,7 +139,7 @@ public class Engine
         Point c = path.removeFirst();
         if (!map.groundAt(c).isOccupied()) { //collision check (blocked path)
             changeLoc(cont, c);
-            if (map.groundAt(c) instanceof Water) { // stepped into water
+            if (map.groundAt(c) instanceof Water) { // stepped into WATER
                 int playerIndex = cont.getTeam();
                 players[playerIndex].addDeadControllable(cont);
                 map.groundAt(cont.getReferenceCoords()).setOwnerReference(null);
@@ -322,6 +332,7 @@ public class Engine
     private void cleanUp() {
         for (Player p : players) {
             p.remDead();
+            p.addNew();
         }
     }
     
@@ -335,8 +346,7 @@ public class Engine
      * @param buildingType 
      */
     public void startBuild(Controllable builder, Point buildingRefCoords, Enum buildingType) {
-        if (/*map.groundAt(buildingRefCoords).isFreeOrTree() && !(map.groundAt(buildingRefCoords).getType().equals(VisualType.water)) //refCoords free, not water
-            &&*/ areaAvailable(buildingRefCoords, buildingType, builder.getTeam())) { //area free/tree, not water            
+        if (areaAvailable(buildingRefCoords, buildingType, builder.getTeam())) { //area free/tree, not water            
             Point builderTarLoc = new Point(buildingRefCoords.x, buildingRefCoords.y - 1);
             if (!map.groundAt(builderTarLoc).isOccupied()                            // builder target position free, 
                 || map.groundAt(builderTarLoc).getOwnerReference().equals(builder)){ // or builder already there
@@ -381,6 +391,7 @@ public class Engine
                 map.groundAt(c).setOwnerReference(builder.getGhostBuilding());
                 payForUnit(players[builder.getTeam()], builder.getGhostBuilding());
             }
+            players[builder.getTeam()].addNewControllable(builder.getGhostBuilding());
             stopBuild(builder);
             stopMove(builder);
         }
@@ -389,11 +400,16 @@ public class Engine
     private boolean areaAvailable(Point p, Enum type, int team) {
         boolean b = true;
         for (Point c : ghostBuilding(p, type, team).getCoordsArray()) {
-            if (!map.groundAt(c).isFreeOrTree() || map.groundAt(c).getType().equals(VisualType.water)) {
-                b = false;
+            try {
+                if (!map.groundAt(c).isFreeOrTree() || map.groundAt(c).getType().equals(VisualType.WATER)) {
+                    b = false;
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("Checked area extends off the map. (area check)");
+                return false;
             }
         }
-        return b; //|| mineGroundCheck(p, type, team);
+        return b && mineGroundCheck(p, type, team);
     }
     
     /**
@@ -404,7 +420,7 @@ public class Engine
      * @return 
      */
     private boolean mineGroundCheck(Point refCoords, Enum type, int team) {
-        if (type.equals(VisualType.stonemine) || type.equals(VisualType.goldmine)) {
+        if (type.equals(VisualType.STONEMINE) || type.equals(VisualType.GOLDMINE)) {
             Mine mine = (Mine)ghostBuilding(refCoords, type, team);
             return mGC_helper(mine);
         }
@@ -412,15 +428,15 @@ public class Engine
     }
     
     private boolean mGC_helper(Mine mine) {
-        if (mine instanceof StoneMine) { //stone
+        if (mine instanceof StoneMine) { //STONE
             for (Point c : mine.getCoordsArray()) {
-                if (map.adjMineralCheck(c, VisualType.stone)) {
+                if (map.adjMineralCheck(c, VisualType.STONE)) {
                     return true;
                 }
             }
-        } else { //gold
+        } else { //GOLD
             for (Point c : mine.getCoordsArray()) {
-                if (map.adjMineralCheck(c, VisualType.gold)) {
+                if (map.adjMineralCheck(c, VisualType.GOLD)) {
                     return true;
                 }
             }
@@ -440,28 +456,28 @@ public class Engine
         Controllable cont = null;
         String typeString = type.name();
         switch(typeString) {
-            case "workerspawn":
+            case "WORKERSPAWN":
                 cont = new WorkerSpawn(p, team);
                 break;
-            case "militaryspawn":
+            case "MILITARYSPAWN":
                 cont = new MilitarySpawn(p, team);
                 break;
-            case "farm":
+            case "FARM":
                 cont = new Farm(p, team);
                 break;
-            case "harvestcenter":
+            case "HARVESTCENTER":
                 cont = new HarvestCenter(p, team);
                 break;
-            case "goldmine":
+            case "GOLDMINE":
                 cont = new GoldMine(p, team);
                 break;
-            case "stonemine":
+            case "STONEMINE":
                 cont = new StoneMine(p, team);
                 break;
-            case "turret":
+            case "TURRET":
                 cont = new Turret(p, team);
                 break;    
-            case "barricade":
+            case "BARRICADE":
                 cont = new Barricade(p, team);
                 break;  
         }    
@@ -480,54 +496,54 @@ public class Engine
         HashMap<ResourceType, Integer> price = null;
         String typeString = type.name();
         switch (typeString) { //buildings
-            case "workerspawn":
+            case "WORKERSPAWN":
                 price = WorkerSpawn.price;
                 break;
-            case "militaryspawn":
+            case "MILITARYSPAWN":
                 price = MilitarySpawn.price;
                 break;
-            case "farm":
+            case "FARM":
                 price = Farm.price;
                 break;
-            case "harvestcenter":
+            case "HARVESTCENTER":
                 price = HarvestCenter.price;
                 break;
-            case "goldmine":
+            case "GOLDMINE":
                 price = GoldMine.price;
                 break;
-            case "stonemine":
+            case "STONEMINE":
                 price = StoneMine.price;
                 break;
-            case "turret":
+            case "TURRET":
                 price = Turret.price;
                 break;    
-            case "barricade":
+            case "BARRICADE":
                 price = Barricade.price;
                 break;  
         }
         switch (typeString) { //mobiles
-            case "lumberjack":
+            case "LUMBERJACK":
                 price = Lumberjack.price;
                 break;
-            case "miner":
+            case "MINER":
                 price = Miner.price;
                 break;
-            case "builder":
+            case "BUILDER":
                 price = Builder.price;
                 break;
-            case "infantry":
+            case "INFANTRY":
                 price = Infantry.price;
                 break;
-            case "cavalry":
+            case "CAVALRY":
                 price = Cavalry.price;
                 break;
-            case "ranger":
+            case "RANGER":
                 price = Ranger.price;
                 break;
-            case "destroyer":
+            case "DESTROYER":
                 price = Destroyer.price;
                 break;    
-            case "medic":
+            case "MEDIC":
                 price = Medic.price;
                 break;  
         }

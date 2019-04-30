@@ -7,7 +7,7 @@ package visual.unit;
 
 import fleetbot_wars.model.enums.ResourceType;
 import fleetbot_wars.model.enums.VisualType;
-import java.awt.Image;
+
 import java.awt.Point;
 import java.util.HashMap;
 
@@ -26,7 +26,7 @@ public class Lumberjack extends Controllable {
      * @param team
      */
     public Lumberjack(Point coords, int team) {
-        super(coords, VisualType.lumberjack, null, 100, 1, 1, 10, 1, 1, 1, team);
+        super(coords, VisualType.LUMBERJACK, null, 100, 1, 1, 10, 1, 1, 1, team);
     }
 
     @Override
