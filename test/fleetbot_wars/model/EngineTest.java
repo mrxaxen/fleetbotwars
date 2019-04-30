@@ -297,13 +297,14 @@ public class EngineTest {
         // b B B B Tr B
         // B B W B B B
         // B B B S B B
+        // B B B B B B
         Engine building_engine = createBuildingEngine();
         Controllable bui = building_engine.getPlayers()[0].getPlayerUnits().get(0);
         // check map fill
         assertEquals(bui, building_engine.getMap().groundAt(new Point(0, 0)).getOwnerReference());
         
         // occupied target location: now covered by area availability
-        building_engine.startBuild(bui, new Point(2, 3), VisualType.STONEMINE);
+        building_engine.startBuild(bui, new Point(3, 3), VisualType.STONEMINE);
         assertFalse(bui.isBuilding());
         assertFalse(bui.isMoving());
         assertEquals("Checked area extends off the map. (area check)" + System.lineSeparator(), outContent.toString());
@@ -319,6 +320,7 @@ public class EngineTest {
         assertFalse(bui.isMoving());
         assertEquals("Checked area extends off the map. (area check)" + System.lineSeparator(), outContent.toString());
         
+        //occupied builder target location
     }
 
     @Test
@@ -453,7 +455,7 @@ public class EngineTest {
     @Test
     public void testIsValidTarget() {
         //isValidTarget has 4 versions implemented,
-        //the default false wont be called
+        //the default false won't be called
         Controllable turret = new Turret(new Point(1, 1), 1);
         Controllable destroyer = new Destroyer(new Point(1, 1), 1);
         Controllable infantry = new Infantry(new Point(1, 1), 1);
@@ -618,7 +620,8 @@ public class EngineTest {
         // b B B B Tr B
         // B B W B B B
         // B B B S B B
-        for (int i = 0; i < 3; ++i) {
+        // B B B B B B
+        for (int i = 0; i < 4; ++i) {
             for (int j = 0; j < 6; ++j) {
                 building_ground[i][j] = new Base(new Point(i, j));
             }
