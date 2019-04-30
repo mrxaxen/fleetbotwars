@@ -5,6 +5,7 @@
  */
 package fleetbot_wars.model;
 
+import exceptions.OutOfMapBoundsException;
 import fleetbot_wars.model.enums.ResourceType;
 import fleetbot_wars.model.enums.VisualType;
 import java.awt.Point;
@@ -402,7 +403,7 @@ public class Engine
                 if (!map.groundAt(c).isFreeOrTree() || map.groundAt(c).getType().equals(VisualType.WATER)) {
                     b = false;
                 }
-            } catch (NullPointerException e) {
+            } catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("Checked area extends off the map. (area check)");
                 return false;
             }
