@@ -27,6 +27,7 @@ public class Cavalry extends Controllable {
      */
     public Cavalry(Point coords, int team) {
         super(coords, VisualType.CAVALRY, null, 100, 1, 1, 10, 5, 1, 1, team);
+        this.upPrice = 10;
     }
 
     @Override

@@ -30,6 +30,7 @@ public class Turret extends Controllable {
         super(coords, VisualType.TURRET, null, 500, 0, 1, 10, 5, 1, 2, team);
         this.width = 2;
         this.height = 2;
+        this.upPrice = 10;
     }
 
     @Override

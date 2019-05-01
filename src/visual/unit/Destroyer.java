@@ -27,6 +27,7 @@ public class Destroyer extends Controllable {
      */
     public Destroyer(Point coords, int team) {
         super(coords, VisualType.DESTROYER, null, 100, 1, 1, 50, 5, 1, 1, team);
+        this.upPrice = 10;
     }
 
     @Override

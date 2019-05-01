@@ -452,7 +452,7 @@ public class Engine
      * @param team
      * @return 
      */
-    public static Controllable ghostBuilding(Point p, Enum type, int team) {
+    private Controllable ghostBuilding(Point p, Enum type, int team) {
         Controllable cont = null;
         String typeString = type.name();
         switch(typeString) {
@@ -484,7 +484,46 @@ public class Engine
         return cont;
     }
     
-    ///// CONTROLLABLE CREATION HELPER
+    ///// UPGRADE
+    
+    /**
+     * increase the level of given Controllable by 1,
+     * subsequently increasing its stats
+     * @param cont 
+     */
+    public void upgrade(Controllable cont) {
+        if (gotResForUpgr(cont)) {
+            Player p = players[cont.getTeam()];
+            cont.upgrade();
+            payForUpgr(p, cont);
+        }
+    }
+    
+    /**
+     * tells whether given Controllable can be upgraded
+     * @param cont
+     * @return true if Controllable is upgradeable AND Player has enough resources,
+     * false else
+     */
+    public boolean gotResForUpgr(Controllable cont) {
+        if (cont.isUpgradeable() && cont.getMaxLvl() > cont.getCurrLvl()) {
+            Player p = players[cont.getTeam()];
+            int pUp = p.getResourceByName(ResourceType.upgrade);
+            if (pUp >= cont.getUpPrice()) {
+                return true;
+            }
+        }
+        return true;
+    }
+    /// upgrade helpers (private)   
+    
+    private void payForUpgr(Player p, Controllable cont) {
+        int upPr = cont.getUpPrice();
+        int pUpRes = p.getResourceByName(ResourceType.upgrade);
+        p.getResourceMap().replace(ResourceType.upgrade, pUpRes - upPr);
+    }
+    
+    ///// CONTROLLABLE CREATION HELPERS (private)
     
     private void payForUnit(Player p, Controllable cont) {
         HashMap<ResourceType, Integer> contPrice = getPriceOfCont(cont.getType());

@@ -6,6 +6,7 @@
 package fleetbot_wars.model;
 
 import fleetbot_wars.model.enums.VisualType;
+import fleetbot_wars.model.enums.ResourceType;
 import java.awt.Point;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -400,7 +401,39 @@ public class EngineTest {
         assertTrue(building_engine.gotResForCont(building_engine.getPlayers()[0], VisualType.STONEMINE));
         assertFalse(building_engine.gotResForCont(building_engine.getPlayers()[1], VisualType.STONEMINE));
     }
-
+    
+    /// upgrade
+    @Test
+    public void testUpgrade() {
+        // i0 b0
+        // i1 B
+        Engine upgrade_engine = createUpgradeEngine();
+        Controllable i0 = upgrade_engine.getPlayers()[0].getPlayerUnits().get(0);
+        Controllable b0 = upgrade_engine.getPlayers()[0].getPlayerUnits().get(1);
+        Controllable i1 = upgrade_engine.getPlayers()[1].getPlayerUnits().get(0);
+        // check map fill
+        assertEquals(i0, upgrade_engine.getMap().groundAt(new Point(0, 0)).getOwnerReference());
+        assertEquals(b0, upgrade_engine.getMap().groundAt(new Point(0, 1)).getOwnerReference());
+        assertEquals(i1, upgrade_engine.getMap().groundAt(new Point(1, 0)).getOwnerReference());
+        
+        //got res, can upgr
+        upgrade_engine.upgrade(i0);
+        assertEquals(2, i0.getCurrLvl());
+        assertEquals(15, i0.getDmg());
+        assertEquals(15, i0.getUpPrice());
+        assertEquals(9989, upgrade_engine.getPlayers()[0].getResourceByName(ResourceType.upgrade));
+        // got res, can't upgr (type)
+        upgrade_engine.upgrade(b0); 
+        assertEquals(1, b0.getCurrLvl());
+        assertEquals(10, b0.getUpPrice());
+        assertEquals(9999, upgrade_engine.getPlayers()[0].getResourceByName(ResourceType.upgrade));
+        // no res, can upgr
+        upgrade_engine.upgrade(i1); 
+        assertEquals(1, i1.getCurrLvl());
+        assertEquals(10, i1.getUpPrice());
+        assertEquals(0, upgrade_engine.getPlayers()[1].getResourceByName(ResourceType.upgrade));
+    }
+    
     ///// ENGINE HELPERS
     /// Ground:
     @Test
@@ -714,6 +747,32 @@ public class EngineTest {
         Engine new_building_engine = new Engine(building_map, players, 57);
         
         return new_building_engine;
+    }
+    
+    private Engine createUpgradeEngine() {
+        // i0 b0
+        // i1 B
+        Ground[][] upgrade_ground = new Ground[2][2];
+        for (int i = 0; i < 2; ++i) {
+            for (int j = 0; j < 2; ++j) {
+                upgrade_ground[i][j] = new Base(new Point(i, j));
+            }
+        }
+        Map upgrade_map = new Map(upgrade_ground);
+        
+        Player[] players = new Player[2];
+        Player jane_0 = new Player("jane_doe", 0);
+        jane_0.addControllable(new Infantry(new Point(0, 0), jane_0.getPlayerNumber()));
+        jane_0.addControllable(new Builder(new Point(0, 1), jane_0.getPlayerNumber()));
+        Player john_1 = new Player("john_doe", 1);
+        john_1.addControllable(new Builder(new Point(1, 0), john_1.getPlayerNumber()));
+        john_1.nullifyResources();
+        players[0] = jane_0;
+        players[1] = john_1;
+        
+        Engine new_upgrade_engine = new Engine(upgrade_map, players, 666);
+        
+        return new_upgrade_engine;
     }
     
 }

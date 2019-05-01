@@ -27,6 +27,7 @@ public class Medic extends Controllable {
      */
     public Medic(Point coords, int team) {
         super(coords, VisualType.MEDIC, null, 100, 1, 1, -10, 5, 1, 1, team);
+        this.upPrice = 10;
     }
 
     @Override

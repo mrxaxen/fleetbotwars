@@ -18,15 +18,11 @@ public abstract class Controllable extends Unit {
 
     private int mvmtSpd, atkSpd, dmg, maxLvl, currLvl, rng;
     protected int team;
-    //private Rectangle rngRect;
     // action helpers:
-    // private boolean moving = false;
     private LinkedList<Point> currPath = new LinkedList<>();
-    // private boolean attacking = false;
     private Unit currTar = null;
-    // private boolean building = false;
     private Controllable ghostBuilding = null;
-    // private Point builderTarLoc = null;
+    protected int upPrice = 0;
 
     /**
      * create Controllable at (x,y) coordinates, for 'team' team *
@@ -76,7 +72,7 @@ public abstract class Controllable extends Unit {
     }
 
     public void hit(Unit tar) {
-        int resHp = tar.currHp - this.dmg * atkSpd;
+        int resHp = tar.currHp - this.dmg * this.atkSpd;
         if (resHp < tar.maxHp) {
             tar.currHp = resHp;
         } else {
@@ -87,17 +83,15 @@ public abstract class Controllable extends Unit {
     /**
      * increase Unit level
      */
-    public void upgrade() {
-        // check resources HIGHER UP
-        if (this.currLvl < this.maxLvl) {
+    public void upgrade() {    
+        //level check done in Engine
+        //if (this.currLvl < this.maxLvl) {
             ++this.currLvl;
+            this.upPrice *= (1 + 1 / currLvl);
             this.maxHp *= (1 + 1 / currLvl);
-            // this.currHp += ??; //wassup with these
-            // this.mvmtSpd *= lvl;
             this.atkSpd *= (1 + 1 / currLvl);
             this.dmg *= (1 + 1 / currLvl);
-            // this.rng *= currLvl;
-        }
+        //}
     }
 
     public boolean isBuildingType() {
@@ -108,6 +102,12 @@ public abstract class Controllable extends Unit {
 
     public boolean isHumanType() {
         return !isBuildingType();
+    }
+    
+    public boolean isUpgradeable() {
+        String t = this.type.name();
+        return t.equals("INFANTRY") || t.equals("CAVALRY") || t.equals("RANGER")
+               || t.equals("DESTROYER") || t.equals("MEDIC") || t.equals("BARRICADE") || t.equals("TURRET");
     }
 
     ///// getters, setters
@@ -166,6 +166,18 @@ public abstract class Controllable extends Unit {
 
     public int getRng() {
         return rng;
+    }
+
+    public int getUpPrice() {
+        return upPrice;
+    }
+
+    public int getMaxLvl() {
+        return maxLvl;
+    }
+
+    public int getCurrLvl() {
+        return currLvl;
     }
 
 }

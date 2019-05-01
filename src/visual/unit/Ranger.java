@@ -26,6 +26,7 @@ public class Ranger extends Controllable {
      */
     public Ranger(Point coords, int team) {
         super(coords, VisualType.RANGER, null, 100, 1, 1, 10, 5, 1, 2, team);
+        this.upPrice = 10;
     }
 
     @Override

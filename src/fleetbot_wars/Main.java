@@ -10,7 +10,6 @@ import fleetbot_wars.model.GUI;
 import javax.swing.*;
 
 import fleetbot_wars.model.Engine;
-import static fleetbot_wars.model.Engine.ghostBuilding;
 import fleetbot_wars.model.Map;
 import fleetbot_wars.model.Player;
 import fleetbot_wars.model.enums.VisualType;

@@ -38,9 +38,7 @@ public class Barricade extends Controllable {
      */
     public Barricade(Point coords, int team) {
         super(coords, VisualType.BARRICADE, null, 500, 0, 0, 0, 5, 1, 0, team);
-
-        this.width = 1;
-        this.height = 1;
+        this.upPrice = 10;
     }
 
     /**

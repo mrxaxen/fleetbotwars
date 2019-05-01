@@ -28,6 +28,7 @@ public class Infantry extends Controllable {
      */
     public Infantry(Point coords, int team) {
         super(coords, VisualType.INFANTRY, null, 100, 1, 1, 10, 5, 1, 1, team);
+        this.upPrice = 10;
     }
 
     @Override
