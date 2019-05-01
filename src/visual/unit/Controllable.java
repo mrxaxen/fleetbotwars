@@ -87,10 +87,12 @@ public abstract class Controllable extends Unit {
         //level check done in Engine
         //if (this.currLvl < this.maxLvl) {
             ++this.currLvl;
-            this.upPrice *= (1 + 1 / currLvl);
-            this.maxHp *= (1 + 1 / currLvl);
-            this.atkSpd *= (1 + 1 / currLvl);
-            this.dmg *= (1 + 1 / currLvl);
+            //double to int conversion: floor (decimals lost)
+            double modif = 1 + (double)1/currLvl;
+            this.upPrice *= modif;
+            this.maxHp *= modif;
+            this.atkSpd *= modif;
+            this.dmg *= modif;
         //}
     }
 

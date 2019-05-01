@@ -417,17 +417,24 @@ public class EngineTest {
         assertEquals(i1, upgrade_engine.getMap().groundAt(new Point(1, 0)).getOwnerReference());
         
         //got res, can upgr
-        upgrade_engine.upgrade(i0);
+        assertEquals(10, i0.getUpPrice()); //1, 9999
+        upgrade_engine.upgrade(i0); //2, 9989
         assertEquals(2, i0.getCurrLvl());
-        assertEquals(15, i0.getDmg());
         assertEquals(15, i0.getUpPrice());
+        assertEquals(15, i0.getDmg());
         assertEquals(9989, upgrade_engine.getPlayers()[0].getResourceByName(ResourceType.upgrade));
-        // got res, can't upgr (type)
+        //got res, maxLvl reached
+        upgrade_engine.upgrade(i0); //3, 9974
+        upgrade_engine.upgrade(i0); //4, 9954
+        upgrade_engine.upgrade(i0); //5, 9929
+        upgrade_engine.upgrade(i0); // 6 -> 5, 9929 
+        assertEquals(5, i0.getCurrLvl());
+        //got res, can't upgr (type)
         upgrade_engine.upgrade(b0); 
         assertEquals(1, b0.getCurrLvl());
-        assertEquals(10, b0.getUpPrice());
-        assertEquals(9999, upgrade_engine.getPlayers()[0].getResourceByName(ResourceType.upgrade));
-        // no res, can upgr
+        assertEquals(0, b0.getUpPrice());
+        assertEquals(9929, upgrade_engine.getPlayers()[0].getResourceByName(ResourceType.upgrade));
+        //no res, can upgr
         upgrade_engine.upgrade(i1); 
         assertEquals(1, i1.getCurrLvl());
         assertEquals(10, i1.getUpPrice());
@@ -765,7 +772,7 @@ public class EngineTest {
         jane_0.addControllable(new Infantry(new Point(0, 0), jane_0.getPlayerNumber()));
         jane_0.addControllable(new Builder(new Point(0, 1), jane_0.getPlayerNumber()));
         Player john_1 = new Player("john_doe", 1);
-        john_1.addControllable(new Builder(new Point(1, 0), john_1.getPlayerNumber()));
+        john_1.addControllable(new Infantry(new Point(1, 0), john_1.getPlayerNumber()));
         john_1.nullifyResources();
         players[0] = jane_0;
         players[1] = john_1;

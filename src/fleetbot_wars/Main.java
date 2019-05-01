@@ -52,12 +52,19 @@ public class Main {
         */
         
         //System.out.println(e.getMap());
+        
+        /*
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 GUI gui = GUI.getInstance();
                 gui.setVisible(true);
             }
         });
+        */
+        
+        double d = 1.0 + (double)1/2;
+        int i = 1 + 1/2;
+        System.out.println(d + " " +i);
     }
     
 }

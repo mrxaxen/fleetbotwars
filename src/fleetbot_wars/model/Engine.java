@@ -494,8 +494,8 @@ public class Engine
     public void upgrade(Controllable cont) {
         if (gotResForUpgr(cont)) {
             Player p = players[cont.getTeam()];
-            cont.upgrade();
             payForUpgr(p, cont);
+            cont.upgrade();
         }
     }
     
@@ -513,7 +513,7 @@ public class Engine
                 return true;
             }
         }
-        return true;
+        return false;
     }
     /// upgrade helpers (private)   
     
