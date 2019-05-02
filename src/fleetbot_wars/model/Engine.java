@@ -140,9 +140,7 @@ public class Engine
         if (!map.groundAt(c).isOccupied()) { //collision check (blocked path)
             changeLoc(cont, c);
             if (map.groundAt(c) instanceof Water) { // stepped into WATER
-                int playerIndex = cont.getTeam();
-                players[playerIndex].addDeadControllable(cont);
-                map.groundAt(cont.getReferenceCoords()).setOwnerReference(null);
+                killUnit(cont);
             }
         } else {
             stopMove(cont); //hit an obstacle (in move())
@@ -267,12 +265,12 @@ public class Engine
                 }
                 if (atkr.getCurrHp() <= 0) { //atkr dead after defense
                     stopAttack(tarCont); 
-                    deathEvent(atkr);
+                    deathEvent(atkr, ((Controllable)tar).getTeam());
                 }
             }                    
         } else { //target died
             stopAttack(atkr);                    
-            deathEvent(tar);
+            deathEvent(tar, atkr.getTeam());
         }
     }
     
@@ -318,8 +316,33 @@ public class Engine
     
     // death
     
-    private void deathEvent(Unit u) {
-        //ADD DROPS
+    /**
+     * happens when a Unit's death has additional events tied to it,
+     * such as resource gain
+     * @param u
+     * @param teamBenefiting 
+     */
+    private void deathEvent(Unit u, int teamBenefiting) {
+        Player p = players[teamBenefiting];
+        if (u instanceof Tree) {
+            p.increaseResource(ResourceType.wood, 2);
+        } else { //Unit was Controllable
+            Controllable cont = (Controllable)u;
+            if (cont.isBuildingType()) {
+                p.increaseResource(ResourceType.upgrade, 5);
+            }
+            if (cont.isHumanType()) {
+                p.increaseResource(ResourceType.upgrade, 1);
+            }
+        }
+        killUnit(u);
+    }
+    
+    /**
+     * removes Unit from the Map, and owner Player if it was Controllable
+     * @param u 
+     */
+    private void killUnit(Unit u) {
         if (u instanceof Controllable) { // doesnt apply to trees
             int playerIndex = ((Controllable) u).getTeam();
             players[playerIndex].addDeadControllable((Controllable) u);
