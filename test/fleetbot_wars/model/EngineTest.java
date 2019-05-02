@@ -168,13 +168,6 @@ public class EngineTest {
         Controllable tur1 = attack_engine.getPlayers()[1].getPlayerUnits().get(0);
         Controllable inf1 = attack_engine.getPlayers()[1].getPlayerUnits().get(1);
         Controllable ran1 = attack_engine.getPlayers()[1].getPlayerUnits().get(2);
-        // check map fill
-        assertEquals(tur0, attack_engine.getMap().groundAt(new Point(0, 0)).getOwnerReference());
-        assertEquals(inf0, attack_engine.getMap().groundAt(new Point(0, 2)).getOwnerReference());
-        assertEquals(ran0, attack_engine.getMap().groundAt(new Point(0, 4)).getOwnerReference());
-        assertEquals(tur1, attack_engine.getMap().groundAt(new Point(3, 0)).getOwnerReference());
-        assertEquals(inf1, attack_engine.getMap().groundAt(new Point(3, 2)).getOwnerReference());
-        assertEquals(ran1, attack_engine.getMap().groundAt(new Point(3, 4)).getOwnerReference());
 
         // empty target 
         Point tarLoc = new Point(0, 1);
@@ -274,10 +267,6 @@ public class EngineTest {
         Controllable ran01 = attack_engine.getPlayers()[0].getPlayerUnits().get(0);
         Controllable inf11 = attack_engine.getPlayers()[1].getPlayerUnits().get(0);
         Controllable inf12 = attack_engine.getPlayers()[1].getPlayerUnits().get(1);
-        // check map fill
-        assertEquals(ran01, attack_engine.getMap().groundAt(new Point(0, 0)).getOwnerReference());
-        assertEquals(inf11, attack_engine.getMap().groundAt(new Point(0, 2)).getOwnerReference());
-        assertEquals(inf12, attack_engine.getMap().groundAt(new Point(2, 0)).getOwnerReference());
         // try to attack target not within LoS
         attack_engine.startAttack(ran01, inf11.getReferenceCoords());
         attack_engine.actionIteration();
@@ -293,7 +282,33 @@ public class EngineTest {
 
     @Test
     public void testDeathEvent() {
-
+        // lj0 Tr
+        // i0 i1
+        // ba1 B
+        Engine attack_engine = createAttackEngine_deathEvent();
+        Controllable lj0 = attack_engine.getPlayers()[0].getPlayerUnits().get(0);
+        Controllable i0 = attack_engine.getPlayers()[0].getPlayerUnits().get(1);
+        Controllable i1 = attack_engine.getPlayers()[1].getPlayerUnits().get(0);
+        Controllable ba1 = attack_engine.getPlayers()[1].getPlayerUnits().get(1);
+        Tree tr = (Tree)attack_engine.getMap().groundAt(new Point(0,1)).getOwnerReference();
+        Player p0 = attack_engine.getPlayers()[0];
+        
+        //Tree: 5 hits, Inf: 10 hits, Barri: 50 hits
+        attack_engine.startAttack(lj0, tr.getReferenceCoords());
+        attack_engine.startAttack(i0, i1.getReferenceCoords());
+        for (int i = 0; i < 5; ++i) {
+            attack_engine.actionIteration();
+        }
+        assertEquals(2, p0.getResourceByName(ResourceType.wood));
+        for (int i = 0; i < 5; ++i) {
+            attack_engine.actionIteration();
+        }
+        assertEquals(1, p0.getResourceByName(ResourceType.upgrade));
+        attack_engine.startAttack(i0, ba1.getReferenceCoords());
+        for (int i = 0; i < 50; ++i) {
+            attack_engine.actionIteration();
+        }
+        assertEquals(6, p0.getResourceByName(ResourceType.upgrade));
     }
 
     /// building
@@ -305,8 +320,6 @@ public class EngineTest {
         // B B B B B B B
         Engine building_engine = createBuildingEngine();
         Controllable bui = building_engine.getPlayers()[0].getPlayerUnits().get(0);
-        // check map fill
-        assertEquals(bui, building_engine.getMap().groundAt(new Point(0, 0)).getOwnerReference());
 
         // occupied target location: now covered by area availability
         building_engine.startBuild(bui, new Point(3, 3), VisualType.STONEMINE);
@@ -398,9 +411,6 @@ public class EngineTest {
         Engine building_engine = createBuildingEngine_gRFC();
         Controllable b0 = building_engine.getPlayers()[0].getPlayerUnits().get(0);
         Controllable b1 = building_engine.getPlayers()[1].getPlayerUnits().get(0);
-        // check map fill
-        assertEquals(b0, building_engine.getMap().groundAt(new Point(0, 0)).getOwnerReference());
-        assertEquals(b1, building_engine.getMap().groundAt(new Point(0, 1)).getOwnerReference());
 
         assertTrue(building_engine.gotResForCont(building_engine.getPlayers()[0], VisualType.STONEMINE));
         assertFalse(building_engine.gotResForCont(building_engine.getPlayers()[1], VisualType.STONEMINE));
@@ -415,10 +425,6 @@ public class EngineTest {
         Controllable i0 = upgrade_engine.getPlayers()[0].getPlayerUnits().get(0);
         Controllable b0 = upgrade_engine.getPlayers()[0].getPlayerUnits().get(1);
         Controllable i1 = upgrade_engine.getPlayers()[1].getPlayerUnits().get(0);
-        // check map fill
-        assertEquals(i0, upgrade_engine.getMap().groundAt(new Point(0, 0)).getOwnerReference());
-        assertEquals(b0, upgrade_engine.getMap().groundAt(new Point(0, 1)).getOwnerReference());
-        assertEquals(i1, upgrade_engine.getMap().groundAt(new Point(1, 0)).getOwnerReference());
 
         //got res, can upgr
         assertEquals(10, i0.getUpPrice()); //1, 9999
@@ -503,7 +509,6 @@ public class EngineTest {
         assertTrue(map.adjMineralCheck(new Point(1, 1), VisualType.GOLD));
         assertFalse(map.adjMineralCheck(new Point(1, 4), VisualType.STONE));
         assertFalse(map.adjMineralCheck(new Point(1, 4), VisualType.GOLD));
-        //doesnt like println
         map.adjMineralCheck(new Point(1, 5), VisualType.GOLD);
         assertEquals("Checked area extends off the map. (mineral check)" + System.lineSeparator(), outContent.toString());
     }
@@ -711,13 +716,13 @@ public class EngineTest {
         return new_attack_engine;
     }
 
-    private Engine createAttcackEngine_deathEvent() {
+    private Engine createAttackEngine_deathEvent() {
         // lj0 Tr
         // i0 i1
         // ba1 B
-        Ground[][] death_ground = new Ground[2][3];
-        for (int i = 0; i < 2; ++i) {
-            for (int j = 0; j < 3; ++j) {
+        Ground[][] death_ground = new Ground[3][2];
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 2; ++j) {
                 death_ground[i][j] = new Base(new Point(i, j));
             }
         }
@@ -728,6 +733,7 @@ public class EngineTest {
         Player jane_0 = new Player("jane_doe", 0);
         jane_0.addControllable(new Lumberjack(new Point(0, 0), jane_0.getPlayerNumber()));
         jane_0.addControllable(new Infantry(new Point(1, 0), jane_0.getPlayerNumber()));
+        jane_0.nullifyResources();
         Player john_1 = new Player("john_doe", 1);
         john_1.addControllable(new Infantry(new Point(1, 1), john_1.getPlayerNumber()));
         john_1.addControllable(new Barricade(new Point(2, 0), john_1.getPlayerNumber()));
