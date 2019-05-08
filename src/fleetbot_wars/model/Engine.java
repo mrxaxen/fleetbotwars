@@ -412,8 +412,8 @@ public class Engine
         if (builder.getReferenceCoords().equals(builder.getBuilderTarLoc())) {
             for (Point c : builder.getGhostBuilding().getCoordsArray()) {
                 map.groundAt(c).setOwnerReference(builder.getGhostBuilding());
-                payForUnit(players[builder.getTeam()], builder.getGhostBuilding());
             }
+            payForUnit(players[builder.getTeam()], builder.getGhostBuilding());
             players[builder.getTeam()].addNewControllable(builder.getGhostBuilding());
             stopBuild(builder);
             stopMove(builder);
@@ -502,6 +502,84 @@ public class Engine
                 break;    
             case "BARRICADE":
                 cont = new Barricade(p, team);
+                break;  
+        }    
+        return cont;
+    }
+    
+    ///// SPAWNING
+    
+    /**
+     * attempts to spawn given type Controllable below, and if unavailable,
+     * above the middle of given spawn building
+     * @param building
+     * @param humanType 
+     */
+    public void spawn(Controllable building, VisualType humanType) {
+        //display buttons only for valid options in GUI
+        Point hrc = spawnPlace(building);
+        if (hrc != null) {
+            Controllable cont = ghostHuman(hrc, humanType, building.getTeam());
+            map.groundAt(hrc).setOwnerReference(cont);
+            payForUnit(players[building.getTeam()], cont);
+            players[building.getTeam()].addNewControllable(cont);
+        }
+    }
+    
+    /// spawning helpers (private)
+    
+    private Point spawnPlace(Controllable building) {
+        Point brc = building.getReferenceCoords();
+        Point hrc = new Point(brc.x + 2, brc.y + 1); //below middle of 3x2 spawn
+        try {
+            if (!map.groundAt(hrc).isOccupied()) {
+                return hrc;
+            } 
+        } catch (ArrayIndexOutOfBoundsException e) {}
+        hrc = new Point (brc.x - 1, brc.y + 1); //above middle of 3x2 spawn 
+        try {
+            if (!map.groundAt(hrc).isOccupied()) {
+                return hrc;
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {}
+        return null;
+    }
+    
+    /**
+     * create building without binding it to the Map
+     * (Ground ownerReferences remain unchanged)
+     * @param p
+     * @param type
+     * @param team
+     * @return 
+     */
+    private Controllable ghostHuman(Point p, Enum type, int team) {
+        Controllable cont = null;
+        String typeString = type.name();
+        switch(typeString) {
+            case "BUILDER":
+                cont = new Builder(p, team);
+                break;
+            case "LUMBERJACK":
+                cont = new Lumberjack(p, team);
+                break;
+            case "MINER":
+                cont = new Miner(p, team);
+                break;
+            case "INFANTRY":
+                cont = new Infantry(p, team);
+                break;
+            case "CAVALRY":
+                cont = new Cavalry(p, team);
+                break;
+            case "RANGER":
+                cont = new Ranger(p, team);
+                break;
+            case "DESTROYER":
+                cont = new Destroyer(p, team);
+                break;    
+            case "MEDIC":
+                cont = new Medic(p, team);
                 break;  
         }    
         return cont;

@@ -22,11 +22,11 @@ public class StoneMine extends Mine {
     //REVISIT
     private static HashMap<ResourceType, Integer> initPrice() {
         HashMap<ResourceType, Integer> new_price = new HashMap<>();
-        new_price.put(ResourceType.food, 1);
-        new_price.put(ResourceType.wood, 1);
-        new_price.put(ResourceType.gold, 1);
-        new_price.put(ResourceType.stone, 1);
-        new_price.put(ResourceType.upgrade, 1);
+        new_price.put(ResourceType.food, 0);
+        new_price.put(ResourceType.wood, 30);
+        new_price.put(ResourceType.gold, 0);
+        new_price.put(ResourceType.stone, 30);
+        new_price.put(ResourceType.upgrade, 0);
         return new_price;
     }
     

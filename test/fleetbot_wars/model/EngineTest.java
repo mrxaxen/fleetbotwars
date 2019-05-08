@@ -415,6 +415,43 @@ public class EngineTest {
         assertTrue(building_engine.gotResForCont(building_engine.getPlayers()[0], VisualType.STONEMINE));
         assertFalse(building_engine.gotResForCont(building_engine.getPlayers()[1], VisualType.STONEMINE));
     }
+    
+    /// spawning
+    @Test
+    public void testSpawn() {
+        // B   B   B 
+        // s00 s00 s00
+        // s00 s00 s00
+        // B   B   B
+        // B   B   B
+        // s01 s01 s01
+        // s01 s01 s01
+        // B   Tr  B
+        // s02 s02 s02
+        // s02 s02 s02
+        Engine spawning_engine = createSpawningEngine();
+        Controllable s00 = spawning_engine.getPlayers()[0].getPlayerUnits().get(0);
+        Controllable s01 = spawning_engine.getPlayers()[0].getPlayerUnits().get(1);
+        Controllable s02 = spawning_engine.getPlayers()[0].getPlayerUnits().get(2);
+        Player jane = spawning_engine.getPlayers()[0];
+        
+        //below
+        spawning_engine.spawn(s00, VisualType.INFANTRY);
+        spawning_engine.actionIteration();
+        assertEquals(4, jane.getPlayerUnits().size());
+        assertEquals(jane.getPlayerUnits().get(3), spawning_engine.getMap().groundAt(new Point(3, 1)).getOwnerReference());
+        assertEquals(9979, jane.getResourceByName(ResourceType.gold));
+        //above
+        spawning_engine.spawn(s01, VisualType.INFANTRY);
+        spawning_engine.actionIteration();
+        assertEquals(5, jane.getPlayerUnits().size());
+        assertEquals(jane.getPlayerUnits().get(4), spawning_engine.getMap().groundAt(new Point(4, 1)).getOwnerReference());
+        assertEquals(9959, jane.getResourceByName(ResourceType.gold));
+        //failed
+        spawning_engine.spawn(s02, VisualType.INFANTRY);
+        assertEquals(5, jane.getPlayerUnits().size());
+        assertEquals(9959, jane.getResourceByName(ResourceType.gold));
+    }
 
     /// upgrade
     @Test
@@ -790,6 +827,38 @@ public class EngineTest {
         Engine new_building_engine = new Engine(building_map, players, 57);
 
         return new_building_engine;
+    }
+    
+    private Engine createSpawningEngine() {
+        // B   B   B 
+        // s00 s00 s00
+        // s00 s00 s00
+        // B   B   B
+        // B   B   B
+        // s01 s01 s01
+        // s01 s01 s01
+        // B   Tr  B
+        // s02 s02 s02
+        // s02 s02 s02
+        Ground[][] spawning_ground = new Ground[10][3];
+        for (int i = 0; i < 10; ++i) {
+            for (int j = 0; j < 3; j ++) {
+                spawning_ground[i][j] = new Base(new Point(i, j));
+            }
+        }
+        spawning_ground[7][1].setOwnerReference(new Tree(new Point (7, 1)));
+        Map spawning_map = new Map(spawning_ground);
+        
+        Player[] players = new Player[1];
+        Player jane_0 = new Player("jane_doe", 0);
+        jane_0.addControllable(new MilitarySpawn(new Point(1, 0), jane_0.getPlayerNumber()));
+        jane_0.addControllable(new MilitarySpawn(new Point(5, 0), jane_0.getPlayerNumber()));
+        jane_0.addControllable(new MilitarySpawn(new Point(8, 0), jane_0.getPlayerNumber()));
+        players[0] = jane_0;
+        
+        Engine new_spawning_engine = new Engine(spawning_map, players, 42);
+        
+        return new_spawning_engine;
     }
 
     private Engine createUpgradeEngine() {
