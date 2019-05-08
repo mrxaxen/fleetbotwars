@@ -5,6 +5,7 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.Player;
 import fleetbot_wars.model.enums.ResourceType;
 
 import java.awt.Point;
@@ -44,10 +45,11 @@ public class Farm extends Controllable {
     }
 
     /**
-     * increase Player Food resource
+     * increase Player Food resource of given Player
+     * @param p
      */
-    public void incrFood() {
-        // should be based on num stored in object??
+    public void incrFood(Player p) {
+        p.increaseResource(ResourceType.food, 1);
     }
 
 }

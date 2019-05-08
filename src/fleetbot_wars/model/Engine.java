@@ -79,6 +79,9 @@ public class Engine
         for (Player p : players) 
         {
             for (Controllable cont : p.getPlayerUnits()) {
+                if (cont.isHarvesting()) {
+                    harvest(cont);
+                }
                 if (cont.isAttacking()) {
                     attack(cont, cont.getCurrTar());                    
                 }
@@ -142,12 +145,16 @@ public class Engine
             if (map.groundAt(c) instanceof Water) { // stepped into WATER
                 killUnit(cont);
             }
+            if (cont.getType().equals(VisualType.MINER)) {
+                Miner mr = (Miner)cont;
+                tryOccupyMine(mr);
+            }
         } else {
             stopMove(cont); //hit an obstacle (in move())
             stopAttack(cont); //hit an obstacle (in attack())
             stopBuild(cont); //hit an obstacle (in build())
         }
-        if (path.isEmpty()) {
+        if (path.isEmpty()) { //reached destination
             stopMove(cont);
         }
     }
@@ -349,6 +356,10 @@ public class Engine
         }
         for (Point c : u.getCoordsArray()) { //delete unit from the map
             map.groundAt(c).setOwnerReference(null);
+        }
+        if (u instanceof Mine) {
+            Mine m = (Mine)u;
+            dropMiner(m);
         }
     }
     
@@ -583,6 +594,39 @@ public class Engine
                 break;  
         }    
         return cont;
+    }
+    
+    ///// HARVESTING
+    
+    /// harvesting helpers (private)
+    
+    private void harvest(Controllable cont) {
+        VisualType contType = cont.getType();
+        if (contType.equals(VisualType.FARM)) {
+            Farm f = (Farm)cont;
+            f.incrFood(players[f.getTeam()]);
+        }
+        if (cont instanceof Mine) {
+            Mine m = (Mine)cont;
+            m.incrRes(players[m.getTeam()]);
+        }
+    }
+
+    private void tryOccupyMine(Miner mr) {
+        Mine m = map.adjMineCheck(mr);
+        if (m != null) {
+            stopMove(mr);
+            m.setMiner(mr);
+            //miner 'disappears' into the building:
+            //won't be directly bound to the map, just the building.
+            map.groundAt(mr.getReferenceCoords()).setOwnerReference(null);
+        }
+    }
+    
+    private void dropMiner(Mine m) {
+        Point mrc = m.getReferenceCoords();
+        Miner mr = m.getMiner();
+        map.groundAt(mrc).setOwnerReference(mr);
     }
     
     ///// UPGRADE

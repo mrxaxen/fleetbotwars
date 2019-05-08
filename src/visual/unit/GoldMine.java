@@ -5,6 +5,7 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.Player;
 import fleetbot_wars.model.enums.ResourceType;
 import java.awt.Point;
 import java.util.HashMap;
@@ -44,10 +45,13 @@ public class GoldMine extends Mine {
 
     /**
      * increase Player Gold resource
+     * @param p
      */
     @Override
-    public void incrRes() {
-        //
+    public void incrRes(Player p) {
+        if (isActive()) {
+            p.increaseResource(ResourceType.gold, 1);
+        }
     }
 
 }

@@ -5,11 +5,9 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.Player;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.Timer;
 
 import fleetbot_wars.model.enums.VisualType;
 
@@ -20,9 +18,8 @@ import fleetbot_wars.model.enums.VisualType;
 abstract public class Mine extends Controllable {
 
     // paired with Miner
-    protected boolean active = false;
-    private Timer timer;
-
+    protected Miner miner;
+    
     /**
      * called when specific Mine created
      * 
@@ -34,15 +31,23 @@ abstract public class Mine extends Controllable {
      */
     public Mine(Point coords, VisualType type, Image model, int hp, int team) {
         super(coords, type, model, hp, 0, 0, 0, 1, 1, 0, team);
-        ActionListener taskPerformer = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                incrRes();
-            }
-        };
-        timer = new Timer(5000, taskPerformer); // demo param
+        this.miner = null;        
     }
 
-    abstract protected void incrRes();
+    abstract public void incrRes(Player p);
+    
+    public boolean isActive() {
+        return miner != null;
+    }
+    
+    ///// getters, setters
+
+    public Miner getMiner() {
+        return miner;
+    }
+
+    public void setMiner(Miner miner) {
+        this.miner = miner;
+    }
     
 }
