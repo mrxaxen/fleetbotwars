@@ -22,6 +22,7 @@ public enum UnitType {
     WORKERSPAWN(UnitType.class.getResource("/resources/building/workerspawn.png"), new Color(255,255,0), 3, 2),
     MILITARYSPAWN(UnitType.class.getResource("/resources/building/militaryspawn.png"), new Color(120,0,180), 3, 2),
     FARM(UnitType.class.getResource("/resources/building/farm.png"), new Color(200, 69, 132), 3, 2),
+    HARVESTCENTER(UnitType.class.getResource("/resources/building/harvestcenter.png"), new Color(200, 69, 132), 3, 2),
     STONEMINE(UnitType.class.getResource("/resources/building/stonemine.png"), new Color(100,100,100), 2, 2),
     GOLDMINE(UnitType.class.getResource("/resources/building/goldmine.png"), new Color(255, 242,0 ), 2, 2),
     BARRICADE(UnitType.class.getResource("/resources/building/barricade.png"), new Color(0,0,0), 1, 1),

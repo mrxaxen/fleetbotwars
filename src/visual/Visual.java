@@ -41,7 +41,7 @@ public class Visual {
      */
 
     public Visual(Point referenceCoords, VisualType type, Image model) {
-        System.out.println(type.name());
+        //System.out.println(type.name());
         this.referenceCoords = referenceCoords;
         switch(type){
             case TREE:
@@ -201,6 +201,7 @@ public class Visual {
         }
         return cA;
     }
+
     
     public void setReferenceCoords(Point referenceCoords) {
         this.referenceCoords = referenceCoords;

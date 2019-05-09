@@ -59,11 +59,7 @@ public class Tile extends JPanel {
 
     private int calculateImgIndex(){
         ArrayList<Point> unitCoords = unit.getCoordsArray();
-        System.out.println(unitType.name());
-        System.out.println(unitCoords);
-        System.out.println(new Point(this.yCoord, this.xCoord));
         return unitCoords.indexOf(new Point(this.yCoord, this.xCoord));
-        //return 0;
     }
 
     private boolean isLargeUnit(Unit unit){
@@ -129,6 +125,11 @@ public class Tile extends JPanel {
                 super.mouseClicked(e);
                 if (e.getButton() == MouseEvent.BUTTON1) {
                     selectionController.select(tile);
+                    System.out.println("tile coords: " + tile.getCoordY() + " - " + tile.getCoordX());
+                    System.out.println("unit obj name: " + tile.getUnit());
+                    System.out.println("unit reference coords: " + tile.getUnit().getReferenceCoords());
+                    System.out.println(tile.getUnit().getCoordsArray());
+                    System.out.println("\n");
                 }
                 if (e.getButton() == MouseEvent.BUTTON3) {
                     if (selectionController.getSelectedTile().unitType == UnitType.BUILDER) {
@@ -160,11 +161,16 @@ public class Tile extends JPanel {
         return groundType;
     }
 
+    public Unit getUnit() {
+        return unit;
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         g.drawImage(groundImages.get(groundType), 0, 0, null);
         if(isLargeUnit(unit)){
-            g.drawImage(imageSections.get(unitType)[calculateImgIndex()], 0, 0, null);
+            int idx = calculateImgIndex() > -1 ? calculateImgIndex() : 0;
+            g.drawImage(imageSections.get(unitType)[idx], 0, 0, null);
         }else{
             g.drawImage(unitImages.get(unitType), 0, 0, null);
         }
