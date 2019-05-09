@@ -12,6 +12,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -40,8 +41,31 @@ public class Visual {
      */
 
     public Visual(Point referenceCoords, VisualType type, Image model) {
+        System.out.println(type.name());
         this.referenceCoords = referenceCoords;
-        this.type = type;
+        switch(type){
+            case TREE:
+                this.type = VisualType.getRandomType("TREE", 4);
+                break;
+            case STONE:
+                this.type = VisualType.getRandomType("STONE", 2);
+                break;
+            case GOLD:
+                this.type = VisualType.getRandomType("GOLD", 2);
+                break;
+            case  BASE:
+                this.type = VisualType.getRandomType("BASE", 2);
+                break;
+            case WATER:
+                this.type = VisualType.getRandomType("WATER", 2);
+                break;
+            case MOUNTAIN:
+                this.type = VisualType.getRandomType("MOUNTAIN", 3);
+                break;
+                default:
+                    this.type = type;
+        }
+
         this.model = model;
         this.width = defaultDimX;
         this.height = defaultDimY;
@@ -63,9 +87,7 @@ public class Visual {
      */
 
     public Visual(Point referenceCoords, VisualType type, Image model, int width, int height) {
-        this.referenceCoords = referenceCoords;
-        this.type = type;
-        this.model = model;
+        this(referenceCoords, type, model);
         this.width = width;
         this.height = height;
 

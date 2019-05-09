@@ -57,6 +57,10 @@ class ActionBar extends JPanel {
         if(unitType == null) return;
         switch (unitType) {
             case TREE:
+            case TREE_1:
+            case TREE_2:
+            case TREE_3:
+            case TREE_4:
                 return;
             case BUILDER:
                 changeActionBar("BUILDER");

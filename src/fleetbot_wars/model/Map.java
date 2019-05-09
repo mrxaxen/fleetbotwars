@@ -218,8 +218,8 @@ public class Map {
         int currY = referenceCoords.y;
         Ground currentGround = ground[currX][currY];
         boolean isEmpty = !(currentGround.isOccupied());
-        while ((currX < referenceCoords.x + width) && isEmpty) {
-            while ((currY < referenceCoords.y + height) && isEmpty) {
+        while ((currX < referenceCoords.x + width) && isEmpty && currX < this.mapDimension.height) {
+            while ((currY < referenceCoords.y + height) && isEmpty  && currY < this.mapDimension.width) {
                 currentGround = ground[currX][currY];
                 isEmpty = !(currentGround.isOccupied());
                 currY++;

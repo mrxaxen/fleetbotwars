@@ -6,6 +6,7 @@
 package visual.unit;
 
 import java.awt.Point;
+import java.util.Random;
 
 import fleetbot_wars.model.enums.VisualType;
 

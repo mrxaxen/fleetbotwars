@@ -50,7 +50,12 @@ public class Ground extends Visual {
         boolean hasTree = false;
         Unit owner = getOwnerReference();
         if(owner != null){
-            hasTree = owner.getType().equals(VisualType.TREE);
+            VisualType oType = owner.getType();
+            hasTree = oType.equals(VisualType.TREE) ||
+                    oType.equals(VisualType.TREE_1) ||
+                    oType.equals(VisualType.TREE_2) ||
+                    oType.equals(VisualType.TREE_3) ||
+                    oType.equals(VisualType.TREE_4);
         }
         
         return !isOccupied() || hasTree;

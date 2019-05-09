@@ -7,12 +7,13 @@ package fleetbot_wars.model;
 
 import exceptions.*;
 import java.awt.Point;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import visual.ground.Ground;
 
 /**
@@ -38,14 +39,7 @@ public class MapTest {
     @AfterClass
     public static void tearDownClass() {
     }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
+
 
     /**
      * Test of groundAt method, of class Map for valid values on given Map.
@@ -140,6 +134,41 @@ public class MapTest {
         map.placePlayersOnMap(testPlayers);
         
     }
-    
-    
+
+
+    @BeforeEach
+    void setUp() {
+    }
+
+    @AfterEach
+    void tearDown() {
+    }
+
+    @Test
+    void groundAt() {
+    }
+
+    @Test
+    void getStartingZoneCoords() {
+    }
+
+    @Test
+    void placePlayersOnMap() {
+    }
+
+    @Test
+    void toString1() {
+    }
+
+    @Test
+    void getGround() {
+    }
+
+    @Test
+    void adjMineralCheck() {
+    }
+
+    @Test
+    void getMapDimension() {
+    }
 }

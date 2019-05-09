@@ -11,10 +11,11 @@ import java.awt.Point;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.LinkedList;
-import org.junit.After;
-import org.junit.Test;
 import static org.junit.Assert.*;
+
+import org.junit.After;
 import org.junit.Before;
+import org.junit.jupiter.api.Test;
 import visual.Visual;
 import visual.ground.*;
 import visual.unit.*;

@@ -1,12 +1,14 @@
 package fleetbot_wars.model;
 
-import fleetbot_wars.model.enums.VisualType;
-import visual.Visual;
 import visual.ground.Ground;
 import visual.unit.Unit;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.ArrayList;
 
 class GameSpace extends JPanel implements Talkative{
 
@@ -72,17 +74,18 @@ class GameSpace extends JPanel implements Talkative{
         for(int y = 0; y < tiles.length; y++) {
             for (int x = 0; x < tiles[y].length; x++) {
                 GroundType groundType = grounds[y][x].getType().getGroundType();
-                Unit unitVisualType = grounds[y][x].getOwnerReference();
-                if(unitVisualType != null) {
-                    tiles[y][x] = new Tile(groundType, unitVisualType.getType().getUnitType(), x, y);
+                Unit currUnit = grounds[y][x].getOwnerReference();
+                if(currUnit != null) {
+                    tiles[y][x] = new Tile(groundType, currUnit, x, y);
                 } else {
                     tiles[y][x] = new Tile(groundType, null, x, y);
                 }
-                this.add(tiles[y][x],BorderLayout.CENTER);
+                this.add(tiles[y][x], BorderLayout.CENTER);
             }
         }
         System.out.println("Map gen complete.");
         this.repaint();
+
     }
 //    DUMMY
 //    private class DummyUnit {

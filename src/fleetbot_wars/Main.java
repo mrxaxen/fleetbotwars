@@ -31,7 +31,7 @@ public class Main {
 
     public static void main(String[] args) {
         // TODO code application logic here
-        /*
+
         Player[] players = new Player[4];
         players[0] = new Player("bori", 0);
         players[1] = new Player("gabor", 1);
@@ -41,30 +41,29 @@ public class Main {
 
         e = Engine.getInstance(new Map(), players);
         
-        Engine e = new Engine(new Map(), players);
+        //Engine e = new Engine(new Map(), players);
         
-        System.out.println(e.getMap());
+        /*System.out.println(e.getMap());
 
         Infantry inf = new Infantry(new Point(1, 1), 1);
         Controllable sm = Engine.ghostBuilding(new Point(0, 1), VisualType.STONEMINE, 0);
         System.out.println(inf.getCoordsArray());
         System.out.println(sm.getCoordsArray());        
-        */
+
         
         //System.out.println(e.getMap());
         
-        /*
+        */
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 GUI gui = GUI.getInstance();
                 gui.setVisible(true);
             }
         });
-        */
         
-        double d = 1.0 + (double)1/2;
+        /*double d = 1.0 + (double)1/2;
         int i = 1 + 1/2;
-        System.out.println(d + " " +i);
+        System.out.println(d + " " +i);*/
     }
     
 }
