@@ -1,10 +1,10 @@
 package fleetbot_wars.model;
 
+import fleetbot_wars.model.enums.ResourceType;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
-import javax.swing.border.SoftBevelBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -13,21 +13,23 @@ import java.util.Map;
 
 class StatusBar extends JPanel implements Talkative {
 
-    StatusBar(/*HashMap<ResourceType, Integer> resources*/) {
+    Translation serverComm = Translation.getInstance();
 
+    StatusBar(/*HashMap<ResourceType, Integer> resources*/) {
         FlowLayout layout = new FlowLayout();
         layout.setAlignment(FlowLayout.LEFT);
         this.setLayout(layout);
         this.setBackground(new Color(67, 41, 24));
         init(genResources());
+        serverComm.passStatusBar(this);
     }
     //DUMMY
     private HashMap<ResourceType, Integer> genResources() {
         HashMap<ResourceType, Integer> resources = new HashMap<>();
-        resources.put(ResourceType.WOOD, 20);
-        resources.put(ResourceType.STONE, 30);
-        resources.put(ResourceType.GOLD, 40);
-        resources.put(ResourceType.FOOD, 50);
+        resources.put(ResourceType.wood, serverComm.getResource(ResourceType.wood));
+        resources.put(ResourceType.stone, serverComm.getResource(ResourceType.stone));
+        resources.put(ResourceType.gold, serverComm.getResource(ResourceType.gold));
+        resources.put(ResourceType.food, serverComm.getResource(ResourceType.food));
 
         return resources;
     }
@@ -65,7 +67,7 @@ class StatusBar extends JPanel implements Talkative {
             borderIcon();
             this.amount = amount;
             this.type = type;
-            this.setText(type.name + ": " + amount); //May need updating
+            this.setText(type.getName() + ": " + amount); //May need updating
             this.setFont(new Font("SansSerif", Font.BOLD, 12));
             this.setForeground(new Color(255,255,255));
             this.setBorder(new MatteBorder(icon));

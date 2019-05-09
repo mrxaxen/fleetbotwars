@@ -35,6 +35,14 @@ public class Engine
         }
     }
 
+    public static Engine getInstance() throws RuntimeException{
+        if(instance != null) {
+            return instance;
+        } else {
+            throw new RuntimeException("Engine not initialized!");
+        }
+    }
+
     /**
      * create Engine
      * @param map
@@ -80,13 +88,15 @@ public class Engine
         {
             for (Controllable cont : p.getPlayerUnits()) {
                 if (cont.isAttacking()) {
-                    attack(cont, cont.getCurrTar());                    
+                    attack(cont, cont.getCurrTar());
                 }
                 if (cont.isBuilding()) {
                     build(cont);                    
                 }
                 if (cont.isMoving()) {
-                    move(cont);                    
+                    Translation.getInstance().repaintOnMove(cont.getReferenceCoords(),cont,false);
+                    move(cont);
+                    Translation.getInstance().repaintOnMove(cont.getReferenceCoords(),cont,true);
                 }
             }
         }
@@ -101,13 +111,17 @@ public class Engine
      * @param cont
      * @param tarLoc 
      */
-    public void startMove(Controllable cont, Point tarLoc) {
+    public boolean startMove(Controllable cont, Point tarLoc) {
         if (!map.groundAt(tarLoc).isOccupied()) {
-            LinkedList<Point> path = path(cont.getReferenceCoords(), tarLoc);
-            path.add(tarLoc);
-            cont.setCurrPath(path);
+//            synchronized (cont) {
+                LinkedList<Point> path = path(cont.getReferenceCoords(), tarLoc);
+                path.add(tarLoc);
+                cont.setCurrPath(path);
+//            }
+            return true;
         } else {
             //DISPLAY FAILURE?
+            return false;
         }
     }
     
@@ -390,6 +404,7 @@ public class Engine
         stopMove(builder);
     }
     
+
     /**
      * 
      * @param p
@@ -465,6 +480,14 @@ public class Engine
             }
         }
         return false;
+    }
+
+    public void update() {
+        HashMap<ResourceType, Integer> resources = new HashMap<>();
+        players[0].getResourceMap().forEach((key,value) -> {
+            resources.put(key,value);
+        });
+        Translation.getInstance().updateResources(resources);
     }
 
     /**

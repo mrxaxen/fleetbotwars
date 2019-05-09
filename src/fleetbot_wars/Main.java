@@ -41,25 +41,22 @@ public class Main {
 
         e = Engine.getInstance(new Map(), players);
         
-        //Engine e = new Engine(new Map(), players);
-        
-        /*System.out.println(e.getMap());
-
-        Infantry inf = new Infantry(new Point(1, 1), 1);
-        Controllable sm = Engine.ghostBuilding(new Point(0, 1), VisualType.STONEMINE, 0);
-        System.out.println(inf.getCoordsArray());
-        System.out.println(sm.getCoordsArray());        
-
-        
-        //System.out.println(e.getMap());
-        
-        */
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                GUI gui = GUI.getInstance();
-                gui.setVisible(true);
-            }
+        SwingUtilities.invokeLater(() -> {
+            GUI gui = GUI.getInstance();
+            gui.setVisible(true);
         });
+
+        new Thread(() -> {
+           while (true) {
+               e.actionIteration();
+               e.update();
+               try {
+                   Thread.sleep(120);
+               } catch (InterruptedException ex) {
+                   ex.printStackTrace();
+               }
+           }
+        }).start();
         
         /*double d = 1.0 + (double)1/2;
         int i = 1 + 1/2;
