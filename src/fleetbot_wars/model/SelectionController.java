@@ -1,7 +1,11 @@
 package fleetbot_wars.model;
 
+import visual.unit.Controllable;
+
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 class SelectionController {
 
@@ -17,7 +21,6 @@ class SelectionController {
 
     //TODO: move on right click
     private SelectionController() {
-
     }
 
     static SelectionController getInstance() {
@@ -53,6 +56,26 @@ class SelectionController {
             selectedTile = null;
             actionBar.changeToDefault();
         }
+    }
+
+    void move(Tile toTile) {
+        int yTo = toTile.getCoordY();
+        int xTo = toTile.getCoordX();
+        int xFrom = selectedTile.getCoordX();
+        int yFrom = selectedTile.getCoordY();
+
+
+        if(!serverComm.move(new Point(xFrom,yFrom),new Point(xTo,yTo))) {
+            toTile.setBorder(new LineBorder(new Color(255, 20, 20),5,true));
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    toTile.setBorder(null);
+                }
+            },50);
+        }
+        select(selectedTile);
     }
 
     void setBuildingToBuild(UnitType unitType) {

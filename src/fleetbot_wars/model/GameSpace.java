@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 class GameSpace extends JPanel implements Talkative{
 
-    private Ground[][] grounds = new Ground[GUI.mapSize.height][GUI.mapSize.width];
+    private Ground[][] grounds;
     private Translation serverComm = Translation.getInstance();
     static Tile[][] tiles; //not static just for testing
     private static GameSpace instance;
@@ -33,41 +33,8 @@ class GameSpace extends JPanel implements Talkative{
         GridLayout layout = new GridLayout(GUI.mapSize.height, GUI.mapSize.width);
         this.setLayout(layout);
         this.setPreferredSize(new Dimension(Tile.TILE_BASE_SIZE*GUI.mapSize.width,Tile.TILE_BASE_SIZE*GUI.mapSize.height));
-//        generateGrounds();
         genTiles();
     }
-
-//    void move() {
-//        this.removeAll();
-//        grounds = serverComm.getMap();
-//        genTiles();
-//        this.revalidate();
-//        this.repaint();
-//    }
-    //DUMMY
-//    private void generateGrounds() {
-//        for (int y = 0; y < grounds.length; y++) {
-//            for (int x = 0; x < grounds[y].length; x++) {
-//                grounds[y][x] = new Ground();
-//            }
-//        }
-//
-//    }
-    //DUMMY
-//    private class DummyGround {
-//        DummyUnit unit = new DummyUnit();
-//
-//        GroundType type = GroundType.DIRT;
-//
-//        private DummyUnit getUnit() {
-//            return unit;
-//        }
-//
-//        private GroundType getType() {
-//            return type;
-//        }
-//
-//    }
 
     private void genTiles() {
         System.out.println("Generating map...");
@@ -76,9 +43,9 @@ class GameSpace extends JPanel implements Talkative{
                 GroundType groundType = grounds[y][x].getType().getGroundType();
                 Unit currUnit = grounds[y][x].getOwnerReference();
                 if(currUnit != null) {
-                    tiles[y][x] = new Tile(groundType, currUnit, x, y);
+                    tiles[y][x] = new Tile(groundType, currUnit, y, x);
                 } else {
-                    tiles[y][x] = new Tile(groundType, null, x, y);
+                    tiles[y][x] = new Tile(groundType, null, y, x);
                 }
                 this.add(tiles[y][x], BorderLayout.CENTER);
             }
@@ -87,28 +54,12 @@ class GameSpace extends JPanel implements Talkative{
         this.repaint();
 
     }
-//    DUMMY
-//    private class DummyUnit {
-//        UnitType type;
-//
-//        DummyUnit() {
-//            int rand = (int)(Math.random() * 4);
-//            switch (rand) {
-//                case 0:
-//                    type = UnitType.TREE;
-//                    break;
-//                case 1:
-//                    type = UnitType.BUILDER;
-//                    break;
-//                case 2:
-//                    type = UnitType.TURRET;
-//                    break;
-//            }
-//        }
 
-//        private UnitType getType() {
-//            return type;
-//        }
-//    }
+    public void repaintTile(Point tileAt, Unit unit,boolean isGoingTo) {
+        Unit newUnit = isGoingTo ? unit : null;
+        Tile tile = tiles[tileAt.x][tileAt.y];
+        tile.setUnit(newUnit);
+        tile.repaint();
+    }
 
 }

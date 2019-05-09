@@ -5,6 +5,7 @@ import visual.ground.Ground;
 import visual.unit.Controllable;
 import visual.unit.Unit;
 
+import javax.swing.*;
 import java.awt.*;
 
 
@@ -36,11 +37,14 @@ class Translation {
         return engine.getMap().getGround();
     }
 
-    void move(Point unitAt, Point moveTo) {
-        Unit unit = engine.getMap().groundAt(unitAt).getOwnerReference();
-        if(unit instanceof Controllable)
-            engine.startMove((Controllable) unit, moveTo);
-//        GameSpace.getInstance().move();
+    boolean move(Point unitAt, Point moveTo) {
+        Controllable unitToMove = (Controllable) engine.getMap().groundAt(unitAt).getOwnerReference();
+        return engine.startMove(unitToMove, moveTo);
+    }
+
+    void repaintOnMove(Point tileAt, Unit unitToPlace, boolean isGoingTo) {
+        SwingUtilities.invokeLater(() -> GameSpace.getInstance().repaintTile(tileAt,unitToPlace,isGoingTo));
+        System.out.println("CALLED");
     }
 
     void getResources() {
