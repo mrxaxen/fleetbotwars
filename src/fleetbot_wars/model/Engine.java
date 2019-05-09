@@ -404,6 +404,7 @@ public class Engine
         stopMove(builder);
     }
     
+
     /**
      * 
      * @param p
@@ -479,6 +480,14 @@ public class Engine
             }
         }
         return false;
+    }
+
+    public void update() {
+        HashMap<ResourceType, Integer> resources = new HashMap<>();
+        players[0].getResourceMap().forEach((key,value) -> {
+            resources.put(key,value);
+        });
+        Translation.getInstance().updateResources(resources);
     }
 
     /**

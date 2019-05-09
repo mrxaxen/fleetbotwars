@@ -1,12 +1,14 @@
 package fleetbot_wars.model;
 
 import fleetbot_wars.Main;
+import fleetbot_wars.model.enums.ResourceType;
 import visual.ground.Ground;
 import visual.unit.Controllable;
 import visual.unit.Unit;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 
 
 //Separate thread
@@ -14,6 +16,7 @@ class Translation {
 
     private static Translation instance;
     private Engine engine = Main.getEngine();
+    private StatusBar statusBar;
 
     static Translation getInstance() {
         if (instance != null) {
@@ -37,6 +40,10 @@ class Translation {
         return engine.getMap().getGround();
     }
 
+    void passStatusBar(StatusBar statusBar) {
+        this.statusBar = statusBar;
+    }
+
     boolean move(Point unitAt, Point moveTo) {
         Controllable unitToMove = (Controllable) engine.getMap().groundAt(unitAt).getOwnerReference();
         return engine.startMove(unitToMove, moveTo);
@@ -47,11 +54,7 @@ class Translation {
         System.out.println("CALLED");
     }
 
-    void getResources() {
-
-    }
-
-    void getUnits() {
+    void build() {
 
     }
 
@@ -61,8 +64,13 @@ class Translation {
 
     }
 
-    void checkResources() {
-
+    void updateResources(HashMap<ResourceType, Integer> resources) {
+        SwingUtilities.invokeLater(() -> {
+            statusBar.updateResources(resources);
+        });
     }
 
+    int getResource(ResourceType type) {
+        return engine.getPlayers()[0].getResourceByName(type);
+    }
 }

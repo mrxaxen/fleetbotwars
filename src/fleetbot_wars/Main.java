@@ -49,6 +49,7 @@ public class Main {
         new Thread(() -> {
            while (true) {
                e.actionIteration();
+               e.update();
                try {
                    Thread.sleep(120);
                } catch (InterruptedException ex) {
