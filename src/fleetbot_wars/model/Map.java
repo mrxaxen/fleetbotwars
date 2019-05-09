@@ -206,7 +206,7 @@ public class Map {
         int currX = referenceCoord.x;
         int currY = referenceCoord.y;
 
-        for (int i = currX; i < referenceCoord.x + unit.getWidth(); i++) {
+        for (int i = currX; i < referenceCoord.x + unit.getHeight(); i++) {
             for (int j = currY; j < referenceCoord.y + unit.getWidth(); j++) {
                 ground[i][j].setOwnerReference(unit);
             }
@@ -218,8 +218,8 @@ public class Map {
         int currY = referenceCoords.y;
         Ground currentGround = ground[currX][currY];
         boolean isEmpty = !(currentGround.isOccupied());
-        while ((currX < referenceCoords.x + width) && isEmpty && currX < this.mapDimension.height) {
-            while ((currY < referenceCoords.y + height) && isEmpty  && currY < this.mapDimension.width) {
+        while ((currX < referenceCoords.x + width) && isEmpty && currX < this.mapDimension.width) {
+            while ((currY < referenceCoords.y + height) && isEmpty  && currY < this.mapDimension.height) {
                 currentGround = ground[currX][currY];
                 isEmpty = !(currentGround.isOccupied());
                 currY++;
@@ -245,11 +245,10 @@ public class Map {
                     && !(isSectionUnOccupied(currentCoord, currUnit.getWidth(), currUnit.getHeight()))) {
                 count++;
                 currentCoord = startingZone.get(count);
-
             }
             if (isSectionUnOccupied(currentCoord, currUnit.getWidth(), currUnit.getHeight()) && count < (startingZone.size()-1)) {
                 placeUnitOnMap(currentCoord, currUnit);
-                count++;
+                count+= currUnit.getWidth();
             }
         }
     }
