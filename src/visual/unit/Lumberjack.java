@@ -5,6 +5,7 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.Player;
 import fleetbot_wars.model.enums.ResourceType;
 import fleetbot_wars.model.enums.VisualType;
 
@@ -21,12 +22,11 @@ public class Lumberjack extends Controllable {
     
     /**
      * create Lumberjack at (x,y) coordinates, for 'team' team
-     * 
-     * @param coords
-     * @param team
+     *  @param coords
+     * @param player
      */
-    public Lumberjack(Point coords, int team) {
-        super(coords, VisualType.LUMBERJACK, null, 100, 1, 1, 10, 1, 1, 1, team);
+    public Lumberjack(Point coords, Player player) {
+        super(coords, VisualType.LUMBERJACK, null, 100, 1, 1, 10, 1, 1, 1, player);
     }
 
     @Override

@@ -5,6 +5,7 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.Player;
 import fleetbot_wars.model.enums.ResourceType;
 import java.awt.Point;
 import java.util.HashMap;
@@ -24,12 +25,11 @@ public class Builder extends Controllable {
     
     /**
      * create Builder at (x,y) coordinates, for 'team' team
-     * 
-     * @param coords
-     * @param team
+     *  @param coords
+     * @param player
      */
-    public Builder(Point coords, int team) {
-        super(coords, VisualType.BUILDER, null, 100, 1, 0, 0, 1, 1, 1, team);
+    public Builder(Point coords, Player player) {
+        super(coords, VisualType.BUILDER, null, 100, 1, 0, 0, 1, 1, 1, player);
     }
 
 }

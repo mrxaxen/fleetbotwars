@@ -5,6 +5,7 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.Player;
 import fleetbot_wars.model.enums.ResourceType;
 
 import java.awt.Point;
@@ -22,12 +23,11 @@ public class Farm extends Controllable {
     
     /**
      * create Farm at (x,y) coordinates, for 'team' team
-     * 
-     * @param coords
-     * @param team
+     *  @param coords
+     * @param player
      */
-    public Farm(Point coords, int team) {
-        super(coords, VisualType.FARM, null, 500, 0, 0, 0, 5, 1, 0, team);
+    public Farm(Point coords, Player player) {
+        super(coords, VisualType.FARM, null, 500, 0, 0, 0, 5, 1, 0, player);
         this.width = 3;
         this.height = 2;
     }

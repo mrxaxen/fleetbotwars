@@ -5,6 +5,7 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.Player;
 import fleetbot_wars.model.enums.ResourceType;
 import java.awt.Point;
 import java.util.HashMap;
@@ -21,12 +22,11 @@ public class Cavalry extends Controllable {
     
     /**
      * create Cavalry at (x,y) coordinates, for 'team' team
-     * 
-     * @param coords
-     * @param team
+     *  @param coords
+     * @param player
      */
-    public Cavalry(Point coords, int team) {
-        super(coords, VisualType.CAVALRY, null, 100, 1, 1, 10, 5, 1, 1, team);
+    public Cavalry(Point coords, Player player) {
+        super(coords, VisualType.CAVALRY, null, 100, 1, 1, 10, 5, 1, 1, player);
         this.upPrice = 10;
     }
 

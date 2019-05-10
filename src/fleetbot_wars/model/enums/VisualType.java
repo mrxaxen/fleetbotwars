@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.Random;
 
 import fleetbot_wars.model.GroundType;
+import fleetbot_wars.model.Player;
 import fleetbot_wars.model.UnitType;
 import visual.unit.*;
 
@@ -81,56 +82,56 @@ public enum VisualType {
         return this.name();
     }
 
-    public static Controllable createUnit(VisualType name, Point coords, int playerNum) {
+    public static Controllable createUnit(VisualType name, Point coords, Player player) {
         Controllable retUnit = null;
         switch (name) {
         case BARRICADE:
-            retUnit = new Barricade(coords, playerNum);
+            retUnit = new Barricade(coords, player);
             break;
         case BUILDER:
-            retUnit = new Builder(coords, playerNum);
+            retUnit = new Builder(coords, player);
             break;
         case CAVALRY:
-            retUnit = new Cavalry(coords, playerNum);
+            retUnit = new Cavalry(coords, player);
             break;
         case DESTROYER:
-            retUnit = new Destroyer(coords, playerNum);
+            retUnit = new Destroyer(coords, player);
             break;
         case FARM:
-            retUnit = new Farm(coords, playerNum);
+            retUnit = new Farm(coords, player);
             break;
         case GOLDMINE:
-            retUnit = new GoldMine(coords, playerNum);
+            retUnit = new GoldMine(coords, player);
             break;
         case HARVESTCENTER:
-            retUnit = new HarvestCenter(coords, playerNum);
+            retUnit = new HarvestCenter(coords, player);
             break;
         case INFANTRY:
-            retUnit = new Infantry(coords, playerNum);
+            retUnit = new Infantry(coords, player);
             break;
         case LUMBERJACK:
-            retUnit = new Lumberjack(coords, playerNum);
+            retUnit = new Lumberjack(coords, player);
             break;
         case MEDIC:
-            retUnit = new Medic(coords, playerNum);
+            retUnit = new Medic(coords, player);
             break;
         case MILITARYSPAWN:
-            retUnit = new MilitarySpawn(coords, playerNum);
+            retUnit = new MilitarySpawn(coords, player);
             break;
         case MINER:
-            retUnit = new Miner(coords, playerNum);
+            retUnit = new Miner(coords, player);
             break;
         case RANGER:
-            retUnit = new Ranger(coords, playerNum);
+            retUnit = new Ranger(coords, player);
             break;
         case STONEMINE:
-            retUnit = new StoneMine(coords, playerNum);
+            retUnit = new StoneMine(coords, player);
             break;
         case TURRET:
-            retUnit = new Turret(coords, playerNum);
+            retUnit = new Turret(coords, player);
             break;
         case WORKERSPAWN:
-            retUnit = new WorkerSpawn(coords, playerNum);
+            retUnit = new WorkerSpawn(coords, player);
             break;
         default:
             break;

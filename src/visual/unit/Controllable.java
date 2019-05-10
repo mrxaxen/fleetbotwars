@@ -5,9 +5,10 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.Player;
 import fleetbot_wars.model.enums.VisualType;
-import java.awt.Image;
-import java.awt.Point;
+
+import java.awt.*;
 import java.util.LinkedList;
 
 /**
@@ -23,11 +24,12 @@ public abstract class Controllable extends Unit {
     private Unit currTar = null;
     private Controllable ghostBuilding = null;
     protected int upPrice = 0;
+    private Player player;
+    private Color color;
 
     /**
      * create Controllable at (x,y) coordinates, for 'team' team *
-     * 
-     * @param coords
+     *  @param coords
      * @param type
      * @param model
      * @param hp
@@ -37,10 +39,10 @@ public abstract class Controllable extends Unit {
      * @param maxLvl
      * @param lvl
      * @param rng
-     * @param team
+     * @param player
      */
     public Controllable(Point coords, VisualType type, Image model, int hp, int mvmtSpd, int atkSpd, int dmg,
-            int maxLvl, int lvl, int rng, int team) { // MAXLEVEL IN SPECIFIC CONSTRS
+                        int maxLvl, int lvl, int rng, Player player) { // MAXLEVEL IN SPECIFIC CONSTRS
         super(coords, type, model, hp);
         this.mvmtSpd = mvmtSpd;
         this.atkSpd = atkSpd;
@@ -48,7 +50,9 @@ public abstract class Controllable extends Unit {
         this.maxLvl = maxLvl;
         this.currLvl = lvl;
         this.rng = rng;
-        this.team = team;
+        this.player = player;
+        this.color = player.getColor();
+
     }
 
     /**
@@ -60,7 +64,7 @@ public abstract class Controllable extends Unit {
 
     /**
      * returns whether the targeted Unit is valid target for attacking Controllable
-     * 
+     *
      * @param target
      * @return
      */
@@ -83,7 +87,7 @@ public abstract class Controllable extends Unit {
     /**
      * increase Unit level
      */
-    public void upgrade() {    
+    public void upgrade() {
         //level check done in Engine
         //if (this.currLvl < this.maxLvl) {
             ++this.currLvl;
@@ -105,7 +109,7 @@ public abstract class Controllable extends Unit {
     public boolean isHumanType() {
         return !isBuildingType();
     }
-    
+
     public boolean isUpgradeable() {
         String t = this.type.name();
         return t.equals("INFANTRY") || t.equals("CAVALRY") || t.equals("RANGER")
@@ -113,9 +117,9 @@ public abstract class Controllable extends Unit {
     }
 
     ///// getters, setters
-    
+
     public int getTeam() {
-        return team;
+        return player.getPlayerNumber();
     }
 
     public int getDmg() {
@@ -182,4 +186,11 @@ public abstract class Controllable extends Unit {
         return currLvl;
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Color getColor() {
+        return color;
+    }
 }

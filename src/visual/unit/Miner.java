@@ -5,6 +5,7 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.Player;
 import fleetbot_wars.model.enums.ResourceType;
 import java.awt.Point;
 import java.util.HashMap;
@@ -26,12 +27,11 @@ public class Miner extends Controllable {
 
     /**
      * create Miner at (x,y) coordinates, for 'team' team
-     * 
-     * @param coords
-     * @param team
+     *  @param coords
+     * @param player
      */
-    public Miner(Point coords, int team) {
-        super(coords, VisualType.MINER, null, 100, 1, 0, 0, 1, 1, 0, team);
+    public Miner(Point coords, Player player) {
+        super(coords, VisualType.MINER, null, 100, 1, 0, 0, 1, 1, 0, player);
     }
 
 }

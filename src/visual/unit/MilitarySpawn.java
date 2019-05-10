@@ -5,6 +5,7 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.Player;
 import fleetbot_wars.model.enums.ResourceType;
 import java.awt.Point;
 import java.util.HashMap;
@@ -21,12 +22,11 @@ public class MilitarySpawn extends Controllable {
     
     /**
      * create MilitarySpawn at (x,y) coordinates, for 'team' team
-     * 
-     * @param coords
-     * @param team
+     *  @param coords
+     * @param player
      */
-    public MilitarySpawn(Point coords, int team) {
-        super(coords, VisualType.MILITARYSPAWN, null, 500, 0, 0, 0, 1, 1, 0, team);
+    public MilitarySpawn(Point coords, Player player) {
+        super(coords, VisualType.MILITARYSPAWN, null, 500, 0, 0, 0, 1, 1, 0, player);
         this.width = 3;
         this.height = 2;
     }

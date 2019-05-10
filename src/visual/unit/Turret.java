@@ -5,6 +5,7 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.Player;
 import fleetbot_wars.model.enums.ResourceType;
 
 import java.awt.Point;
@@ -22,12 +23,11 @@ public class Turret extends Controllable {
     
     /**
      * create Turret at (x,y) coordinates, for 'team' team
-     * 
-     * @param coords
-     * @param team
+     *  @param coords
+     * @param player
      */
-    public Turret(Point coords, int team) {
-        super(coords, VisualType.TURRET, null, 500, 0, 1, 10, 5, 1, 2, team);
+    public Turret(Point coords, Player player) {
+        super(coords, VisualType.TURRET, null, 500, 0, 1, 10, 5, 1, 2, player);
         this.width = 2;
         this.height = 2;
         this.upPrice = 10;

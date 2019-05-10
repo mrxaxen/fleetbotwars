@@ -5,6 +5,7 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.Player;
 import fleetbot_wars.model.enums.ResourceType;
 
 import java.awt.Point;
@@ -22,12 +23,11 @@ public class Infantry extends Controllable {
     
     /**
      * create Infantry at (x,y) coordinates, for 'team' team
-     * 
-     * @param coords
-     * @param team
+     *  @param coords
+     * @param player
      */
-    public Infantry(Point coords, int team) {
-        super(coords, VisualType.INFANTRY, null, 100, 1, 1, 10, 5, 1, 1, team);
+    public Infantry(Point coords, Player player) {
+        super(coords, VisualType.INFANTRY, null, 100, 1, 1, 10, 5, 1, 1, player);
         this.upPrice = 10;
     }
 

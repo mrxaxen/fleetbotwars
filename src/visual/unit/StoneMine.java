@@ -5,6 +5,7 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.Player;
 import fleetbot_wars.model.enums.ResourceType;
 import java.awt.Point;
 import java.util.HashMap;
@@ -32,12 +33,11 @@ public class StoneMine extends Mine {
     
     /**
      * create StoneMine at (x,y) coordinates, for 'team' team
-     * 
-     * @param coords
-     * @param team
+     *  @param coords
+     * @param player
      */
-    public StoneMine(Point coords, int team) {
-        super(coords, VisualType.STONEMINE, null, 500, team);
+    public StoneMine(Point coords, Player player) {
+        super(coords, VisualType.STONEMINE, null, 500, player);
         this.width = 3;
         this.height = 2;
     }

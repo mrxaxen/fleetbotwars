@@ -5,6 +5,7 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.Player;
 import fleetbot_wars.model.enums.ResourceType;
 import java.awt.Point;
 import java.util.HashMap;
@@ -21,12 +22,11 @@ public class Destroyer extends Controllable {
     
     /**
      * create Destroyer at (x,y) coordinates, for 'team' team
-     * 
-     * @param coords
-     * @param team
+     *  @param coords
+     * @param player
      */
-    public Destroyer(Point coords, int team) {
-        super(coords, VisualType.DESTROYER, null, 100, 1, 1, 50, 5, 1, 1, team);
+    public Destroyer(Point coords, Player player) {
+        super(coords, VisualType.DESTROYER, null, 100, 1, 1, 50, 5, 1, 1, player);
         this.upPrice = 10;
     }
 

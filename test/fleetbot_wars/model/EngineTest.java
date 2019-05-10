@@ -198,7 +198,7 @@ public class EngineTest {
     @Test
     public void testStopAttack() {
         // t0 t0 i0 B r0
-        // t0 t0 B  B B 
+        // t0 t0 B  B B
         // B  B  B  B B
         // t1 t1 i1 B r1
         // t1 t1 B  B B
@@ -216,7 +216,7 @@ public class EngineTest {
     @Test
     public void testIteration_combat() {
         // t0 t0 i0 B r0
-        // t0 t0 B  B B 
+        // t0 t0 B  B B
         // B  B  B  B B
         // t1 t1 i1 B r1
         // t1 t1 B  B B
@@ -262,8 +262,8 @@ public class EngineTest {
 
         // LoS check
         // r01 S i11
-        //  B  B  B 
-        // i12 B  B 
+        //  B  B  B
+        // i12 B  B
         attack_engine = createAttackEngine_LoS();
         Controllable ran01 = attack_engine.getPlayers()[0].getPlayerUnits().get(0);
         Controllable inf11 = attack_engine.getPlayers()[1].getPlayerUnits().get(0);
@@ -293,7 +293,7 @@ public class EngineTest {
         Controllable ba1 = attack_engine.getPlayers()[1].getPlayerUnits().get(1);
         Tree tr = (Tree)attack_engine.getMap().groundAt(new Point(0,1)).getOwnerReference();
         Player p0 = attack_engine.getPlayers()[0];
-        
+
         //Tree: 5 hits, Inf: 10 hits, Barri: 50 hits
         attack_engine.startAttack(lj0, tr.getReferenceCoords());
         attack_engine.startAttack(i0, i1.getReferenceCoords());
@@ -438,7 +438,7 @@ public class EngineTest {
         upgrade_engine.upgrade(i0); //3, 9974
         upgrade_engine.upgrade(i0); //4, 9954
         upgrade_engine.upgrade(i0); //5, 9929
-        upgrade_engine.upgrade(i0); // 6 -> 5, 9929 
+        upgrade_engine.upgrade(i0); // 6 -> 5, 9929
         assertEquals(5, i0.getCurrLvl());
         //got res, can't upgr (type)
         upgrade_engine.upgrade(b0);
@@ -490,7 +490,7 @@ public class EngineTest {
         assertFalse(mountain.isFreeOrTree());
     }
 
-    /// Map:    
+    /// Map:
     @Test
     public void testAdjMineralCheck() {
         Ground[][] ground = new Ground[3][6];
@@ -518,23 +518,24 @@ public class EngineTest {
     // isHumanType() is its negation: if this works, that works too
     @Test
     public void testIsBuildingType() {
-        Controllable barricade = new Barricade(new Point(1, 1), 1);
-        Controllable farm = new Farm(new Point(1, 1), 1);
-        Controllable goldmine = new GoldMine(new Point(1, 1), 1);
-        Controllable harvestcenter = new HarvestCenter(new Point(1, 1), 1);
-        Controllable militaryspawn = new MilitarySpawn(new Point(1, 1), 1);
-        Controllable stonemine = new StoneMine(new Point(1, 1), 1);
-        Controllable turret = new Turret(new Point(1, 1), 1);
-        Controllable workerspawn = new WorkerSpawn(new Point(1, 1), 1);
+        Player jane = new Player("jane_doe", 0);
+        Controllable barricade = new Barricade(new Point(1, 1), jane);
+        Controllable farm = new Farm(new Point(1, 1), jane);
+        Controllable goldmine = new GoldMine(new Point(1, 1), jane);
+        Controllable harvestcenter = new HarvestCenter(new Point(1, 1), jane);
+        Controllable militaryspawn = new MilitarySpawn(new Point(1, 1), jane);
+        Controllable stonemine = new StoneMine(new Point(1, 1), jane);
+        Controllable turret = new Turret(new Point(1, 1), jane);
+        Controllable workerspawn = new WorkerSpawn(new Point(1, 1), jane);
 
-        Controllable builder = new Builder(new Point(1, 1), 1);
-        Controllable cavalry = new Cavalry(new Point(1, 1), 1);
-        Controllable destroyer = new Destroyer(new Point(1, 1), 1);
-        Controllable infantry = new Infantry(new Point(1, 1), 1);
-        Controllable lumberjack = new Lumberjack(new Point(1, 1), 1);
-        Controllable medic = new Medic(new Point(1, 1), 1);
-        Controllable miner = new Miner(new Point(1, 1), 1);
-        Controllable ranger = new Ranger(new Point(1, 1), 1);
+        Controllable builder = new Builder(new Point(1, 1), jane);
+        Controllable cavalry = new Cavalry(new Point(1, 1), jane);
+        Controllable destroyer = new Destroyer(new Point(1, 1), jane);
+        Controllable infantry = new Infantry(new Point(1, 1), jane);
+        Controllable lumberjack = new Lumberjack(new Point(1, 1), jane);
+        Controllable medic = new Medic(new Point(1, 1), jane);
+        Controllable miner = new Miner(new Point(1, 1), jane);
+        Controllable ranger = new Ranger(new Point(1, 1), jane);
 
         assertTrue(barricade.isBuildingType());
         assertTrue(farm.isBuildingType());
@@ -559,14 +560,16 @@ public class EngineTest {
     public void testIsValidTarget() {
         //isValidTarget has 4 versions implemented,
         //the default false won't be called
-        Controllable turret = new Turret(new Point(1, 1), 1);
-        Controllable destroyer = new Destroyer(new Point(1, 1), 1);
-        Controllable infantry = new Infantry(new Point(1, 1), 1);
-        Controllable lumberjack = new Lumberjack(new Point(1, 1), 1);
-        Controllable medic = new Medic(new Point(1, 1), 1);
+        Player jane = new Player("jane_doe", 0);
+        Player jane_enemy = new Player("jane_doe_enemy", 0);
+        Controllable turret = new Turret(new Point(1, 1), jane);
+        Controllable destroyer = new Destroyer(new Point(1, 1), jane);
+        Controllable infantry = new Infantry(new Point(1, 1), jane);
+        Controllable lumberjack = new Lumberjack(new Point(1, 1), jane);
+        Controllable medic = new Medic(new Point(1, 1), jane);
 
-        Controllable e_turret = new Turret(new Point(1, 1), 2);
-        Controllable e_infantry = new Infantry(new Point(1, 1), 2);
+        Controllable e_turret = new Turret(new Point(1, 1), jane_enemy);
+        Controllable e_infantry = new Infantry(new Point(1, 1), jane_enemy);
         Unit tree = new Tree(new Point(1, 1));
 
         assertTrue(destroyer.isValidTarget(e_turret)); //enemy building
@@ -596,8 +599,10 @@ public class EngineTest {
 
     @Test
     public void testHit() {
-        Controllable infantry1 = new Infantry(new Point(1, 1), 1);
-        Controllable infantry2 = new Infantry(new Point(1, 1), 2);
+        Player jane = new Player("jane_doe", 0);
+        Player jane_enemy = new Player("jane_doe_enemy", 0);
+        Controllable infantry1 = new Infantry(new Point(1, 1), jane);
+        Controllable infantry2 = new Infantry(new Point(1, 1), jane_enemy);
         int hp2 = infantry2.getCurrHp(); //100
         int dmg1 = infantry1.getDmg(); //10
         int atkSpd1 = infantry1.getAtkSpd(); //1
@@ -607,7 +612,7 @@ public class EngineTest {
         assertEquals(res, infantry2.getCurrHp());
         assertEquals(90, infantry2.getCurrHp());
 
-        Controllable medic2 = new Medic(new Point(1, 1), 2);
+        Controllable medic2 = new Medic(new Point(1, 1), jane_enemy);
         int heal2 = medic2.getDmg(); //-10
         int healSpd2 = medic2.getAtkSpd(); //1
 
@@ -619,13 +624,14 @@ public class EngineTest {
         assertEquals(90, infantry2.getCurrHp());
 
         medic2.hit(infantry2); //100
-        medic2.hit(infantry2); //110 -> 100        
+        medic2.hit(infantry2); //110 -> 100
         assertEquals(100, infantry2.getCurrHp());
     }
 
     @Test
     public void testClearPath() {
-        Controllable inf = new Infantry(new Point(1, 1), 1);
+        Player jane = new Player("jane_doe", 0);
+        Controllable inf = new Infantry(new Point(1, 1), jane);
         LinkedList<Point> path = new LinkedList<>();
         path.add(new Point(1, 2));
         inf.setCurrPath(path);
@@ -651,7 +657,7 @@ public class EngineTest {
 
         Player[] players = new Player[1];
         Player jane = new Player("jane_doe", 0);
-        jane.addControllable(new Infantry(new Point(3, 3), jane.getPlayerNumber()));
+        jane.addControllable(new Infantry(new Point(3, 3), jane));
         players[0] = jane;
 
         Engine new_movement_engine = new Engine(movement_map, players, 420);
@@ -662,7 +668,7 @@ public class EngineTest {
     private Engine createAttackEngine() {
         Ground[][] attack_ground = new Ground[5][5];
         // t0 t0 i0 B r0
-        // t0 t0 B  B B 
+        // t0 t0 B  B B
         // B  B  B  B B
         // t1 t1 i1 B r1
         // t1 t1 B  B B
@@ -675,13 +681,13 @@ public class EngineTest {
 
         Player[] players = new Player[2];
         Player jane_0 = new Player("jane_doe", 0);
-        jane_0.addControllable(new Turret(new Point(0, 0), jane_0.getPlayerNumber()));
-        jane_0.addControllable(new Infantry(new Point(0, 2), jane_0.getPlayerNumber()));
-        jane_0.addControllable(new Ranger(new Point(0, 4), jane_0.getPlayerNumber()));
+        jane_0.addControllable(new Turret(new Point(0, 0), jane_0));
+        jane_0.addControllable(new Infantry(new Point(0, 2), jane_0));
+        jane_0.addControllable(new Ranger(new Point(0, 4), jane_0));
         Player john_1 = new Player("john_doe", 1);
-        john_1.addControllable(new Turret(new Point(3, 0), john_1.getPlayerNumber()));
-        john_1.addControllable(new Infantry(new Point(3, 2), john_1.getPlayerNumber()));
-        john_1.addControllable(new Ranger(new Point(3, 4), john_1.getPlayerNumber()));
+        john_1.addControllable(new Turret(new Point(3, 0), john_1));
+        john_1.addControllable(new Infantry(new Point(3, 2), john_1));
+        john_1.addControllable(new Ranger(new Point(3, 4), john_1));
         players[0] = jane_0;
         players[1] = john_1;
 
@@ -693,8 +699,8 @@ public class EngineTest {
     private Engine createAttackEngine_LoS() {
         Ground[][] attack_ground = new Ground[3][3];
         // r01 S i11
-        //  B  B  B 
-        // i12 B  B 
+        //  B  B  B
+        // i12 B  B
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 attack_ground[i][j] = new Base(new Point(i, j));
@@ -705,10 +711,10 @@ public class EngineTest {
 
         Player[] players = new Player[2];
         Player jane_0 = new Player("jane_doe", 0);
-        jane_0.addControllable(new Ranger(new Point(0, 0), jane_0.getPlayerNumber()));
+        jane_0.addControllable(new Ranger(new Point(0, 0), jane_0));
         Player john_1 = new Player("john_doe", 1);
-        john_1.addControllable(new Infantry(new Point(0, 2), john_1.getPlayerNumber()));
-        john_1.addControllable(new Infantry(new Point(2, 0), john_1.getPlayerNumber()));
+        john_1.addControllable(new Infantry(new Point(0, 2), john_1));
+        john_1.addControllable(new Infantry(new Point(2, 0), john_1));
         players[0] = jane_0;
         players[1] = john_1;
 
@@ -732,17 +738,17 @@ public class EngineTest {
 
         Player[] players = new Player[2];
         Player jane_0 = new Player("jane_doe", 0);
-        jane_0.addControllable(new Lumberjack(new Point(0, 0), jane_0.getPlayerNumber()));
-        jane_0.addControllable(new Infantry(new Point(1, 0), jane_0.getPlayerNumber()));
+        jane_0.addControllable(new Lumberjack(new Point(0, 0), jane_0));
+        jane_0.addControllable(new Infantry(new Point(1, 0), jane_0));
         jane_0.nullifyResources();
         Player john_1 = new Player("john_doe", 1);
-        john_1.addControllable(new Infantry(new Point(1, 1), john_1.getPlayerNumber()));
-        john_1.addControllable(new Barricade(new Point(2, 0), john_1.getPlayerNumber()));
+        john_1.addControllable(new Infantry(new Point(1, 1), john_1));
+        john_1.addControllable(new Barricade(new Point(2, 0), john_1));
         players[0] = jane_0;
         players[1] = john_1;
 
         Engine new_death_engine = new Engine(death_map, players, 1337);
-        
+
         return new_death_engine;
     }
 
@@ -764,7 +770,7 @@ public class EngineTest {
 
         Player[] players = new Player[1];
         Player jane = new Player("jane_doe", 0);
-        jane.addControllable(new Builder(new Point(0, 0), jane.getPlayerNumber()));
+        jane.addControllable(new Builder(new Point(0, 0), jane));
         players[0] = jane;
 
         Engine new_building_engine = new Engine(building_map, players, 57);
@@ -781,9 +787,9 @@ public class EngineTest {
 
         Player[] players = new Player[2];
         Player jane_0 = new Player("jane_doe", 0);
-        jane_0.addControllable(new Builder(new Point(0, 0), jane_0.getPlayerNumber()));
+        jane_0.addControllable(new Builder(new Point(0, 0), jane_0));
         Player john_1 = new Player("john_doe", 1);
-        john_1.addControllable(new Builder(new Point(0, 1), john_1.getPlayerNumber()));
+        john_1.addControllable(new Builder(new Point(0, 1), john_1));
         john_1.nullifyResources();
         players[0] = jane_0;
         players[1] = john_1;
@@ -806,10 +812,10 @@ public class EngineTest {
 
         Player[] players = new Player[2];
         Player jane_0 = new Player("jane_doe", 0);
-        jane_0.addControllable(new Infantry(new Point(0, 0), jane_0.getPlayerNumber()));
-        jane_0.addControllable(new Builder(new Point(0, 1), jane_0.getPlayerNumber()));
+        jane_0.addControllable(new Infantry(new Point(0, 0), jane_0));
+        jane_0.addControllable(new Builder(new Point(0, 1), jane_0));
         Player john_1 = new Player("john_doe", 1);
-        john_1.addControllable(new Infantry(new Point(1, 0), john_1.getPlayerNumber()));
+        john_1.addControllable(new Infantry(new Point(1, 0), john_1));
         john_1.nullifyResources();
         players[0] = jane_0;
         players[1] = john_1;

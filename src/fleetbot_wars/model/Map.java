@@ -238,7 +238,7 @@ public class Map {
         Point currentCoord;
         for (VisualType unit : units) {
             currentCoord = startingZone.get(count);
-            currUnit = VisualType.createUnit(unit, currentCoord, playerNum);
+            currUnit = VisualType.createUnit(unit, currentCoord, player);
             while (!(isSectionUnOccupied(currentCoord, currUnit.getWidth(), currUnit.getHeight())) && count < (startingZone.size())) {
                 count++;
                 currentCoord = startingZone.get(count);

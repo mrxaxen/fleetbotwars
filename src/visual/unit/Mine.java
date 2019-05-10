@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Timer;
 
+import fleetbot_wars.model.Player;
 import fleetbot_wars.model.enums.VisualType;
 
 /**
@@ -25,15 +26,14 @@ abstract public class Mine extends Controllable {
 
     /**
      * called when specific Mine created
-     * 
-     * @param coords
+     *  @param coords
      * @param type
      * @param model
      * @param hp
-     * @param team
+     * @param player
      */
-    public Mine(Point coords, VisualType type, Image model, int hp, int team) {
-        super(coords, type, model, hp, 0, 0, 0, 1, 1, 0, team);
+    public Mine(Point coords, VisualType type, Image model, int hp, Player player) {
+        super(coords, type, model, hp, 0, 0, 0, 1, 1, 0, player);
         ActionListener taskPerformer = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

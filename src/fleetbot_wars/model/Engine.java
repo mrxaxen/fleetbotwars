@@ -11,6 +11,8 @@ import java.awt.Point;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
+
+import visual.Visual;
 import visual.ground.Ground;
 import visual.ground.Water;
 import visual.unit.*;
@@ -46,52 +48,62 @@ public class Engine
     /**
      * create Engine
      * @param map
-     * @param players 
+     * @param players
      */
     private Engine(Map map, Player[] players) {
         this.map = map;
         this.players = players;
         map.placePlayersOnMap(players);
     }
-    
+
     // used for testing - Bori
-    public Engine(Map map, Player[] players, int mark) {        
+    public Engine(Map map, Player[] players, int mark) {
         this.map = map;
         this.players = players;
         //bind Controllables to map
         for (Player p : players) {
             for (Controllable cont : p.getPlayerUnits()) {
-                for (Point c : cont.getCoordsArray()) { 
+                for (Point c : cont.getCoordsArray()) {
                     map.groundAt(c).setOwnerReference(cont);
                 }
             }
         }
     }
-    
+
     /**
      * inspects Unit at given location
-     * @param location 
+     * @param location
      */
     public void inspectUnit(Point location) {
         //DISPLAY UNIT INFO? ACTIONS
         inspectedUnit = map.groundAt(location).getOwnerReference();
         inspectedUnit.inspect();
     }
-    
+
     ///// Controllable actions
-    
+
     /**
      * one step of iteration on ALL ongoing actions
      */
     public void actionIteration() {
-        for (Player p : players) 
+        for (Player p : players)
         {
             for (Controllable cont : p.getPlayerUnits()) {
                 if (cont.isAttacking()) {
                     attack(cont, cont.getCurrTar());
                 }
                 if (cont.isBuilding()) {
-                    build(cont);                    
+                    Controllable ghostBuilding = cont.getGhostBuilding();
+                    if(build(cont)) {
+                        System.out.println("Building...");
+                        for (int i = 0; i < ghostBuilding.getWidth(); i++) {
+                            for (int j = 0; j < ghostBuilding.getHeight(); j++) {
+                                Point point = new Point(ghostBuilding.getReferenceCoords().x + j, ghostBuilding.getReferenceCoords().y + i);
+                                Translation.getInstance().repaintOnMove(point, ghostBuilding, true);
+                            }
+                        }
+                    }
+
                 }
                 if (cont.isMoving()) {
                     Translation.getInstance().repaintOnMove(cont.getReferenceCoords(),cont,false);
@@ -102,52 +114,50 @@ public class Engine
         }
         cleanUp();
     }
-    
-    ///// MOVEMENT    
-    
+
+    ///// MOVEMENT
+
     /**
      * initilaizes given Controllable's movement to given location,
      * if given location is valid
      * @param cont
-     * @param tarLoc 
+     * @param tarLoc
      */
     public boolean startMove(Controllable cont, Point tarLoc) {
         if (!map.groundAt(tarLoc).isOccupied()) {
-//            synchronized (cont) {
                 LinkedList<Point> path = path(cont.getReferenceCoords(), tarLoc);
                 path.add(tarLoc);
                 cont.setCurrPath(path);
-//            }
             return true;
         } else {
             //DISPLAY FAILURE?
             return false;
         }
     }
-    
+
     /**
      * stops given Controllable's movement, as if it has reached its destination
      * (therefore the 'same' movement cannot be resumed)
-     * @param cont 
+     * @param cont
      */
     public void stopMove(Controllable cont) {
         cont.clearPath();
     }
-    
+
     /// movement helpers (private)
-    
+
     /**
      * moves given Controllable along its current path
-     * @param cont 
+     * @param cont
      */
     private void move(Controllable cont) {
         step(cont, cont.getCurrPath());
     }
-    
+
     /**
      * moves given Controllable along given path (just one step)
      * @param cont
-     * @param path 
+     * @param path
      */
     private void step(Controllable cont, LinkedList<Point> path) {
         Point c = path.removeFirst();
@@ -165,12 +175,12 @@ public class Engine
             stopMove(cont);
         }
     }
-    
+
     /**
      * returns the Points of a path bewteen Points a and b (a and b not included)
      * @param a: first point (start)
      * @param b: last point (end)
-     * @return 
+     * @return
      */
     private LinkedList<Point> path(Point a, Point b) {
         int ax = a.x;   int ay = a.y;
@@ -179,7 +189,7 @@ public class Engine
         int ydist = by - ay;    int ydir = (int) Math.signum(ydist);
         xdist = Math.abs(xdist);
         ydist = Math.abs(ydist);
-        
+
         LinkedList<Point> pathPoints = new LinkedList<>();
         while (!((xdist == 1 && ydist == 0) || (xdist == 0 && ydist == 1))) {
             if (xdist <= ydist) {
@@ -194,12 +204,12 @@ public class Engine
         System.out.println(pathPoints);
         return pathPoints;
     }
-    
+
     /**
      * changes given Controllables current location to given target location.
      * also handles ground ownerReferences in the map
      * @param cont: Controllable being moved
-     * @param tarLoc: target location 
+     * @param tarLoc: target location
      */
     private void changeLoc(Controllable cont, Point tarLoc) {
         Point currLoc = cont.getReferenceCoords();
@@ -207,14 +217,14 @@ public class Engine
         map.groundAt(currLoc).setOwnerReference(null);
         map.groundAt(tarLoc).setOwnerReference(cont);
     }
-    
+
     ///// COMBAT
-    
+
     /**
      * initializes combat between attacker Controllable and Unit at target location,
      * if selected target exists and is valid
-     * @param atkr 
-     * @param tarLoc 
+     * @param atkr
+     * @param tarLoc
      */
     public void startAttack(Controllable atkr, Point tarLoc) {
         Unit tar = map.groundAt(tarLoc).getOwnerReference();
@@ -227,32 +237,32 @@ public class Engine
                     startMove(atkr, tar);
                 }
             }
-        }        
+        }
     }
-    
+
     /**
      * stops given Controllable's attacks
-     * @param atkr 
+     * @param atkr
      */
     public void stopAttack(Controllable atkr) {
         atkr.setCurrTar(null);
         stopMove(atkr);
     }
-    
-    /// combat helpers (private)    
-    
+
+    /// combat helpers (private)
+
     /**
      * same logic as startMove(Controllable, Unit),
      * without the initial occupation check (will always be occupied by terget)
      * @param cont
-     * @param tar 
-     */    
+     * @param tar
+     */
     private void startMove(Controllable cont, Unit tar) {
         LinkedList<Point> path = path(cont.getReferenceCoords(), tar.getReferenceCoords());
             path.add(tar.getReferenceCoords());
             cont.setCurrPath(path);
     }
-    
+
     /**
      * given Controllable attempts to attack given Unit
      * @param atkr: attacker
@@ -267,33 +277,33 @@ public class Engine
             } else { //blocked view
                 stopAttack(atkr);
             }
-        }      
+        }
     }
-    
+
     private void selfDef(Controllable atkr, Unit tar) {
         if (tar.getCurrHp() > 0) { //tar alive after being hit
             if (tar instanceof Controllable) {
                 Controllable tarCont = (Controllable)tar;
-                if (tarCont.getDmg() > 0 && !tarCont.isAttacking()) {     
+                if (tarCont.getDmg() > 0 && !tarCont.isAttacking()) {
                     startAttack(tarCont, atkr.getReferenceCoords());
                 }
                 if (atkr.getCurrHp() <= 0) { //atkr dead after defense
-                    stopAttack(tarCont); 
+                    stopAttack(tarCont);
                     deathEvent(atkr, ((Controllable)tar).getTeam());
                 }
-            }                    
+            }
         } else { //target died
-            stopAttack(atkr);                    
+            stopAttack(atkr);
             deathEvent(tar, atkr.getTeam());
         }
     }
-    
+
     /**
      * returns whether target Unit is in attacker Controllable's line of sight.
      * incorrect in some cases (only checks reference coordinates)
      * @param atkr: attacker
      * @param tar: target
-     * @return 
+     * @return
      */
     private boolean losCheck(Controllable atkr, Unit tar) {
         LinkedList<Point> pathPoints = path(atkr.getReferenceCoords(), tar.getReferenceCoords());
@@ -303,38 +313,38 @@ public class Engine
             }
         }
         return true;
-    }   
-    
+    }
+
     private boolean seeThrough(Controllable cont, Ground g) {
         if (!g.isOccupied()) {
             return true;
         }
         Unit u = g.getOwnerReference();
-        return u instanceof Controllable 
+        return u instanceof Controllable
                && ((Controllable)u).isHumanType()
                && ((Controllable)u).getTeam() == cont.getTeam();
     }
-    
+
     /**
      * returns whether target Unit is in attacker Controllable's range
      * @param attacker
      * @param target
-     * @return 
+     * @return
      */
     private boolean inRange(Controllable attacker, Unit target) {
-        //return attacker.getRngRect().intersects(target.getBodyRect());      
-        //return attacker.getRngRect().contains(target.getReferenceCoords()); 
+        //return attacker.getRngRect().intersects(target.getBodyRect());
+        //return attacker.getRngRect().contains(target.getReferenceCoords());
         return Math.abs(attacker.getReferenceCoords().x - target.getReferenceCoords().x) <= attacker.getRng()
                && Math.abs(attacker.getReferenceCoords().y - target.getReferenceCoords().y) <= attacker.getRng();
     }
-    
+
     // death
-    
+
     /**
      * happens when a Unit's death has additional events tied to it,
      * such as resource gain
      * @param u
-     * @param teamBenefiting 
+     * @param teamBenefiting
      */
     private void deathEvent(Unit u, int teamBenefiting) {
         Player p = players[teamBenefiting];
@@ -351,10 +361,10 @@ public class Engine
         }
         killUnit(u);
     }
-    
+
     /**
      * removes Unit from the Map, and owner Player if it was Controllable
-     * @param u 
+     * @param u
      */
     private void killUnit(Unit u) {
         if (u instanceof Controllable) { // doesnt apply to trees
@@ -365,53 +375,57 @@ public class Engine
             map.groundAt(c).setOwnerReference(null);
         }
     }
-    
+
     private void cleanUp() {
         for (Player p : players) {
             p.remDead();
             p.addNew();
         }
     }
-    
+
     ///// BUILDING
-    
+
     /**
      * sends given Builder to build given building, at given location,
      * if given location is valid
      * @param builder
      * @param buildingRefCoords
-     * @param buildingType 
+     * @param buildingType
      */
-    public void startBuild(Controllable builder, Point buildingRefCoords, Enum buildingType) {
-        if (areaAvailable(buildingRefCoords, buildingType, builder.getTeam())) { //area free/tree, not water            
+
+    public boolean startBuild(Controllable builder, Point buildingRefCoords, VisualType buildingType) {
+        if (areaAvailable(buildingRefCoords, buildingType, builder.getPlayer())) { //area free/tree, not water
+            System.out.println("Starting to build");
             Point builderTarLoc = new Point(buildingRefCoords.x, buildingRefCoords.y - 1);
-            if (!map.groundAt(builderTarLoc).isOccupied()                            // builder target position free, 
+            if (!map.groundAt(builderTarLoc).isOccupied()                            // builder target position free,
                 || map.groundAt(builderTarLoc).getOwnerReference().equals(builder)){ // or builder already there
-                builder.setGhostBuilding(ghostBuilding(buildingRefCoords, buildingType, builder.getTeam()));
+                builder.setGhostBuilding(ghostBuilding(buildingRefCoords, buildingType, builder.getPlayer()));
                 if (!builder.getReferenceCoords().equals(builderTarLoc)) {
                     startMove(builder, builderTarLoc);
                 }
             }
+            return true;
         }
+        return false;
     }
-    
+
     /**
      * stops given Builder's building process
-     * @param builder 
+     * @param builder
      */
     public void stopBuild(Controllable builder) {
         builder.setGhostBuilding(null);
         stopMove(builder);
     }
-    
+
 
     /**
-     * 
+     *
      * @param p
      * @param contType
      * @return true if given Player has enough resources to create given type Controllable
      */
-    public boolean gotResForCont(Player p, Enum contType) {
+    public boolean gotResForCont(Player p, VisualType contType) {
         HashMap price = getPriceOfCont(contType);
         for (Entry e : p.getResourceMap().entrySet()) {
             if ((int)price.get(e.getKey()) > (int)e.getValue()) {
@@ -420,10 +434,10 @@ public class Engine
         }
         return true;
     }
-    
+
     /// building helpers (private)
-    
-    private void build(Controllable builder) {
+
+    private boolean build(Controllable builder) {
         if (builder.getReferenceCoords().equals(builder.getBuilderTarLoc())) {
             for (Point c : builder.getGhostBuilding().getCoordsArray()) {
                 map.groundAt(c).setOwnerReference(builder.getGhostBuilding());
@@ -432,12 +446,15 @@ public class Engine
             players[builder.getTeam()].addNewControllable(builder.getGhostBuilding());
             stopBuild(builder);
             stopMove(builder);
+            return true;
         }
+        return false;
     }
-    
-    private boolean areaAvailable(Point p, Enum type, int team) {
+
+
+    private boolean areaAvailable(Point p, VisualType type, Player player) {
         boolean b = true;
-        for (Point c : ghostBuilding(p, type, team).getCoordsArray()) {
+        for (Point c : ghostBuilding(p, type, player).getCoordsArray()) {
             try {
                 if (!map.groundAt(c).isFreeOrTree() || map.groundAt(c).getType().equals(VisualType.WATER)) {
                     b = false;
@@ -447,34 +464,51 @@ public class Engine
                 return false;
             }
         }
-        return b && mineGroundCheck(p, type, team);
+
+
+        if (type.equals(VisualType.STONEMINE) || type.equals(VisualType.GOLDMINE)) {
+            b = b && mineGroundCheck(p, type, player);
+            System.out.println("Minecheck: "+b);
+        }
+        return b;
     }
-    
+
     /**
      * additional ground condition check for Mines
      * @param refCoords
      * @param type
-     * @param team
-     * @return 
+     * @param player
+     * @return
      */
-    private boolean mineGroundCheck(Point refCoords, Enum type, int team) {
-        if (type.equals(VisualType.STONEMINE) || type.equals(VisualType.GOLDMINE)) {
-            Mine mine = (Mine)ghostBuilding(refCoords, type, team);
-            return mGC_helper(mine);
-        }
-        return true;
+
+    private boolean mineGroundCheck(Point refCoords, VisualType type, Player player) {
+        Mine mine = (Mine)ghostBuilding(refCoords, type, player);
+        return mGC_helper(mine);
     }
-    
+
     private boolean mGC_helper(Mine mine) {
         if (mine instanceof StoneMine) { //STONE
+            System.out.println("Mineral check success!");
             for (Point c : mine.getCoordsArray()) {
                 if (map.adjMineralCheck(c, VisualType.STONE)) {
+                    return true;
+                }
+                if (map.adjMineralCheck(c, VisualType.STONE_1)) {
+                    return true;
+                }
+                if (map.adjMineralCheck(c, VisualType.STONE_2)) {
                     return true;
                 }
             }
         } else { //GOLD
             for (Point c : mine.getCoordsArray()) {
                 if (map.adjMineralCheck(c, VisualType.GOLD)) {
+                    return true;
+                }
+                if (map.adjMineralCheck(c, VisualType.GOLD_1)) {
+                    return true;
+                }
+                if (map.adjMineralCheck(c, VisualType.GOLD_2)) {
                     return true;
                 }
             }
@@ -495,47 +529,47 @@ public class Engine
      * (Ground ownerReferences remain unchanged)
      * @param p
      * @param type
-     * @param team
-     * @return 
+     * @param player
+     * @return
      */
-    private Controllable ghostBuilding(Point p, Enum type, int team) {
+    private Controllable ghostBuilding(Point p, Enum type, Player player) {
         Controllable cont = null;
         String typeString = type.name();
         switch(typeString) {
             case "WORKERSPAWN":
-                cont = new WorkerSpawn(p, team);
+                cont = new WorkerSpawn(p, player);
                 break;
             case "MILITARYSPAWN":
-                cont = new MilitarySpawn(p, team);
+                cont = new MilitarySpawn(p, player);
                 break;
             case "FARM":
-                cont = new Farm(p, team);
+                cont = new Farm(p, player);
                 break;
             case "HARVESTCENTER":
-                cont = new HarvestCenter(p, team);
+                cont = new HarvestCenter(p, player);
                 break;
             case "GOLDMINE":
-                cont = new GoldMine(p, team);
+                cont = new GoldMine(p, player);
                 break;
             case "STONEMINE":
-                cont = new StoneMine(p, team);
+                cont = new StoneMine(p, player);
                 break;
             case "TURRET":
-                cont = new Turret(p, team);
-                break;    
+                cont = new Turret(p, player);
+                break;
             case "BARRICADE":
-                cont = new Barricade(p, team);
-                break;  
-        }    
+                cont = new Barricade(p, player);
+                break;
+        }
         return cont;
     }
-    
+
     ///// UPGRADE
-    
+
     /**
      * increase the level of given Controllable by 1,
      * subsequently increasing its stats
-     * @param cont 
+     * @param cont
      */
     public void upgrade(Controllable cont) {
         if (gotResForUpgr(cont)) {
@@ -544,7 +578,7 @@ public class Engine
             cont.upgrade();
         }
     }
-    
+
     /**
      * tells whether given Controllable can be upgraded
      * @param cont
@@ -561,74 +595,71 @@ public class Engine
         }
         return false;
     }
-    /// upgrade helpers (private)   
-    
+    /// upgrade helpers (private)
+
     private void payForUpgr(Player p, Controllable cont) {
         int upPr = cont.getUpPrice();
         int pUpRes = p.getResourceByName(ResourceType.upgrade);
         p.getResourceMap().replace(ResourceType.upgrade, pUpRes - upPr);
     }
-    
+
     ///// CONTROLLABLE CREATION HELPERS (private)
-    
+
     private void payForUnit(Player p, Controllable cont) {
         HashMap<ResourceType, Integer> contPrice = getPriceOfCont(cont.getType());
         p.getResourceMap().replaceAll((key, value) -> value - contPrice.get(key));
-    }   
-    
+    }
+
     //dont look at this unless you like brute force YIKES
-    private HashMap<ResourceType, Integer> getPriceOfCont(Enum type) {
+    private HashMap<ResourceType, Integer> getPriceOfCont(VisualType type) {
         HashMap<ResourceType, Integer> price = null;
-        String typeString = type.name();
-        switch (typeString) { //buildings
-            case "WORKERSPAWN":
+        switch (type) { //buildings
+            case WORKERSPAWN:
                 price = WorkerSpawn.price;
                 break;
-            case "MILITARYSPAWN":
+            case MILITARYSPAWN:
                 price = MilitarySpawn.price;
                 break;
-            case "FARM":
+            case FARM:
                 price = Farm.price;
                 break;
-            case "HARVESTCENTER":
+            case HARVESTCENTER:
                 price = HarvestCenter.price;
                 break;
-            case "GOLDMINE":
+            case GOLDMINE:
                 price = GoldMine.price;
                 break;
-            case "STONEMINE":
+            case STONEMINE:
                 price = StoneMine.price;
                 break;
-            case "TURRET":
+            case TURRET:
                 price = Turret.price;
-                break;    
-            case "BARRICADE":
+                break;
+            case BARRICADE:
                 price = Barricade.price;
-                break;  
-        }
-        switch (typeString) { //mobiles
-            case "LUMBERJACK":
+                break;
+            case LUMBERJACK:
                 price = Lumberjack.price;
                 break;
-            case "MINER":
+            case MINER:
                 price = Miner.price;
                 break;
-            case "BUILDER":
+            case BUILDER:
                 price = Builder.price;
                 break;
-            case "INFANTRY":
+            case INFANTRY:
                 price = Infantry.price;
                 break;
-            case "CAVALRY":
+            case CAVALRY:
                 price = Cavalry.price;
                 break;
-            case "RANGER":
+            case RANGER:
                 price = Ranger.price;
                 break;
-            case "DESTROYER":
+            case DESTROYER:
                 price = Destroyer.price;
-                break;    
-            case "MEDIC":
+                break;
+            case MEDIC:
                 price = Medic.price;
                 break;  
         }

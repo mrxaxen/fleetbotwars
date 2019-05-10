@@ -3,6 +3,8 @@ package fleetbot_wars.model;
 
 import fleetbot_wars.model.enums.*;
 import visual.unit.Controllable;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -27,23 +29,25 @@ public class Player {
     private ArrayList<Controllable> newUnits = new ArrayList<>();
     private String playerName;
     private int playerNumber;
+    private Color color;
     public final static VisualType[] initialUnits = {VisualType.BARRICADE, VisualType.BUILDER, VisualType.CAVALRY, VisualType.DESTROYER, VisualType.FARM, VisualType.GOLDMINE, VisualType.HARVESTCENTER, VisualType.INFANTRY, VisualType.LUMBERJACK, VisualType.MEDIC, VisualType.MILITARYSPAWN, VisualType.MINER, VisualType.RANGER, VisualType.STONEMINE, VisualType.TURRET, VisualType.WORKERSPAWN, VisualType.BARRICADE, VisualType.BUILDER, VisualType.CAVALRY, VisualType.DESTROYER, VisualType.FARM, VisualType.GOLDMINE, VisualType.HARVESTCENTER, VisualType.INFANTRY, VisualType.LUMBERJACK, VisualType.MEDIC, VisualType.MILITARYSPAWN, VisualType.MINER, VisualType.RANGER, VisualType.STONEMINE, VisualType.TURRET, VisualType.WORKERSPAWN, VisualType.BARRICADE, VisualType.BUILDER, VisualType.CAVALRY, VisualType.DESTROYER, VisualType.FARM, VisualType.GOLDMINE, VisualType.HARVESTCENTER, VisualType.INFANTRY, VisualType.LUMBERJACK, VisualType.MEDIC, VisualType.MILITARYSPAWN, VisualType.MINER, VisualType.RANGER, VisualType.STONEMINE, VisualType.TURRET, VisualType.WORKERSPAWN, VisualType.BARRICADE, VisualType.BUILDER, VisualType.CAVALRY, VisualType.DESTROYER, VisualType.FARM, VisualType.GOLDMINE, VisualType.HARVESTCENTER, VisualType.INFANTRY, VisualType.LUMBERJACK, VisualType.MEDIC, VisualType.MILITARYSPAWN, VisualType.MINER, VisualType.RANGER, VisualType.STONEMINE, VisualType.TURRET, VisualType.WORKERSPAWN, VisualType.BARRICADE, VisualType.BUILDER, VisualType.CAVALRY, VisualType.DESTROYER, VisualType.FARM, VisualType.GOLDMINE, VisualType.HARVESTCENTER, VisualType.INFANTRY, VisualType.LUMBERJACK, VisualType.MEDIC, VisualType.MILITARYSPAWN, VisualType.MINER, VisualType.RANGER, VisualType.STONEMINE, VisualType.TURRET, VisualType.WORKERSPAWN, VisualType.BARRICADE, VisualType.BUILDER, VisualType.CAVALRY, VisualType.DESTROYER, VisualType.FARM, VisualType.GOLDMINE, VisualType.HARVESTCENTER, VisualType.INFANTRY, VisualType.LUMBERJACK, VisualType.MEDIC, VisualType.MILITARYSPAWN, VisualType.MINER, VisualType.RANGER, VisualType.STONEMINE, VisualType.TURRET, VisualType.WORKERSPAWN};
 
     /**
      * Player Object containing an individual player's data such as Units,
      * resources, player name and related methods to manipulate these data.
-     * 
+     *
      * //@param initResources It is intended to set the initial resources for given
      *                      Player. The key list of this HashMap should
      *                      correspond with the following list of String: food,
      *                      WOOD, STONE, GOLD, upgrade.
      * @param playerName    The name of the Player.
      * @param playerNumber  The number of the Player.
-     * 
+     *
      */
-    public Player(String playerName, int playerNumber){//, HashMap<Enum, Integer> initResources) {
+    public Player(String playerName, int playerNumber, Color color){
         this.playerName = playerName;
         this.playerNumber = playerNumber;
+        this.color = color;
         //this.resources = initResources;
         this.resources = new HashMap<ResourceType, Integer>();
         resources.put(ResourceType.food, 9999);
@@ -51,6 +55,10 @@ public class Player {
         resources.put(ResourceType.gold, 9999);
         resources.put(ResourceType.stone, 9999);
         resources.put(ResourceType.upgrade, 9999);
+    }
+
+    public Player(String playerName, int playerNumber){
+        this(playerName, playerNumber, Color.black);
     }
 
     // used for testing only - Bori
@@ -61,10 +69,10 @@ public class Player {
         resources.put(ResourceType.stone, 0);
         resources.put(ResourceType.upgrade, 0);
     }
-    
+
     /**
      * Convenient way to DECREASE a given resource.
-     * 
+     *
      * @param resourceName Name of the resource intended to be DECREASED from the
      *                     following list: food, WOOD, STONE, GOLD, upgrade.
      * @param amount       The amount by the given resource needs to be DECREASED.
@@ -76,7 +84,7 @@ public class Player {
 
     /**
      * Convenient way to INCREASE a given resource.
-     * 
+     *
      * @param resourceName Name of the resource intended to be INCREASED from the
      *                     following list: food, WOOD, STONE, GOLD, upgrade.
      * @param amount       The amount by the given resource needs to be INCREASED.
@@ -88,52 +96,52 @@ public class Player {
 
     /**
      * Adding one unit to the Player's unit Collection.
-     * 
+     *
      * @param unit The Unit Object which needs to be added.
      */
     public void addControllable(Controllable unit) {
         if (unit != null) {
-            playerUnits.add(unit);            
+            playerUnits.add(unit);
         }
     }
-    
+
     /**
      * Removing one unit to the Player's unit Collection.
-     * 
+     *
      * @param unit The Unit Object which needs to be added.
      */
     public void remControllable(Controllable unit) {
         playerUnits.remove(unit);
     }
-    
+
     /**
      * Adding one unit to the Player's dead unit Collection.
-     * 
+     *
      * @param unit The Unit Object which needs to be added.
      */
     public void addDeadControllable(Controllable unit) {
         deadUnits.add(unit);
     }
-    
+
     public void remDead() {
         playerUnits.removeAll(deadUnits);
     }
-    
+
     /**
      * Adding one unit to the Player's new unit Collection.
-     * 
+     *
      * @param unit The Unit Object which needs to be added.
      */
     public void addNewControllable(Controllable unit) {
         newUnits.add(unit);
     }
-    
+
     public void addNew() {
         playerUnits.addAll(newUnits);
     }
 
     ///// getters, setters
-    
+
     /**
      * @return the playerName
      */
@@ -150,7 +158,7 @@ public class Player {
 
     /**
      * Get available amount of given resource.
-     * 
+     *
      * @param name The name of the requested resource.
      * @return The amount of the requested resource.
      */
@@ -159,7 +167,7 @@ public class Player {
     }
 
     /**
-     * 
+     *
      * @return All the available resources as raw data.
      */
     public HashMap<ResourceType, Integer> getResourceMap() {
@@ -173,4 +181,7 @@ public class Player {
         return playerNumber;
     }
 
+    public Color getColor() {
+        return color;
+    }
 }

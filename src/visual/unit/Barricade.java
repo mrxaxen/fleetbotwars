@@ -5,6 +5,7 @@
  */
 package visual.unit;
 
+import fleetbot_wars.model.Player;
 import fleetbot_wars.model.enums.ResourceType;
 import java.awt.Point;
 import java.util.HashMap;
@@ -32,12 +33,11 @@ public class Barricade extends Controllable {
     
     /**
      * create Barricade at (x,y) coordinates, for 'team' team
-     * 
-     * @param coords
-     * @param team
+     *  @param coords
+     * @param player
      */
-    public Barricade(Point coords, int team) {
-        super(coords, VisualType.BARRICADE, null, 500, 0, 0, 0, 5, 1, 0, team);
+    public Barricade(Point coords, Player player) {
+        super(coords, VisualType.BARRICADE, null, 500, 0, 0, 0, 5, 1, 0, player);
         this.upPrice = 10;
     }
 
