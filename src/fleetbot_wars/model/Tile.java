@@ -30,6 +30,7 @@ public class Tile extends JPanel {
     private UnitType unitType;
     private SelectionController selectionController = SelectionController.getInstance();
     private Translation serverComm = Translation.getInstance();
+    private Color tileColor;
 
     public static Image[] genImageSections(int widthInUnits, int heightInUnits, BufferedImage imageToCut, Color color) {
         int rows = widthInUnits;
@@ -83,7 +84,7 @@ public class Tile extends JPanel {
         for (int i = 0; i < buffImage.getHeight(); i++) {
             int c = i;
             for (int j = 0; j < buffImage.getWidth(); j++) {
-                if(c < TILE_BASE_SIZE/2) {
+                if (c < TILE_BASE_SIZE / 2) {
                     buffImage.setRGB(i, j, color.getRGB());
                 }
                 c++;
@@ -102,10 +103,10 @@ public class Tile extends JPanel {
         this.groundType = groundType;
 
 
-        if(unit instanceof Controllable){
+        if (unit instanceof Controllable) {
             Color color = ((Controllable) unit).getColor();
             HashMap<UnitType, Image[]> imgSections = iSections.get(color);
-            if(imgSections == null){
+            if (imgSections == null) {
                 imgSections = new HashMap<UnitType, Image[]>();
                 iSections.put(color, imgSections);
             }
@@ -118,9 +119,50 @@ public class Tile extends JPanel {
 
         this.setPreferredSize(new Dimension(TILE_BASE_SIZE, TILE_BASE_SIZE));
 
+        setTileColor(unit, groundType);
         setMouseListener();
     }
 
+    private void setTileColor(Unit unit, GroundType groundType) {
+        if (unit instanceof Controllable) {
+            tileColor = ((Controllable) unit).getPlayer().getColor();
+        } else if (unit instanceof Tree) {
+            tileColor = new Color(188, 0, 255);
+        } else if (unit == null) {
+            switch (groundType) {
+                case WATER:
+                case WATER_1:
+                case WATER_2:
+                    tileColor = new Color(0, 255, 237);
+                    break;
+                case MOUNTAIN:
+                case MOUNTAIN_1:
+                case MOUNTAIN_2:
+                case MOUNTAIN_3:
+                    tileColor = new Color(255, 190, 27);
+                    break;
+                case GOLD:
+                case GOLD_1:
+                case GOLD_2:
+                    tileColor = new Color(0, 255, 38);
+                    break;
+                case STONE:
+                case STONE_1:
+                case STONE_2:
+                    tileColor = new Color(130, 128, 133);
+                    break;
+                case DIRT:
+                case DIRT_1:
+                case DIRT_2:
+                    tileColor = new Color(255, 255, 255);
+                    break;
+                default:
+                    tileColor = new Color(255, 255, 255);
+                    break;
+
+            }
+        }
+    }
 
     static void loadImages() {
         Tile.groundImages = new HashMap<>();
@@ -197,16 +239,19 @@ public class Tile extends JPanel {
     public void paintComponent(Graphics g) {
         g.drawImage(groundImages.get(groundType), 0, 0, null);
         if (isLargeUnit(unit)) {
-            Color color = ((Controllable)unit).getColor();
+            Color color = ((Controllable) unit).getColor();
             HashMap<UnitType, Image[]> imgSections = iSections.get(color);
             g.drawImage(imgSections.get(unitType)[calculateImgIndex()], 0, 0, null);
         } else {
-            if(unit instanceof Tree){
+            if (unit instanceof Tree) {
                 g.drawImage(unitImages.get(unitType), 0, 0, null);
-            }else if(unit != null){
-                g.drawImage(colorCorners(unitImages.get(unitType), ((Controllable)unit).getColor()), 0, 0, null);
+            } else if (unit != null) {
+                g.drawImage(colorCorners(unitImages.get(unitType), ((Controllable) unit).getColor()), 0, 0, null);
             }
         }
     }
 
+    public Color getTileColor() {
+        return tileColor;
+    }
 }
