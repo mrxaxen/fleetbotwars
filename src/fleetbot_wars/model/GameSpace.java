@@ -16,6 +16,7 @@ class GameSpace extends JPanel implements Talkative{
     private Translation serverComm = Translation.getInstance();
     static Tile[][] tiles; //not static just for testing
     private static GameSpace instance;
+    private MiniMap miniMap;
 
     static GameSpace getInstance() {
         if (instance == null) {
@@ -55,10 +56,15 @@ class GameSpace extends JPanel implements Talkative{
 
     }
 
-    public void repaintTile(Point tileAt, Unit unit,boolean isGoingTo) {
+    /*public void setMiniMap(MiniMap miniMap){
+        this.miniMap = miniMap;
+    }*/
+
+    public void repaintTile(Point tileAt, Unit unit, boolean isGoingTo) {
         Unit newUnit = isGoingTo ? unit : null;
         Tile tile = tiles[tileAt.x][tileAt.y];
         tile.setUnit(newUnit);
+        //miniMap.repaint();
         tile.repaint();
     }
 

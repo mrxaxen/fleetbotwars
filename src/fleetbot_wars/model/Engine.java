@@ -7,6 +7,7 @@ package fleetbot_wars.model;
 
 import fleetbot_wars.model.enums.ResourceType;
 import fleetbot_wars.model.enums.VisualType;
+
 import java.awt.Point;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -21,8 +22,7 @@ import visual.unit.*;
  *
  * @author WB
  */
-public class Engine
-{
+public class Engine {
     private Map map;
     private Player[] players;
     private Unit inspectedUnit;
@@ -37,8 +37,8 @@ public class Engine
         }
     }
 
-    public static Engine getInstance() throws RuntimeException{
-        if(instance != null) {
+    public static Engine getInstance() throws RuntimeException {
+        if (instance != null) {
             return instance;
         } else {
             throw new RuntimeException("Engine not initialized!");
@@ -86,15 +86,15 @@ public class Engine
      * one step of iteration on ALL ongoing actions
      */
     public void actionIteration() {
-        for (Player p : players)
-        {
+        for (Player p : players) {
             for (Controllable cont : p.getPlayerUnits()) {
                 if (cont.isAttacking()) {
                     attack(cont, cont.getCurrTar());
                 }
+
                 if (cont.isBuilding()) {
                     Controllable ghostBuilding = cont.getGhostBuilding();
-                    if(build(cont)) {
+                    if (build(cont)) {
                         System.out.println("Building...");
                         for (int i = 0; i < ghostBuilding.getWidth(); i++) {
                             for (int j = 0; j < ghostBuilding.getHeight(); j++) {
@@ -125,9 +125,9 @@ public class Engine
      */
     public boolean startMove(Controllable cont, Point tarLoc) {
         if (!map.groundAt(tarLoc).isOccupied()) {
-                LinkedList<Point> path = path(cont.getReferenceCoords(), tarLoc);
-                path.add(tarLoc);
-                cont.setCurrPath(path);
+            LinkedList<Point> path = path(cont.getReferenceCoords(), tarLoc);
+            path.add(tarLoc);
+            cont.setCurrPath(path);
             return true;
         } else {
             //DISPLAY FAILURE?
@@ -183,10 +183,14 @@ public class Engine
      * @return
      */
     private LinkedList<Point> path(Point a, Point b) {
-        int ax = a.x;   int ay = a.y;
-        int bx = b.x;   int by = b.y;
-        int xdist = bx - ax;    int xdir = (int) Math.signum(xdist);
-        int ydist = by - ay;    int ydir = (int) Math.signum(ydist);
+        int ax = a.x;
+        int ay = a.y;
+        int bx = b.x;
+        int by = b.y;
+        int xdist = bx - ax;
+        int xdir = (int) Math.signum(xdist);
+        int ydist = by - ay;
+        int ydir = (int) Math.signum(ydist);
         xdist = Math.abs(xdist);
         ydist = Math.abs(ydist);
 
@@ -229,7 +233,6 @@ public class Engine
     public boolean startAttack(Controllable atkr, Point tarLoc) {
         Unit tar = map.groundAt(tarLoc).getOwnerReference();
         if (atkr.isValidTarget(tar)) {
-            System.out.println("IN");
             atkr.setCurrTar(tar);
             if (!inRange(atkr, tar)) {
                 if (atkr instanceof Turret) {
@@ -262,8 +265,8 @@ public class Engine
      */
     private void startMove(Controllable cont, Unit tar) {
         LinkedList<Point> path = path(cont.getReferenceCoords(), tar.getReferenceCoords());
-            path.add(tar.getReferenceCoords());
-            cont.setCurrPath(path);
+        path.add(tar.getReferenceCoords());
+        cont.setCurrPath(path);
     }
 
     /**
@@ -286,13 +289,13 @@ public class Engine
     private void selfDef(Controllable atkr, Unit tar) {
         if (tar.getCurrHp() > 0) { //tar alive after being hit
             if (tar instanceof Controllable) {
-                Controllable tarCont = (Controllable)tar;
+                Controllable tarCont = (Controllable) tar;
                 if (tarCont.getDmg() > 0 && !tarCont.isAttacking()) {
                     startAttack(tarCont, atkr.getReferenceCoords());
                 }
                 if (atkr.getCurrHp() <= 0) { //atkr dead after defense
                     stopAttack(tarCont);
-                    deathEvent(atkr, ((Controllable)tar).getTeam());
+                    deathEvent(atkr, ((Controllable) tar).getTeam());
                 }
             }
         } else { //target died
@@ -324,8 +327,8 @@ public class Engine
         }
         Unit u = g.getOwnerReference();
         return u instanceof Controllable
-               && ((Controllable)u).isHumanType()
-               && ((Controllable)u).getTeam() == cont.getTeam();
+                && ((Controllable) u).isHumanType()
+                && ((Controllable) u).getTeam() == cont.getTeam();
     }
 
     /**
@@ -338,7 +341,7 @@ public class Engine
         //return attacker.getRngRect().intersects(target.getBodyRect());
         //return attacker.getRngRect().contains(target.getReferenceCoords());
         return Math.abs(attacker.getReferenceCoords().x - target.getReferenceCoords().x) <= attacker.getRng()
-               && Math.abs(attacker.getReferenceCoords().y - target.getReferenceCoords().y) <= attacker.getRng();
+                && Math.abs(attacker.getReferenceCoords().y - target.getReferenceCoords().y) <= attacker.getRng();
     }
 
     // death
@@ -354,7 +357,7 @@ public class Engine
         if (u instanceof Tree) {
             p.increaseResource(ResourceType.wood, 2);
         } else { //Unit was Controllable
-            Controllable cont = (Controllable)u;
+            Controllable cont = (Controllable) u;
             if (cont.isBuildingType()) {
                 p.increaseResource(ResourceType.upgrade, 5);
             }
@@ -402,7 +405,7 @@ public class Engine
             System.out.println("Starting to build");
             Point builderTarLoc = new Point(buildingRefCoords.x, buildingRefCoords.y - 1);
             if (!map.groundAt(builderTarLoc).isOccupied()                            // builder target position free,
-                || map.groundAt(builderTarLoc).getOwnerReference().equals(builder)){ // or builder already there
+                    || map.groundAt(builderTarLoc).getOwnerReference().equals(builder)) { // or builder already there
                 builder.setGhostBuilding(ghostBuilding(buildingRefCoords, buildingType, builder.getPlayer()));
                 if (!builder.getReferenceCoords().equals(builderTarLoc)) {
                     startMove(builder, builderTarLoc);
@@ -424,7 +427,6 @@ public class Engine
 
 
     /**
-     *
      * @param p
      * @param contType
      * @return true if given Player has enough resources to create given type Controllable
@@ -432,7 +434,7 @@ public class Engine
     public boolean gotResForCont(Player p, VisualType contType) {
         HashMap price = getPriceOfCont(contType);
         for (Entry e : p.getResourceMap().entrySet()) {
-            if ((int)price.get(e.getKey()) > (int)e.getValue()) {
+            if ((int) price.get(e.getKey()) > (int) e.getValue()) {
                 return false;
             }
         }
@@ -472,7 +474,7 @@ public class Engine
 
         if (type.equals(VisualType.STONEMINE) || type.equals(VisualType.GOLDMINE)) {
             b = b && mineGroundCheck(p, type, player);
-            System.out.println("Minecheck: "+b);
+            System.out.println("Minecheck: " + b);
         }
         return b;
     }
@@ -486,7 +488,7 @@ public class Engine
      */
 
     private boolean mineGroundCheck(Point refCoords, VisualType type, Player player) {
-        Mine mine = (Mine)ghostBuilding(refCoords, type, player);
+        Mine mine = (Mine) ghostBuilding(refCoords, type, player);
 
         return mGC_helper(mine);
     }
@@ -523,8 +525,8 @@ public class Engine
 
     public void update() {
         HashMap<ResourceType, Integer> resources = new HashMap<>();
-        players[0].getResourceMap().forEach((key,value) -> {
-            resources.put(key,value);
+        players[0].getResourceMap().forEach((key, value) -> {
+            resources.put(key, value);
         });
         Translation.getInstance().updateResources(resources);
     }
@@ -540,7 +542,7 @@ public class Engine
     private Controllable ghostBuilding(Point p, Enum type, Player player) {
         Controllable cont = null;
         String typeString = type.name();
-        switch(typeString) {
+        switch (typeString) {
             case "WORKERSPAWN":
                 cont = new WorkerSpawn(p, player);
                 break;
@@ -614,7 +616,7 @@ public class Engine
         HashMap<ResourceType, Integer> contPrice = getPriceOfCont(cont.getType());
         p.getResourceMap().replaceAll((key, value) -> value - contPrice.get(key));
 
-    }   
+    }
 
     //dont look at this unless you like brute force YIKES
     private HashMap<ResourceType, Integer> getPriceOfCont(VisualType type) {
@@ -640,7 +642,7 @@ public class Engine
                 break;
             case TURRET:
                 price = Turret.price;
-                break;    
+                break;
             case BARRICADE:
                 price = Barricade.price;
                 break;
@@ -667,11 +669,11 @@ public class Engine
                 break;
             case MEDIC:
                 price = Medic.price;
-                break;  
+                break;
         }
         return price;
     }
-            
+
     ///// getters, setters
 
     public Map getMap() {
@@ -684,8 +686,8 @@ public class Engine
 
     public Unit getInspectedUnit() {
         return inspectedUnit;
-    }    
-    
+    }
+
     /**
      * rotates ghost Barricade if inspected unit is Builder,
      * with Barricade selected but not yet placed, 
@@ -703,5 +705,5 @@ public class Engine
             }            
         }
     }*/
-    
+
 }
