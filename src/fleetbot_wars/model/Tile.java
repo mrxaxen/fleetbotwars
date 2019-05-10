@@ -25,11 +25,11 @@ public class Tile extends JPanel {
     private final int yCoord;
     private int widthModifier;
     private int heightModifier;
+    private boolean showAttack;
     private Unit unit;
     private GroundType groundType;
     private UnitType unitType;
     private SelectionController selectionController = SelectionController.getInstance();
-    private Translation serverComm = Translation.getInstance();
     private Color tileColor;
 
     public static Image[] genImageSections(int widthInUnits, int heightInUnits, BufferedImage imageToCut, Color color) {
@@ -202,6 +202,7 @@ public class Tile extends JPanel {
                 super.mouseClicked(e);
                 if (e.getButton() == MouseEvent.BUTTON1) {
                     selectionController.select(tile);
+                    // Hint: comment/remove comment with Ctrl + /
                     /*System.out.println("tile coords: " + tile.getCoordY() + " - " + tile.getCoordX());
                     System.out.println("unit obj name: " + tile.getUnit());
                     System.out.println("unit reference coords: " + tile.getUnit().getReferenceCoords());
@@ -211,7 +212,12 @@ public class Tile extends JPanel {
                 }
                 if (e.getButton() == MouseEvent.BUTTON3) {
                     if (selectionController.getSelectedTile() != null) {
-                        selectionController.move(tile);
+                        if(selectionController.isAttacking()) {
+                            selectionController.attack(tile);
+                        } else {
+                            selectionController.move(tile);
+                        }
+
                     }
                 }
             }
@@ -249,6 +255,14 @@ public class Tile extends JPanel {
                 g.drawImage(colorCorners(unitImages.get(unitType), ((Controllable) unit).getColor()), 0, 0, null);
             }
         }
+        if(showAttack) {
+            g.setColor(new Color(200,100,0,80));
+            g.drawRect(0,0,getWidth(),getHeight());
+        }
+    }
+
+    public void setShowAttack(boolean b) {
+        showAttack = b;
     }
 
     public Color getTileColor() {

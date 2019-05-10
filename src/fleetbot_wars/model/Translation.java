@@ -19,8 +19,11 @@ import java.util.TimerTask;
 class Translation {
 
     private static Translation instance;
+    private static final Color BLINK_WRONG_MOVE = new Color(255, 20, 20);
+    private static final Color BLINK_ATTACK = new Color(110, 50, 220);
     private Engine engine = Main.getEngine();
     private StatusBar statusBar;
+    private int currPlayer = 0;
 
     static Translation getInstance() {
         if (instance != null) {
@@ -31,13 +34,6 @@ class Translation {
     }
 
     Ground[][] getMap() {
-        //Get Ground array from engine
-
-//        try {
-//            send request for map
-//            read map from stream
-//        } catch (Exception e) {
-//        }
         Ground[][] engineGround = engine.getMap().getGround();
         System.out.println(engineGround == null);
 
@@ -48,14 +44,48 @@ class Translation {
         this.statusBar = statusBar;
     }
 
+    void changePlayer(int playerNum) {
+        currPlayer = playerNum;
+    }
+
+    int getCurrPlayer() {
+        return currPlayer;
+    }
+
     boolean move(Point unitAt, Point moveTo) {
         Controllable unitToMove = (Controllable) engine.getMap().groundAt(unitAt).getOwnerReference();
         return engine.startMove(unitToMove, moveTo);
     }
 
-    void repaintOnMove(Point tileAt, Unit unitToPlace, boolean isGoingTo) {
+    boolean select(Tile tile) {
+        try {
+            Controllable unit = (Controllable) engine.getMap().groundAt(new Point(tile.getCoordX(), tile.getCoordY())).getOwnerReference();
+            if (isPlayersUnit(unit)) {
+                return true;
+            }
+        } catch (RuntimeException e) {
+            System.err.println("Not the player's unit");
+        }
+        blinkBorder(tile,BLINK_WRONG_MOVE);
+        return false;
+    }
+
+    void attack(Tile from, Tile to) {
+        Controllable unitAttacking;
+        if((unitAttacking = (Controllable) engine.getMap().groundAt(new Point(from.getCoordX(),from.getCoordY())).getOwnerReference()) instanceof Controllable) {
+            if(isPlayersUnit(unitAttacking)) {
+                System.out.println("Is Controllable");
+                if(engine.startAttack(unitAttacking, new Point(to.getCoordX(),to.getCoordY()))) {
+                    blinkBorder(to,BLINK_ATTACK);
+                    return;
+                }
+            }
+        }
+        blinkBorder(from,BLINK_WRONG_MOVE);
+    }
+
+    void repaint(Point tileAt, Unit unitToPlace, boolean isGoingTo) {
         SwingUtilities.invokeLater(() -> GameSpace.getInstance().repaintTile(tileAt,unitToPlace,isGoingTo));
-        System.out.println("CALLED");
     }
 
     void build(Tile buildersTile, Tile buildingPoint, VisualType building) {
@@ -65,16 +95,13 @@ class Translation {
         int yBuilder = buildersTile.getCoordY();
 
         Controllable builder = (Controllable) engine.getMap().groundAt(new Point(xBuilder,yBuilder)).getOwnerReference();
+        if(isPlayersUnit(builder)) {
+            if(!engine.startBuild(builder,new Point(xTo,yTo),building)) {
+                System.out.println("Building failed");
+                blinkBorder(buildingPoint,BLINK_WRONG_MOVE);
+            }
+        } else {
 
-        if(!engine.startBuild(builder,new Point(xTo,yTo),building)) {
-            System.out.println("Building failed");
-            buildingPoint.setBorder(new LineBorder(new Color(255, 20, 20),5,true));
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    buildingPoint.setBorder(null);
-                }
-            },50);
         }
     }
 
@@ -94,7 +121,21 @@ class Translation {
         });
     }
 
+    private boolean isPlayersUnit(Controllable cont) {
+        return cont.getTeam() == currPlayer;
+    }
+
     int getResource(ResourceType type) {
-        return engine.getPlayers()[0].getResourceByName(type);
+        return engine.getPlayers()[currPlayer].getResourceByName(type);
+    }
+
+    private void blinkBorder(Tile tile, Color color) {
+        tile.setBorder(new LineBorder(color,5,true));
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                tile.setBorder(null);
+            }
+        },50);
     }
 }

@@ -3,12 +3,9 @@ package fleetbot_wars.model;
 import visual.ground.Ground;
 import visual.unit.Unit;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.awt.event.ActionEvent;
 
 class GameSpace extends JPanel implements Talkative{
 
@@ -35,6 +32,37 @@ class GameSpace extends JPanel implements Talkative{
         this.setLayout(layout);
         this.setPreferredSize(new Dimension(Tile.TILE_BASE_SIZE*GUI.mapSize.width,Tile.TILE_BASE_SIZE*GUI.mapSize.height));
         genTiles();
+        initPlayerChangeKeys();
+    }
+
+    private void initPlayerChangeKeys() {
+        InputMap keys = this.getInputMap();
+        keys.put(KeyStroke.getKeyStroke("F1"),"player0");
+        keys.put(KeyStroke.getKeyStroke("F2"),"player1");
+        keys.put(KeyStroke.getKeyStroke("F3"),"player2");
+        keys.put(KeyStroke.getKeyStroke("F4"),"player3");
+        ActionMap actionMap = this.getActionMap();
+        actionMap.put("player0", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                serverComm.changePlayer(0);
+            }
+        });actionMap.put("player1", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                serverComm.changePlayer(1);
+            }
+        });actionMap.put("player2", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                serverComm.changePlayer(2);
+            }
+        });actionMap.put("player3", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                serverComm.changePlayer(3);
+            }
+        });
     }
 
     private void genTiles() {

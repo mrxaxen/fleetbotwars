@@ -19,6 +19,7 @@ import visual.ground.Water;
 import visual.unit.*;
 
 /**
+ *
  * @author WB
  */
 public class Engine {
@@ -46,7 +47,6 @@ public class Engine {
 
     /**
      * create Engine
-     *
      * @param map
      * @param players
      */
@@ -72,7 +72,6 @@ public class Engine {
 
     /**
      * inspects Unit at given location
-     *
      * @param location
      */
     public void inspectUnit(Point location) {
@@ -100,17 +99,16 @@ public class Engine {
                         for (int i = 0; i < ghostBuilding.getWidth(); i++) {
                             for (int j = 0; j < ghostBuilding.getHeight(); j++) {
                                 Point point = new Point(ghostBuilding.getReferenceCoords().x + j, ghostBuilding.getReferenceCoords().y + i);
-                                Translation.getInstance().repaintOnMove(point, ghostBuilding, true);
+                                Translation.getInstance().repaint(point, ghostBuilding, true);
                             }
                         }
                     }
 
                 }
-
                 if (cont.isMoving()) {
-                    Translation.getInstance().repaintOnMove(cont.getReferenceCoords(), cont, false);
+                    Translation.getInstance().repaint(cont.getReferenceCoords(),cont,false);
                     move(cont);
-                    Translation.getInstance().repaintOnMove(cont.getReferenceCoords(), cont, true);
+                    Translation.getInstance().repaint(cont.getReferenceCoords(),cont,true);
                 }
             }
         }
@@ -122,7 +120,6 @@ public class Engine {
     /**
      * initilaizes given Controllable's movement to given location,
      * if given location is valid
-     *
      * @param cont
      * @param tarLoc
      */
@@ -144,7 +141,6 @@ public class Engine {
     /**
      * stops given Controllable's movement, as if it has reached its destination
      * (therefore the 'same' movement cannot be resumed)
-     *
      * @param cont
      */
     public void stopMove(Controllable cont) {
@@ -155,7 +151,6 @@ public class Engine {
 
     /**
      * moves given Controllable along its current path
-     *
      * @param cont
      */
     private void move(Controllable cont) {
@@ -164,7 +159,6 @@ public class Engine {
 
     /**
      * moves given Controllable along given path (just one step)
-     *
      * @param cont
      * @param path
      */
@@ -187,7 +181,6 @@ public class Engine {
 
     /**
      * returns the Points of a path bewteen Points a and b (a and b not included)
-     *
      * @param a: first point (start)
      * @param b: last point (end)
      * @return
@@ -222,8 +215,7 @@ public class Engine {
     /**
      * changes given Controllables current location to given target location.
      * also handles ground ownerReferences in the map
-     *
-     * @param cont:   Controllable being moved
+     * @param cont: Controllable being moved
      * @param tarLoc: target location
      */
     private void changeLoc(Controllable cont, Point tarLoc) {
@@ -238,11 +230,10 @@ public class Engine {
     /**
      * initializes combat between attacker Controllable and Unit at target location,
      * if selected target exists and is valid
-     *
      * @param atkr
      * @param tarLoc
      */
-    public void startAttack(Controllable atkr, Point tarLoc) {
+    public boolean startAttack(Controllable atkr, Point tarLoc) {
         Unit tar = map.groundAt(tarLoc).getOwnerReference();
         if (atkr.isValidTarget(tar)) {
             atkr.setCurrTar(tar);
@@ -253,12 +244,13 @@ public class Engine {
                     startMove(atkr, tar);
                 }
             }
+            return true;
         }
+        return false;
     }
 
     /**
      * stops given Controllable's attacks
-     *
      * @param atkr
      */
     public void stopAttack(Controllable atkr) {
@@ -271,7 +263,6 @@ public class Engine {
     /**
      * same logic as startMove(Controllable, Unit),
      * without the initial occupation check (will always be occupied by terget)
-     *
      * @param cont
      * @param tar
      */
@@ -283,9 +274,8 @@ public class Engine {
 
     /**
      * given Controllable attempts to attack given Unit
-     *
      * @param atkr: attacker
-     * @param tar:  target
+     * @param tar: target
      */
     private void attack(Controllable atkr, Unit tar) {
         if (inRange(atkr, tar) && atkr.getCurrHp() > 0) { //in range, not dead (died but not yet removed)
@@ -320,9 +310,8 @@ public class Engine {
     /**
      * returns whether target Unit is in attacker Controllable's line of sight.
      * incorrect in some cases (only checks reference coordinates)
-     *
      * @param atkr: attacker
-     * @param tar:  target
+     * @param tar: target
      * @return
      */
     private boolean losCheck(Controllable atkr, Unit tar) {
@@ -347,7 +336,6 @@ public class Engine {
 
     /**
      * returns whether target Unit is in attacker Controllable's range
-     *
      * @param attacker
      * @param target
      * @return
@@ -364,7 +352,6 @@ public class Engine {
     /**
      * happens when a Unit's death has additional events tied to it,
      * such as resource gain
-     *
      * @param u
      * @param teamBenefiting
      */
@@ -386,7 +373,6 @@ public class Engine {
 
     /**
      * removes Unit from the Map, and owner Player if it was Controllable
-     *
      * @param u
      */
     private void killUnit(Unit u) {
@@ -395,6 +381,7 @@ public class Engine {
             players[playerIndex].addDeadControllable((Controllable) u);
         }
         for (Point c : u.getCoordsArray()) { //delete unit from the map
+            Translation.getInstance().repaint(c,null,false);
             map.groundAt(c).setOwnerReference(null);
         }
     }
@@ -411,7 +398,6 @@ public class Engine {
     /**
      * sends given Builder to build given building, at given location,
      * if given location is valid
-     *
      * @param builder
      * @param buildingRefCoords
      * @param buildingType
@@ -435,7 +421,6 @@ public class Engine {
 
     /**
      * stops given Builder's building process
-     *
      * @param builder
      */
     public void stopBuild(Controllable builder) {
@@ -499,7 +484,6 @@ public class Engine {
 
     /**
      * additional ground condition check for Mines
-     *
      * @param refCoords
      * @param type
      * @param player
@@ -544,7 +528,7 @@ public class Engine {
 
     public void update() {
         HashMap<ResourceType, Integer> resources = new HashMap<>();
-        players[0].getResourceMap().forEach((key, value) -> {
+        players[Translation.getInstance().getCurrPlayer()].getResourceMap().forEach((key, value) -> {
             resources.put(key, value);
         });
         Translation.getInstance().updateResources(resources);
@@ -553,7 +537,6 @@ public class Engine {
     /**
      * create building without binding it to the Map
      * (Ground ownerReferences remain unchanged)
-     *
      * @param p
      * @param type
      * @param player
@@ -596,7 +579,6 @@ public class Engine {
     /**
      * increase the level of given Controllable by 1,
      * subsequently increasing its stats
-     *
      * @param cont
      */
     public void upgrade(Controllable cont) {
@@ -609,7 +591,6 @@ public class Engine {
 
     /**
      * tells whether given Controllable can be upgraded
-     *
      * @param cont
      * @return true if Controllable is upgradeable AND Player has enough resources,
      * false else

@@ -39,11 +39,14 @@ class SelectionController {
 
     void select(Tile tile) {
         if(!isSelected()) {
-            selectedTile = tile;
-            unitSelection(selectedTile.getUnit(), false, new Color(0, 255, 19));
-            //selectedTile.setBorder(new LineBorder(new Color(20,149,255),5,true));
-            actionBar.changeActionBar(tile.getUnitType());
-            return;
+
+            if(serverComm.select(tile)) {
+                selectedTile = tile;
+                unitSelection(selectedTile.getUnit(), false, new Color(0, 255, 19));
+                //selectedTile.setBorder(new LineBorder(new Color(20,149,255),5,true));
+                actionBar.changeActionBar(tile.getUnitType());
+                return;
+            }
         }
 
         if(isSelected()) {
@@ -102,6 +105,20 @@ class SelectionController {
             }
         }
         select(selectedTile);
+    }
+
+    void attack(Tile to) {
+        serverComm.attack(selectedTile,to);
+        setAttackMode(false);
+        select(selectedTile);
+    }
+
+    void setAttackMode(boolean b) {
+        attackMode = b;
+    }
+
+    boolean isAttacking() {
+        return attackMode;
     }
 
     void setBuildingToBuild(VisualType unitType) {

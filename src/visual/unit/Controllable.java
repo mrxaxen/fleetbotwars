@@ -18,13 +18,13 @@ import java.util.LinkedList;
 public abstract class Controllable extends Unit {
 
     private int mvmtSpd, atkSpd, dmg, maxLvl, currLvl, rng;
-    protected int team;
     // action helpers:
     private LinkedList<Point> currPath = new LinkedList<>();
     private Unit currTar = null;
     private Controllable ghostBuilding = null;
     protected int upPrice = 0;
     private Player player;
+    protected final int team;
     private Color color;
 
     /**
@@ -53,7 +53,6 @@ public abstract class Controllable extends Unit {
         this.player = player;
         this.color = player.getColor();
         this.team = player.getPlayerNumber();
-
     }
 
     /**
