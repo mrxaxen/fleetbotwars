@@ -129,7 +129,7 @@ class SelectionController {
         return selectedTile != null;
     }
 
-    private void unitSelection(Unit selectedUnit, boolean deSelect, Color color){
+    public static void unitSelection(Unit selectedUnit, boolean deSelect, Color color){
         if(selectedUnit != null && selectedUnit.getCoordsArray().size() > 1) {
             Point refCoords = selectedUnit.getReferenceCoords();
             int width = selectedUnit.getWidth();
@@ -159,7 +159,7 @@ class SelectionController {
             }
         }
     }
-    private void unitSelection(Unit selectedUnit, boolean deSelect){
+    public static void unitSelection(Unit selectedUnit, boolean deSelect){
         unitSelection(selectedUnit, deSelect, Color.green);
     }
 

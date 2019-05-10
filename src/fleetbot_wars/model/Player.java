@@ -50,11 +50,11 @@ public class Player {
         this.color = color;
         //this.resources = initResources;
         this.resources = new HashMap<ResourceType, Integer>();
-        resources.put(ResourceType.food, 9999);
-        resources.put(ResourceType.wood, 9999);
-        resources.put(ResourceType.gold, 9999);
-        resources.put(ResourceType.stone, 9999);
-        resources.put(ResourceType.upgrade, 9999);
+        resources.put(ResourceType.food, 0);
+        resources.put(ResourceType.wood, 15);
+        resources.put(ResourceType.gold, 0);
+        resources.put(ResourceType.stone, 15);
+        resources.put(ResourceType.upgrade, 0);
     }
 
     public Player(String playerName, int playerNumber){

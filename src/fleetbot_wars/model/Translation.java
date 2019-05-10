@@ -129,13 +129,30 @@ class Translation {
         return engine.getPlayers()[currPlayer].getResourceByName(type);
     }
 
+    boolean enoughResource(HashMap<ResourceType, Integer> resNeeded){
+        System.out.println(resNeeded);
+        System.out.println(engine.getPlayers()[currPlayer].getResourceMap());
+        for(HashMap.Entry<ResourceType, Integer> entry : engine.getPlayers()[currPlayer].getResourceMap().entrySet()){
+            ResourceType currKey = entry.getKey();
+            if(entry.getValue() < resNeeded.get(currKey)){
+                return false;
+            }
+        }
+        return true;
+
+    }
+
     private void blinkBorder(Tile tile, Color color) {
-        tile.setBorder(new LineBorder(color,5,true));
+        SelectionController.unitSelection(tile.getUnit(), false, color);
+        //tile.setBorder(new LineBorder(color,5,true));
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
+                SelectionController.unitSelection(tile.getUnit(), true);
                 tile.setBorder(null);
             }
-        },50);
+        },500);
     }
+
+
 }
