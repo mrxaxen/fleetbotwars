@@ -18,16 +18,18 @@ import java.util.HashSet;
 class ActionBar extends JPanel {
 
     //    Builder     Soldier     Lumberjack    Miner
-    private HashMap<String,HashSet<JButton>> oneToRuleThemAll = new HashMap<>();
-//    private Translation serverComm = Translation.getInstance();
-    private SelectionController selectionController = SelectionController.getInstance();
+    private static final HashSet<UnitType> attackers = new HashSet<>();
     private static ActionBar instance = new ActionBar();
+    private static HashSet<JButton> active;
+    private HashMap<String,HashSet<JButton>> oneToRuleThemAll = new HashMap<>();
+    private SelectionController selectionController = SelectionController.getInstance();
 
     static ActionBar getInstance() {
         return instance;
     }
     //Reimplements with button lists so the action bar component does not resize itself
     private ActionBar() {
+        initAttackers();
         HashSet<JButton> builder = initBuilder();
         HashSet<JButton> buildMenu = initBuildMenu();
         HashSet<JButton> attack = initAttack();
@@ -41,6 +43,15 @@ class ActionBar extends JPanel {
         oneToRuleThemAll.put("attack",attack);
     }
 
+    private void initAttackers() {
+        attackers.add(UnitType.CAVALRY);
+        attackers.add(UnitType.DESTROYER);
+        attackers.add(UnitType.INFANTRY);
+        attackers.add(UnitType.RANGER);
+        attackers.add(UnitType.TURRET);
+        attackers.add(UnitType.LUMBERJACK);
+    }
+
     private void addBar(HashSet<JButton> bar) {
         bar.forEach(button -> {
             this.add(button);
@@ -48,46 +59,44 @@ class ActionBar extends JPanel {
     }
 
     void changeToDefault() {
-        changeActionBar("");
+        changeActionBar("default");
         this.revalidate();
     }
 
     void changeActionBar(UnitType unitType) {
         System.out.println(unitType);
-        if(unitType == null) return;
-        switch (unitType) {
-            case TREE:
-            case TREE_1:
-            case TREE_2:
-            case TREE_3:
-            case TREE_4:
-                return;
-            case BUILDER:
-                changeActionBar("BUILDER");
-                break;
+        if(unitType != null) {
+            changeActionBar(unitType.name());
         }
     }
 
     private void changeActionBar(String name) {
-        oneToRuleThemAll.forEach((key,set) -> {
-            if(!key.equals(name)) {
-                set.forEach(button -> {
-                    button.setEnabled(false);
-                });
-            } else {
-                set.forEach(button -> {
-                    button.setEnabled(true);
-                });
+        try {
+            if (attackers.contains(UnitType.valueOf(name))) {
+                name = "attack";
             }
-        });
+        } catch (RuntimeException e) {
+            System.err.println("No such UnitType as " + name);
+        }
+        final String s = name;
+        if(active != null) {
+            active.forEach((button) -> {
+                button.setEnabled(false);
+            });
+        }
+        if(oneToRuleThemAll.containsKey(s)) {
+            active = oneToRuleThemAll.get(s);
+            active.forEach((button)-> {
+                button.setEnabled(true);
+            });
+
+        }
     }
 
     private HashSet<JButton> initBuilder() {
         HashSet<JButton> buttons = new HashSet<>();
         JButton build = new JButton("Build");
         build.addActionListener(e -> {
-            //Resource check through statusbar's resource check method?
-//            selectionController.setBuildMode(true);
             selectionController.buildMode = true;
             changeActionBar("buildmenu");
             System.out.println("BUTTON PRESSED");
@@ -101,7 +110,7 @@ class ActionBar extends JPanel {
         HashSet<JButton> buttons = new HashSet<>();
         JButton button = new JButton("Attack");
         button.addActionListener( e -> {
-
+            selectionController.setAttackMode(true);
         });
         buttons.add(button);
         button.setEnabled(false);

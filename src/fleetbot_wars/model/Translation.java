@@ -19,6 +19,8 @@ import java.util.TimerTask;
 class Translation {
 
     private static Translation instance;
+    private static final Color BLINK_WRONG_MOVE = new Color(255, 20, 20);
+    private static final Color BLINK_ATTACK = new Color(110, 50, 220);
     private Engine engine = Main.getEngine();
     private StatusBar statusBar;
 
@@ -49,15 +51,17 @@ class Translation {
     void attack(Tile from, Tile to) {
         Unit unitAttacking;
         if((unitAttacking = engine.getMap().groundAt(new Point(from.getCoordX(),from.getCoordY())).getOwnerReference()) instanceof Controllable) {
-            engine.startAttack((Controllable) unitAttacking, new Point(to.getCoordX(),to.getCoordY()));
-        } else {
-            blinkBorder(from);
+            System.out.println("Is Controllable");
+            if(engine.startAttack((Controllable) unitAttacking, new Point(to.getCoordX(),to.getCoordY()))) {
+                blinkBorder(to,BLINK_ATTACK);
+                return;
+            }
         }
+        blinkBorder(from,BLINK_WRONG_MOVE);
     }
 
     void repaint(Point tileAt, Unit unitToPlace, boolean isGoingTo) {
         SwingUtilities.invokeLater(() -> GameSpace.getInstance().repaintTile(tileAt,unitToPlace,isGoingTo));
-        System.out.println("CALLED");
     }
 
     void build(Tile buildersTile, Tile buildingPoint, VisualType building) {
@@ -70,7 +74,7 @@ class Translation {
 
         if(!engine.startBuild(builder,new Point(xTo,yTo),building)) {
             System.out.println("Building failed");
-            blinkBorder(buildingPoint);
+            blinkBorder(buildingPoint,BLINK_WRONG_MOVE);
         }
     }
 
@@ -94,8 +98,8 @@ class Translation {
         return engine.getPlayers()[0].getResourceByName(type);
     }
 
-    private void blinkBorder(Tile tile) {
-        tile.setBorder(new LineBorder(new Color(255, 20, 20),5,true));
+    private void blinkBorder(Tile tile, Color color) {
+        tile.setBorder(new LineBorder(color,5,true));
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {

@@ -96,6 +96,15 @@ class SelectionController {
 
     void attack(Tile to) {
         serverComm.attack(selectedTile,to);
+        setAttackMode(false);
+    }
+
+    void setAttackMode(boolean b) {
+        attackMode = b;
+    }
+
+    boolean isAttacking() {
+        return attackMode;
     }
 
     void setBuildingToBuild(VisualType unitType) {

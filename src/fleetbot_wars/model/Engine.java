@@ -226,9 +226,10 @@ public class Engine
      * @param atkr
      * @param tarLoc
      */
-    public void startAttack(Controllable atkr, Point tarLoc) {
+    public boolean startAttack(Controllable atkr, Point tarLoc) {
         Unit tar = map.groundAt(tarLoc).getOwnerReference();
         if (atkr.isValidTarget(tar)) {
+            System.out.println("IN");
             atkr.setCurrTar(tar);
             if (!inRange(atkr, tar)) {
                 if (atkr instanceof Turret) {
@@ -237,7 +238,9 @@ public class Engine
                     startMove(atkr, tar);
                 }
             }
+            return true;
         }
+        return false;
     }
 
     /**
@@ -371,6 +374,7 @@ public class Engine
             int playerIndex = ((Controllable) u).getTeam();
             players[playerIndex].addDeadControllable((Controllable) u);
         }
+        Translation.getInstance().repaint(u.getReferenceCoords(),null,false);
         for (Point c : u.getCoordsArray()) { //delete unit from the map
             map.groundAt(c).setOwnerReference(null);
         }
