@@ -31,13 +31,6 @@ class Translation {
     }
 
     Ground[][] getMap() {
-        //Get Ground array from engine
-
-//        try {
-//            send request for map
-//            read map from stream
-//        } catch (Exception e) {
-//        }
         Ground[][] engineGround = engine.getMap().getGround();
         System.out.println(engineGround == null);
 
@@ -53,7 +46,16 @@ class Translation {
         return engine.startMove(unitToMove, moveTo);
     }
 
-    void repaintOnMove(Point tileAt, Unit unitToPlace, boolean isGoingTo) {
+    void attack(Tile from, Tile to) {
+        Unit unitAttacking;
+        if((unitAttacking = engine.getMap().groundAt(new Point(from.getCoordX(),from.getCoordY())).getOwnerReference()) instanceof Controllable) {
+            engine.startAttack((Controllable) unitAttacking, new Point(to.getCoordX(),to.getCoordY()));
+        } else {
+            blinkBorder(from);
+        }
+    }
+
+    void repaint(Point tileAt, Unit unitToPlace, boolean isGoingTo) {
         SwingUtilities.invokeLater(() -> GameSpace.getInstance().repaintTile(tileAt,unitToPlace,isGoingTo));
         System.out.println("CALLED");
     }
@@ -68,13 +70,7 @@ class Translation {
 
         if(!engine.startBuild(builder,new Point(xTo,yTo),building)) {
             System.out.println("Building failed");
-            buildingPoint.setBorder(new LineBorder(new Color(255, 20, 20),5,true));
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    buildingPoint.setBorder(null);
-                }
-            },50);
+            blinkBorder(buildingPoint);
         }
     }
 
@@ -96,5 +92,15 @@ class Translation {
 
     int getResource(ResourceType type) {
         return engine.getPlayers()[0].getResourceByName(type);
+    }
+
+    private void blinkBorder(Tile tile) {
+        tile.setBorder(new LineBorder(new Color(255, 20, 20),5,true));
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                tile.setBorder(null);
+            }
+        },50);
     }
 }

@@ -99,16 +99,16 @@ public class Engine
                         for (int i = 0; i < ghostBuilding.getWidth(); i++) {
                             for (int j = 0; j < ghostBuilding.getHeight(); j++) {
                                 Point point = new Point(ghostBuilding.getReferenceCoords().x + j, ghostBuilding.getReferenceCoords().y + i);
-                                Translation.getInstance().repaintOnMove(point, ghostBuilding, true);
+                                Translation.getInstance().repaint(point, ghostBuilding, true);
                             }
                         }
                     }
 
                 }
                 if (cont.isMoving()) {
-                    Translation.getInstance().repaintOnMove(cont.getReferenceCoords(),cont,false);
+                    Translation.getInstance().repaint(cont.getReferenceCoords(),cont,false);
                     move(cont);
-                    Translation.getInstance().repaintOnMove(cont.getReferenceCoords(),cont,true);
+                    Translation.getInstance().repaint(cont.getReferenceCoords(),cont,true);
                 }
             }
         }

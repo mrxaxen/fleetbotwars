@@ -94,6 +94,10 @@ class SelectionController {
         select(selectedTile);
     }
 
+    void attack(Tile to) {
+        serverComm.attack(selectedTile,to);
+    }
+
     void setBuildingToBuild(VisualType unitType) {
         buildingToBuild = unitType;
     }
