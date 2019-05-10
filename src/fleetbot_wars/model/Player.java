@@ -125,6 +125,7 @@ public class Player {
 
     public void remDead() {
         playerUnits.removeAll(deadUnits);
+        deadUnits.clear();
     }
 
     /**
@@ -138,6 +139,7 @@ public class Player {
 
     public void addNew() {
         playerUnits.addAll(newUnits);
+        newUnits.clear();
     }
 
     ///// getters, setters

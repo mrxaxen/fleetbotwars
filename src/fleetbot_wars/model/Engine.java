@@ -88,6 +88,9 @@ public class Engine {
     public void actionIteration() {
         for (Player p : players) {
             for (Controllable cont : p.getPlayerUnits()) {
+                if (cont.isHarvesting()) {
+                    harvest(cont);
+                }
                 if (cont.isAttacking()) {
                     attack(cont, cont.getCurrTar());
                 }
@@ -166,12 +169,16 @@ public class Engine {
             if (map.groundAt(c) instanceof Water) { // stepped into WATER
                 killUnit(cont);
             }
+            if (cont.getType().equals(VisualType.MINER)) {
+                Miner mr = (Miner)cont;
+                tryOccupyMine(mr);
+            }
         } else {
             stopMove(cont); //hit an obstacle (in move())
             stopAttack(cont); //hit an obstacle (in attack())
             stopBuild(cont); //hit an obstacle (in build())
         }
-        if (path.isEmpty()) {
+        if (path.isEmpty()) { //reached destination
             stopMove(cont);
         }
     }
@@ -381,6 +388,10 @@ public class Engine {
             Translation.getInstance().repaint(c,null,false);
             map.groundAt(c).setOwnerReference(null);
         }
+        if (u instanceof Mine) {
+            Mine m = (Mine)u;
+            dropMiner(m);
+        }
     }
 
     private void cleanUp() {
@@ -447,8 +458,8 @@ public class Engine {
         if (builder.getReferenceCoords().equals(builder.getBuilderTarLoc())) {
             for (Point c : builder.getGhostBuilding().getCoordsArray()) {
                 map.groundAt(c).setOwnerReference(builder.getGhostBuilding());
-                payForUnit(players[builder.getTeam()], builder.getGhostBuilding());
             }
+            payForUnit(players[builder.getTeam()], builder.getGhostBuilding());
             players[builder.getTeam()].addNewControllable(builder.getGhostBuilding());
             stopBuild(builder);
             stopMove(builder);
@@ -569,6 +580,117 @@ public class Engine {
                 break;
         }
         return cont;
+    }
+
+    ///// SPAWNING
+
+    /**
+     * attempts to spawn given type Controllable below, and if unavailable,
+     * above the middle of given spawn building
+     * @param building
+     * @param humanType
+     */
+    public void spawn(Controllable building, VisualType humanType) {
+        //display buttons only for valid options in GUI
+        Point hrc = spawnPlace(building);
+        if (hrc != null) {
+            Controllable cont = ghostHuman(hrc, humanType, building.getPlayer());
+            map.groundAt(hrc).setOwnerReference(cont);
+            payForUnit(players[building.getTeam()], cont);
+            players[building.getTeam()].addNewControllable(cont);
+        }
+    }
+
+    /// spawning helpers (private)
+
+    private Point spawnPlace(Controllable building) {
+        Point brc = building.getReferenceCoords();
+        Point hrc = new Point(brc.x + 2, brc.y + 1); //below middle of 3x2 spawn
+        try {
+            if (!map.groundAt(hrc).isOccupied()) {
+                return hrc;
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {}
+        hrc = new Point (brc.x - 1, brc.y + 1); //above middle of 3x2 spawn
+        try {
+            if (!map.groundAt(hrc).isOccupied()) {
+                return hrc;
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {}
+        return null;
+    }
+
+    /**
+     * create building without binding it to the Map
+     * (Ground ownerReferences remain unchanged)
+     * @param p
+     * @param type
+     * @param team
+     * @return
+     */
+    private Controllable ghostHuman(Point p, Enum type, Player team) {
+        Controllable cont = null;
+        String typeString = type.name();
+        switch(typeString) {
+            case "BUILDER":
+                cont = new Builder(p, team);
+                break;
+            case "LUMBERJACK":
+                cont = new Lumberjack(p, team);
+                break;
+            case "MINER":
+                cont = new Miner(p, team);
+                break;
+            case "INFANTRY":
+                cont = new Infantry(p, team);
+                break;
+            case "CAVALRY":
+                cont = new Cavalry(p, team);
+                break;
+            case "RANGER":
+                cont = new Ranger(p, team);
+                break;
+            case "DESTROYER":
+                cont = new Destroyer(p, team);
+                break;
+            case "MEDIC":
+                cont = new Medic(p, team);
+                break;
+        }
+        return cont;
+    }
+
+    ///// HARVESTING
+
+    /// harvesting helpers (private)
+
+    private void harvest(Controllable cont) {
+        VisualType contType = cont.getType();
+        if (contType.equals(VisualType.FARM)) {
+            Farm f = (Farm)cont;
+            f.incrFood(players[f.getTeam()]);
+        }
+        if (cont instanceof Mine) {
+            Mine m = (Mine)cont;
+            m.incrRes(players[m.getTeam()]);
+        }
+    }
+
+    private void tryOccupyMine(Miner mr) {
+        Mine m = map.adjMineCheck(mr);
+        if (m != null) {
+            stopMove(mr);
+            m.setMiner(mr);
+            //miner 'disappears' into the building:
+            //won't be directly bound to the map, just the building.
+            map.groundAt(mr.getReferenceCoords()).setOwnerReference(null);
+        }
+    }
+
+    private void dropMiner(Mine m) {
+        Point mrc = m.getReferenceCoords();
+        Miner mr = m.getMiner();
+        map.groundAt(mrc).setOwnerReference(mr);
     }
 
     ///// UPGRADE

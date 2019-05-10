@@ -21,16 +21,17 @@ public class Farm extends Controllable {
 
     public static HashMap<ResourceType, Integer> price = Farm.initPrice();
 
+    //REVISIT
     private static HashMap<ResourceType, Integer> initPrice() {
         HashMap<ResourceType, Integer> new_price = new HashMap<>();
-        new_price.put(ResourceType.food, 15);
-        new_price.put(ResourceType.wood, 100);
-        new_price.put(ResourceType.gold, 110);
-        new_price.put(ResourceType.stone, 20);
+        new_price.put(ResourceType.food, 0);
+        new_price.put(ResourceType.wood, 30);
+        new_price.put(ResourceType.gold, 0);
+        new_price.put(ResourceType.stone, 30);
         new_price.put(ResourceType.upgrade, 0);
         return new_price;
     }
-
+    
     /**
      * create Farm at (x,y) coordinates, for 'team' team
      *  @param coords
@@ -43,10 +44,11 @@ public class Farm extends Controllable {
     }
 
     /**
-     * increase Player Food resource
+     * increase Player Food resource of given Player
+     * @param p
      */
-    public void incrFood() {
-        // should be based on num stored in object??
+    public void incrFood(Player p) {
+        p.increaseResource(ResourceType.food, 1);
     }
 
 }

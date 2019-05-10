@@ -12,6 +12,8 @@ import visual.ground.*;
 import visual.unit.Controllable;
 import visual.unit.Tree;
 import fleetbot_wars.model.enums.VisualType;
+import visual.unit.Mine;
+import visual.unit.Miner;
 import visual.unit.Unit;
 
 /**
@@ -345,6 +347,22 @@ public class Map {
         return false;
     }
     
+    public Mine adjMineCheck(Miner mr) {
+        Point mrc = mr.getReferenceCoords();
+        for (int i = mrc.x - 1; i < mrc.x + 2; ++i) {
+            for (int j = mrc.y - 1; j < mrc.y + 2; ++j) {
+                try {
+                    Unit u = ground[i][j].getOwnerReference();
+                        if (u != null && u instanceof Mine
+                            && ((Mine)u).getTeam() == mr.getTeam() && !((Mine)u).isActive()) {
+                            return (Mine)u;
+                        }
+                } catch (ArrayIndexOutOfBoundsException e) {}
+            }
+        }
+        return null;
+    }
+
     /**
      *
      * @return Dimensions of the map.

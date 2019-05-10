@@ -410,13 +410,103 @@ public class EngineTest {
     public void testGotResForCont() {
         // b0 b1
         Engine building_engine = createBuildingEngine_gRFC();
-        Controllable b0 = building_engine.getPlayers()[0].getPlayerUnits().get(0);
-        Controllable b1 = building_engine.getPlayers()[1].getPlayerUnits().get(0);
 
         assertTrue(building_engine.gotResForCont(building_engine.getPlayers()[0], VisualType.STONEMINE));
         assertFalse(building_engine.gotResForCont(building_engine.getPlayers()[1], VisualType.STONEMINE));
     }
+    
+    /// spawning
+    @Test
+    public void testSpawn() {
+        // B   B   B 
+        // s00 s00 s00
+        // s00 s00 s00
+        // B   B   B
+        // B   B   B
+        // s01 s01 s01
+        // s01 s01 s01
+        // B   Tr  B
+        // s02 s02 s02
+        // s02 s02 s02
+        Engine spawning_engine = createSpawningEngine();
+        Controllable s00 = spawning_engine.getPlayers()[0].getPlayerUnits().get(0);
+        Controllable s01 = spawning_engine.getPlayers()[0].getPlayerUnits().get(1);
+        Controllable s02 = spawning_engine.getPlayers()[0].getPlayerUnits().get(2);
+        Player jane = spawning_engine.getPlayers()[0];
+        
+        //below
+        spawning_engine.spawn(s00, VisualType.INFANTRY);
+        spawning_engine.actionIteration();
+        assertEquals(4, jane.getPlayerUnits().size());
+        assertEquals(jane.getPlayerUnits().get(3), spawning_engine.getMap().groundAt(new Point(3, 1)).getOwnerReference());
+        assertEquals(9979, jane.getResourceByName(ResourceType.gold));
+        //above
+        spawning_engine.spawn(s01, VisualType.INFANTRY);
+        spawning_engine.actionIteration();
+        assertEquals(5, jane.getPlayerUnits().size());
+        assertEquals(jane.getPlayerUnits().get(4), spawning_engine.getMap().groundAt(new Point(4, 1)).getOwnerReference());
+        assertEquals(9959, jane.getResourceByName(ResourceType.gold));
+        //failed
+        spawning_engine.spawn(s02, VisualType.INFANTRY);
+        assertEquals(5, jane.getPlayerUnits().size());
+        assertEquals(9959, jane.getResourceByName(ResourceType.gold));
+    }
 
+    /// harvesting
+    @Test
+    public void testHarvesting() {
+        // m00 B  B  B  B  B  m01 B  d1 
+        // f   f  f  sm sm sm gm  gm gm
+        // f   f  f  sm sm sm gm  gm gm
+        Engine harvesting_engine = createHarvestingEngine();
+        Controllable f = harvesting_engine.getPlayers()[0].getPlayerUnits().get(0);
+        Controllable sm = harvesting_engine.getPlayers()[0].getPlayerUnits().get(1);
+        Controllable gm = harvesting_engine.getPlayers()[0].getPlayerUnits().get(2);
+        Controllable m00 = harvesting_engine.getPlayers()[0].getPlayerUnits().get(3);
+        Controllable m01 = harvesting_engine.getPlayers()[0].getPlayerUnits().get(4);
+        Controllable d1 = harvesting_engine.getPlayers()[1].getPlayerUnits().get(0);
+        Player jane = harvesting_engine.getPlayers()[0];
+        
+        //mines inactive
+        harvesting_engine.actionIteration();
+        assertFalse(((Mine)sm).isActive());
+        assertFalse(((Mine)gm).isActive());
+        assertEquals(1, jane.getResourceByName(ResourceType.food));
+        assertEquals(0, jane.getResourceByName(ResourceType.gold));
+        assertEquals(0, jane.getResourceByName(ResourceType.stone));
+        //activate goldmine, check miner disappearance
+        harvesting_engine.startMove(m01, new Point(0, 7));
+        harvesting_engine.actionIteration();
+        assertFalse(((Mine)sm).isActive());
+        assertTrue(((Mine)gm).isActive());
+        assertEquals(null, harvesting_engine.getMap().groundAt(new Point(0, 7)).getOwnerReference());
+        assertEquals(m01, ((Mine)gm).getMiner());
+        assertEquals(2, jane.getResourceByName(ResourceType.food));
+        assertEquals(0, jane.getResourceByName(ResourceType.gold));
+        assertEquals(0, jane.getResourceByName(ResourceType.stone));
+        harvesting_engine.actionIteration();
+        assertEquals(3, jane.getResourceByName(ResourceType.food));
+        assertEquals(1, jane.getResourceByName(ResourceType.gold));
+        assertEquals(0, jane.getResourceByName(ResourceType.stone));
+        //activate stonemine
+        harvesting_engine.startMove(m00, new Point(0, 3));
+        harvesting_engine.actionIteration();
+        assertFalse(((Mine)sm).isActive());
+        harvesting_engine.actionIteration();
+        assertTrue(((Mine)sm).isActive());
+        harvesting_engine.actionIteration();
+        assertEquals(6, jane.getResourceByName(ResourceType.food));
+        assertEquals(4, jane.getResourceByName(ResourceType.gold));
+        assertEquals(1, jane.getResourceByName(ResourceType.stone));
+        //destroy goldmine, check miner reappearance
+        harvesting_engine.startAttack(d1, gm.getReferenceCoords());
+        for (int i = 0; i < 10; ++i) { //destroy mine
+            harvesting_engine.actionIteration();
+        }
+        harvesting_engine.actionIteration(); //cleanup finished
+        assertEquals(m01, harvesting_engine.getMap().groundAt(new Point(1, 6)).getOwnerReference());
+    }
+    
     /// upgrade
     @Test
     public void testUpgrade() {
@@ -797,6 +887,68 @@ public class EngineTest {
         Engine new_building_engine = new Engine(building_map, players, 57);
 
         return new_building_engine;
+    }
+    
+    private Engine createSpawningEngine() {
+        // B   B   B 
+        // s00 s00 s00
+        // s00 s00 s00
+        // B   B   B
+        // B   B   B
+        // s01 s01 s01
+        // s01 s01 s01
+        // B   Tr  B
+        // s02 s02 s02
+        // s02 s02 s02
+        Ground[][] spawning_ground = new Ground[10][3];
+        for (int i = 0; i < 10; ++i) {
+            for (int j = 0; j < 3; j ++) {
+                spawning_ground[i][j] = new Base(new Point(i, j));
+            }
+        }
+        spawning_ground[7][1].setOwnerReference(new Tree(new Point (7, 1)));
+        Map spawning_map = new Map(spawning_ground);
+        
+        Player[] players = new Player[1];
+        Player jane_0 = new Player("jane_doe", 0);
+        jane_0.addControllable(new MilitarySpawn(new Point(1, 0), jane_0));
+        jane_0.addControllable(new MilitarySpawn(new Point(5, 0), jane_0));
+        jane_0.addControllable(new MilitarySpawn(new Point(8, 0), jane_0));
+        players[0] = jane_0;
+        
+        Engine new_spawning_engine = new Engine(spawning_map, players, 42);
+        
+        return new_spawning_engine;
+    }
+    
+    private Engine createHarvestingEngine() {
+        // m00 B  B  B  B  B  m01 B  d1 
+        // f   f  f  sm sm sm gm  gm gm
+        // f   f  f  sm sm sm gm  gm gm
+        Ground[][] harvesting_ground = new Ground[3][9];
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                harvesting_ground[i][j] = new Base(new Point(i, j));
+            }
+        }
+        Map harvesting_map = new Map(harvesting_ground);
+        
+        Player[] players = new Player[2];
+        Player jane_0 = new Player("jane_doe", 0);
+        jane_0.addControllable(new Farm(new Point(1, 0), jane_0));
+        jane_0.addControllable(new StoneMine(new Point(1, 3), jane_0));
+        jane_0.addControllable(new GoldMine(new Point(1, 6), jane_0));
+        jane_0.addControllable(new Miner(new Point(0, 0), jane_0));
+        jane_0.addControllable(new Miner(new Point(0, 6), jane_0));
+        jane_0.nullifyResources();
+        Player john_1 = new Player("john_doe", 1);
+        john_1.addControllable(new Destroyer(new Point(0, 8), john_1));
+        players[0] = jane_0;
+        players[1] = john_1;
+        
+        Engine new_harvesting_engine = new Engine(harvesting_map, players, 0-0);
+        
+        return new_harvesting_engine;
     }
 
     private Engine createUpgradeEngine() {

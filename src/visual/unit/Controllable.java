@@ -120,6 +120,11 @@ public abstract class Controllable extends Unit {
         return t.equals("INFANTRY") || t.equals("CAVALRY") || t.equals("RANGER")
                || t.equals("DESTROYER") || t.equals("MEDIC") || t.equals("BARRICADE") || t.equals("TURRET");
     }
+    
+    public boolean isHarvesting() {
+        String t = this.type.name();
+        return t.equals("FARM") || t.equals("GOLDMINE") || t.equals("STONEMINE");
+    }
 
     ///// getters, setters
 

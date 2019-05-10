@@ -18,7 +18,18 @@ import fleetbot_wars.model.enums.VisualType;
  */
 public class Medic extends Controllable {
     
-    public static HashMap<ResourceType, Integer> price = new HashMap<>();
+    public static HashMap<ResourceType, Integer> price = Medic.initPrice();
+    
+    //REVISIT
+    private static HashMap<ResourceType, Integer> initPrice() {
+        HashMap<ResourceType, Integer> new_price = new HashMap<>();
+        new_price.put(ResourceType.food, 0);
+        new_price.put(ResourceType.wood, 0);
+        new_price.put(ResourceType.gold, 20);
+        new_price.put(ResourceType.stone, 0);
+        new_price.put(ResourceType.upgrade, 0);
+        return new_price;
+    }
     
     /**
      * create Medic at (x,y) coordinates, for 'team' team

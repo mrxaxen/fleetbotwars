@@ -18,14 +18,15 @@ import fleetbot_wars.model.enums.VisualType;
  */
 public class GoldMine extends Mine {
 
-    public static HashMap<ResourceType, Integer> price = initPrice();
+    public static HashMap<ResourceType, Integer> price = GoldMine.initPrice();
 
+    //REVISIT
     private static HashMap<ResourceType, Integer> initPrice() {
         HashMap<ResourceType, Integer> new_price = new HashMap<>();
-        new_price.put(ResourceType.food, 15);
-        new_price.put(ResourceType.wood, 100);
-        new_price.put(ResourceType.gold, 110);
-        new_price.put(ResourceType.stone, 20);
+        new_price.put(ResourceType.food, 0);
+        new_price.put(ResourceType.wood, 30);
+        new_price.put(ResourceType.gold, 0);
+        new_price.put(ResourceType.stone, 30);
         new_price.put(ResourceType.upgrade, 0);
         return new_price;
     }
@@ -43,10 +44,13 @@ public class GoldMine extends Mine {
 
     /**
      * increase Player Gold resource
+     * @param p
      */
     @Override
-    public void incrRes() {
-        //
+    public void incrRes(Player p) {
+        if (isActive()) {
+            p.increaseResource(ResourceType.gold, 1);
+        }
     }
 
 }
