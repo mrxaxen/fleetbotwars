@@ -182,10 +182,12 @@ public class Map {
                     (startingZoneCoordsArr.get(c)).add(new Point(topLeftX, topLeftY));
                     topLeftY++;
                 }
+                topLeftY = topLeft.y;
                 topLeftX++;
             }
             c++;
         }
+        System.out.println(startingZoneCoordsArr);
     }
 
     private Point calcPlayerStartingZone(int zoneId) {
@@ -205,9 +207,9 @@ public class Map {
     private void placeUnitOnMap(Point referenceCoord, Controllable unit) {
         int currX = referenceCoord.x;
         int currY = referenceCoord.y;
-
-        for (int i = currX; i < referenceCoord.x + unit.getHeight(); i++) {
-            for (int j = currY; j < referenceCoord.y + unit.getWidth(); j++) {
+        unit.setReferenceCoords(referenceCoord);
+        for (int i = currX; i < referenceCoord.x + unit.getHeight() && i < mapDimension.width; i++) {
+            for (int j = currY; j < referenceCoord.y + unit.getWidth() && j < mapDimension.height; j++) {
                 ground[i][j].setOwnerReference(unit);
             }
         }
@@ -216,16 +218,16 @@ public class Map {
     private boolean isSectionUnOccupied(Point referenceCoords, int width, int height) {
         int currX = referenceCoords.x;
         int currY = referenceCoords.y;
-        Ground currentGround = ground[currX][currY];
-        boolean isEmpty = !(currentGround.isOccupied());
-        while ((currX < referenceCoords.x + width) && isEmpty && currX < this.mapDimension.width) {
-            while ((currY < referenceCoords.y + height) && isEmpty  && currY < this.mapDimension.height) {
-                currentGround = ground[currX][currY];
-                isEmpty = !(currentGround.isOccupied());
-                currY++;
+
+        boolean isEmpty = true;
+
+        for(int i = referenceCoords.x; (i < (referenceCoords.x + height)) && (i < mapDimension.height); i++){
+            for(int j = referenceCoords.y; (j < (referenceCoords.y + width)) && (j < mapDimension.width); j++){
+                isEmpty = isEmpty && !(ground[i][j].isOccupied());
+                isEmpty = isEmpty && (referenceCoords.x + height < mapDimension.height) && (referenceCoords.y + width < mapDimension.width);
             }
-            currX++;
         }
+
         return isEmpty;
     }
 
@@ -235,20 +237,16 @@ public class Map {
         int count = 0;
         Point currentCoord;
         for (VisualType unit : units) {
-            //System.out.println(startingZone.size());
-            //System.out.println(count);
             currentCoord = startingZone.get(count);
             currUnit = VisualType.createUnit(unit, currentCoord, playerNum);
-            player.addControllable(currUnit);
-            //System.out.println(currUnit.getType().name());
-            while (count < (startingZone.size()-1)
-                    && !(isSectionUnOccupied(currentCoord, currUnit.getWidth(), currUnit.getHeight()))) {
+            while (!(isSectionUnOccupied(currentCoord, currUnit.getWidth(), currUnit.getHeight())) && count < (startingZone.size())) {
                 count++;
                 currentCoord = startingZone.get(count);
             }
-            if (isSectionUnOccupied(currentCoord, currUnit.getWidth(), currUnit.getHeight()) && count < (startingZone.size()-1)) {
+            if (isSectionUnOccupied(currentCoord, currUnit.getWidth(), currUnit.getHeight()) && count < (startingZone.size())) {
                 placeUnitOnMap(currentCoord, currUnit);
-                count+= currUnit.getWidth();
+                player.addControllable(currUnit);
+                count++;
             }
         }
     }
@@ -328,18 +326,19 @@ public class Map {
      * @return true if at least 1 surrounding Ground is STONE (check 8 grid points)
      */
     //REVISIT
-    public boolean adjMineralCheck(Point c, Enum minableType) {
+    public boolean adjMineralCheck(Point c, VisualType minableType) {
         int x = c.x;
         int y = c.y;
         //also checks ground at c (redundant cuz cannot be occupied)
         try {
-        for (int i = x - 1; i < x + 2; ++i) {
-            for (int j = y - 1; j < y + 2; ++j) {
-                if (ground[i][j].getType().equals(minableType)) {
-                    return true;
+            for (int i = x - 2; i < x + 3; ++i) {
+                for (int j = y - 2; j < y + 3; ++j) {
+                    System.out.println("Succ, " + ground[i][j].getType());
+                    if (ground[i][j].getType().equals(minableType)) {
+                        return true;
+                    }
                 }
             }
-        }
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Checked area extends off the map. (mineral check)");
         }

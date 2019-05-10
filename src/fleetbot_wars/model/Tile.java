@@ -129,8 +129,12 @@ public class Tile extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 if (e.getButton() == MouseEvent.BUTTON1) {
-                    System.out.println("TILE LISTENER CALLED FOR M1");
                     selectionController.select(tile);
+//                    System.out.println("tile coords: " + tile.getCoordY() + " - " + tile.getCoordX());
+//                    System.out.println("unit obj name: " + tile.getUnit());
+//                    System.out.println("unit reference coords: " + tile.getUnit().getReferenceCoords());
+//                    System.out.println(tile.getUnit().getCoordsArray());
+//                    System.out.println("\n");
                 }
                 if (e.getButton() == MouseEvent.BUTTON3) {
                     if (selectionController.getSelectedTile() != null) {
@@ -154,13 +158,16 @@ public class Tile extends JPanel {
         return groundType;
     }
 
+    public Unit getUnit() {
+        return unit;
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         g.drawImage(groundImages.get(groundType), 0, 0, null);
         if(isLargeUnit(unit)){
-            Image image = imageSections.get(unitType)[calculateImgIndex()];
-            System.out.println("Unittype: "+unitType);
-            g.drawImage(image, 0, 0, null);
+            int idx = calculateImgIndex() > -1 ? calculateImgIndex() : 0;
+            g.drawImage(imageSections.get(unitType)[idx], 0, 0, null);
         }else{
             g.drawImage(unitImages.get(unitType), 0, 0, null);
         }

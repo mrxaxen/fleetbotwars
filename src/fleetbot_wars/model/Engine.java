@@ -98,11 +98,12 @@ public class Engine
                         System.out.println("Building...");
                         for (int i = 0; i < ghostBuilding.getWidth(); i++) {
                             for (int j = 0; j < ghostBuilding.getHeight(); j++) {
-                                Point point = new Point(ghostBuilding.getReferenceCoords().x + i, ghostBuilding.getReferenceCoords().y + j);
+                                Point point = new Point(ghostBuilding.getReferenceCoords().x + j, ghostBuilding.getReferenceCoords().y + i);
                                 Translation.getInstance().repaintOnMove(point, ghostBuilding, true);
                             }
                         }
                     }
+
                 }
                 if (cont.isMoving()) {
                     Translation.getInstance().repaintOnMove(cont.getReferenceCoords(),cont,false);
@@ -432,9 +433,9 @@ public class Engine
         }
         return true;
     }
-    
+
     /// building helpers (private)
-    
+
     private boolean build(Controllable builder) {
         if (builder.getReferenceCoords().equals(builder.getBuilderTarLoc())) {
             for (Point c : builder.getGhostBuilding().getCoordsArray()) {
@@ -448,7 +449,7 @@ public class Engine
         }
         return false;
     }
-    
+
     private boolean areaAvailable(Point p, VisualType type, int team) {
         boolean b = true;
         for (Point c : ghostBuilding(p, type, team).getCoordsArray()) {
@@ -461,7 +462,12 @@ public class Engine
                 return false;
             }
         }
-        return b || mineGroundCheck(p, type, team);
+
+        if (type.equals(VisualType.STONEMINE) || type.equals(VisualType.GOLDMINE)) {
+            b = b && mineGroundCheck(p, type, team);
+            System.out.println("Minecheck: "+b);
+        }
+        return b;
     }
     
     /**
@@ -472,23 +478,33 @@ public class Engine
      * @return 
      */
     private boolean mineGroundCheck(Point refCoords, VisualType type, int team) {
-        if (type.equals(VisualType.STONEMINE) || type.equals(VisualType.GOLDMINE)) {
-            Mine mine = (Mine)ghostBuilding(refCoords, type, team);
-            return mGC_helper(mine);
-        }
-        return false;
+        Mine mine = (Mine)ghostBuilding(refCoords, type, team);
+        return mGC_helper(mine);
     }
     
     private boolean mGC_helper(Mine mine) {
         if (mine instanceof StoneMine) { //STONE
+            System.out.println("Mineral check success!");
             for (Point c : mine.getCoordsArray()) {
                 if (map.adjMineralCheck(c, VisualType.STONE)) {
+                    return true;
+                }
+                if (map.adjMineralCheck(c, VisualType.STONE_1)) {
+                    return true;
+                }
+                if (map.adjMineralCheck(c, VisualType.STONE_2)) {
                     return true;
                 }
             }
         } else { //GOLD
             for (Point c : mine.getCoordsArray()) {
                 if (map.adjMineralCheck(c, VisualType.GOLD)) {
+                    return true;
+                }
+                if (map.adjMineralCheck(c, VisualType.GOLD_1)) {
+                    return true;
+                }
+                if (map.adjMineralCheck(c, VisualType.GOLD_2)) {
                     return true;
                 }
             }

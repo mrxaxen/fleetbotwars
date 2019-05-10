@@ -19,7 +19,7 @@ public enum VisualType {
     RANGER(UnitType.RANGER),
 
     GOLDMINE(UnitType.GOLDMINE),
-    HARVESTCENTER(UnitType.TURRET),
+    HARVESTCENTER(UnitType.HARVESTCENTER),
     FARM(UnitType.FARM),
     BARRICADE(UnitType.BARRICADE),
     MILITARYSPAWN(UnitType.MILITARYSPAWN),
