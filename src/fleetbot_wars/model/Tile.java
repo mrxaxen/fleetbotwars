@@ -25,6 +25,7 @@ public class Tile extends JPanel {
     private final int yCoord;
     private int widthModifier;
     private int heightModifier;
+    private boolean showAttack;
     private Unit unit;
     private GroundType groundType;
     private UnitType unitType;
@@ -254,6 +255,14 @@ public class Tile extends JPanel {
                 g.drawImage(colorCorners(unitImages.get(unitType), ((Controllable) unit).getColor()), 0, 0, null);
             }
         }
+        if(showAttack) {
+            g.setColor(new Color(200,100,0,80));
+            g.drawRect(0,0,getWidth(),getHeight());
+        }
+    }
+
+    public void setShowAttack(boolean b) {
+        showAttack = b;
     }
 
     public Color getTileColor() {

@@ -23,6 +23,7 @@ class Translation {
     private static final Color BLINK_ATTACK = new Color(110, 50, 220);
     private Engine engine = Main.getEngine();
     private StatusBar statusBar;
+    private int currPlayer = 0;
 
     static Translation getInstance() {
         if (instance != null) {
@@ -43,18 +44,41 @@ class Translation {
         this.statusBar = statusBar;
     }
 
+    void changePlayer(int playerNum) {
+        currPlayer = playerNum;
+    }
+
+    int getCurrPlayer() {
+        return currPlayer;
+    }
+
     boolean move(Point unitAt, Point moveTo) {
         Controllable unitToMove = (Controllable) engine.getMap().groundAt(unitAt).getOwnerReference();
         return engine.startMove(unitToMove, moveTo);
     }
 
+    boolean select(Tile tile) {
+        try {
+            Controllable unit = (Controllable) engine.getMap().groundAt(new Point(tile.getCoordX(), tile.getCoordY())).getOwnerReference();
+            if (isPlayersUnit(unit)) {
+                return true;
+            }
+        } catch (RuntimeException e) {
+            System.err.println("Not the player's unit");
+        }
+        blinkBorder(tile,BLINK_WRONG_MOVE);
+        return false;
+    }
+
     void attack(Tile from, Tile to) {
-        Unit unitAttacking;
-        if((unitAttacking = engine.getMap().groundAt(new Point(from.getCoordX(),from.getCoordY())).getOwnerReference()) instanceof Controllable) {
-            System.out.println("Is Controllable");
-            if(engine.startAttack((Controllable) unitAttacking, new Point(to.getCoordX(),to.getCoordY()))) {
-                blinkBorder(to,BLINK_ATTACK);
-                return;
+        Controllable unitAttacking;
+        if((unitAttacking = (Controllable) engine.getMap().groundAt(new Point(from.getCoordX(),from.getCoordY())).getOwnerReference()) instanceof Controllable) {
+            if(isPlayersUnit(unitAttacking)) {
+                System.out.println("Is Controllable");
+                if(engine.startAttack(unitAttacking, new Point(to.getCoordX(),to.getCoordY()))) {
+                    blinkBorder(to,BLINK_ATTACK);
+                    return;
+                }
             }
         }
         blinkBorder(from,BLINK_WRONG_MOVE);
@@ -71,10 +95,13 @@ class Translation {
         int yBuilder = buildersTile.getCoordY();
 
         Controllable builder = (Controllable) engine.getMap().groundAt(new Point(xBuilder,yBuilder)).getOwnerReference();
+        if(isPlayersUnit(builder)) {
+            if(!engine.startBuild(builder,new Point(xTo,yTo),building)) {
+                System.out.println("Building failed");
+                blinkBorder(buildingPoint,BLINK_WRONG_MOVE);
+            }
+        } else {
 
-        if(!engine.startBuild(builder,new Point(xTo,yTo),building)) {
-            System.out.println("Building failed");
-            blinkBorder(buildingPoint,BLINK_WRONG_MOVE);
         }
     }
 
@@ -94,8 +121,12 @@ class Translation {
         });
     }
 
+    private boolean isPlayersUnit(Controllable cont) {
+        return cont.getTeam() == currPlayer;
+    }
+
     int getResource(ResourceType type) {
-        return engine.getPlayers()[0].getResourceByName(type);
+        return engine.getPlayers()[currPlayer].getResourceByName(type);
     }
 
     private void blinkBorder(Tile tile, Color color) {

@@ -377,8 +377,8 @@ public class Engine {
             int playerIndex = ((Controllable) u).getTeam();
             players[playerIndex].addDeadControllable((Controllable) u);
         }
-        Translation.getInstance().repaint(u.getReferenceCoords(),null,false);
         for (Point c : u.getCoordsArray()) { //delete unit from the map
+            Translation.getInstance().repaint(c,null,false);
             map.groundAt(c).setOwnerReference(null);
         }
     }
@@ -525,7 +525,7 @@ public class Engine {
 
     public void update() {
         HashMap<ResourceType, Integer> resources = new HashMap<>();
-        players[0].getResourceMap().forEach((key, value) -> {
+        players[Translation.getInstance().getCurrPlayer()].getResourceMap().forEach((key, value) -> {
             resources.put(key, value);
         });
         Translation.getInstance().updateResources(resources);
