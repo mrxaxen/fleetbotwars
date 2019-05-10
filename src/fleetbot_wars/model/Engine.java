@@ -11,6 +11,8 @@ import java.awt.Point;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
+
+import visual.Visual;
 import visual.ground.Ground;
 import visual.ground.Water;
 import visual.unit.*;
@@ -91,7 +93,16 @@ public class Engine
                     attack(cont, cont.getCurrTar());
                 }
                 if (cont.isBuilding()) {
-                    build(cont);                    
+                    Controllable ghostBuilding = cont.getGhostBuilding();
+                    if(build(cont)) {
+                        System.out.println("Building...");
+                        for (int i = 0; i < ghostBuilding.getWidth(); i++) {
+                            for (int j = 0; j < ghostBuilding.getHeight(); j++) {
+                                Point point = new Point(ghostBuilding.getReferenceCoords().x + i, ghostBuilding.getReferenceCoords().y + j);
+                                Translation.getInstance().repaintOnMove(point, ghostBuilding, true);
+                            }
+                        }
+                    }
                 }
                 if (cont.isMoving()) {
                     Translation.getInstance().repaintOnMove(cont.getReferenceCoords(),cont,false);
@@ -113,11 +124,9 @@ public class Engine
      */
     public boolean startMove(Controllable cont, Point tarLoc) {
         if (!map.groundAt(tarLoc).isOccupied()) {
-//            synchronized (cont) {
                 LinkedList<Point> path = path(cont.getReferenceCoords(), tarLoc);
                 path.add(tarLoc);
                 cont.setCurrPath(path);
-//            }
             return true;
         } else {
             //DISPLAY FAILURE?
@@ -382,8 +391,9 @@ public class Engine
      * @param buildingRefCoords
      * @param buildingType 
      */
-    public void startBuild(Controllable builder, Point buildingRefCoords, Enum buildingType) {
-        if (areaAvailable(buildingRefCoords, buildingType, builder.getTeam())) { //area free/tree, not water            
+    public boolean startBuild(Controllable builder, Point buildingRefCoords, VisualType buildingType) {
+        if (areaAvailable(buildingRefCoords, buildingType, builder.getTeam())) { //area free/tree, not water
+            System.out.println("Starting to build");
             Point builderTarLoc = new Point(buildingRefCoords.x, buildingRefCoords.y - 1);
             if (!map.groundAt(builderTarLoc).isOccupied()                            // builder target position free, 
                 || map.groundAt(builderTarLoc).getOwnerReference().equals(builder)){ // or builder already there
@@ -392,7 +402,9 @@ public class Engine
                     startMove(builder, builderTarLoc);
                 }
             }
+            return true;
         }
+        return false;
     }
     
     /**
@@ -411,7 +423,7 @@ public class Engine
      * @param contType
      * @return true if given Player has enough resources to create given type Controllable
      */
-    public boolean gotResForCont(Player p, Enum contType) {
+    public boolean gotResForCont(Player p, VisualType contType) {
         HashMap price = getPriceOfCont(contType);
         for (Entry e : p.getResourceMap().entrySet()) {
             if ((int)price.get(e.getKey()) > (int)e.getValue()) {
@@ -423,7 +435,7 @@ public class Engine
     
     /// building helpers (private)
     
-    private void build(Controllable builder) {
+    private boolean build(Controllable builder) {
         if (builder.getReferenceCoords().equals(builder.getBuilderTarLoc())) {
             for (Point c : builder.getGhostBuilding().getCoordsArray()) {
                 map.groundAt(c).setOwnerReference(builder.getGhostBuilding());
@@ -432,10 +444,12 @@ public class Engine
             players[builder.getTeam()].addNewControllable(builder.getGhostBuilding());
             stopBuild(builder);
             stopMove(builder);
+            return true;
         }
+        return false;
     }
     
-    private boolean areaAvailable(Point p, Enum type, int team) {
+    private boolean areaAvailable(Point p, VisualType type, int team) {
         boolean b = true;
         for (Point c : ghostBuilding(p, type, team).getCoordsArray()) {
             try {
@@ -447,7 +461,7 @@ public class Engine
                 return false;
             }
         }
-        return b && mineGroundCheck(p, type, team);
+        return b || mineGroundCheck(p, type, team);
     }
     
     /**
@@ -457,12 +471,12 @@ public class Engine
      * @param team
      * @return 
      */
-    private boolean mineGroundCheck(Point refCoords, Enum type, int team) {
+    private boolean mineGroundCheck(Point refCoords, VisualType type, int team) {
         if (type.equals(VisualType.STONEMINE) || type.equals(VisualType.GOLDMINE)) {
             Mine mine = (Mine)ghostBuilding(refCoords, type, team);
             return mGC_helper(mine);
         }
-        return true;
+        return false;
     }
     
     private boolean mGC_helper(Mine mine) {
@@ -498,32 +512,31 @@ public class Engine
      * @param team
      * @return 
      */
-    private Controllable ghostBuilding(Point p, Enum type, int team) {
+    private Controllable ghostBuilding(Point p, VisualType type, int team) {
         Controllable cont = null;
-        String typeString = type.name();
-        switch(typeString) {
-            case "WORKERSPAWN":
+        switch(type) {
+            case WORKERSPAWN:
                 cont = new WorkerSpawn(p, team);
                 break;
-            case "MILITARYSPAWN":
+            case MILITARYSPAWN:
                 cont = new MilitarySpawn(p, team);
                 break;
-            case "FARM":
+            case FARM:
                 cont = new Farm(p, team);
                 break;
-            case "HARVESTCENTER":
+            case HARVESTCENTER:
                 cont = new HarvestCenter(p, team);
                 break;
-            case "GOLDMINE":
+            case GOLDMINE:
                 cont = new GoldMine(p, team);
                 break;
-            case "STONEMINE":
+            case STONEMINE:
                 cont = new StoneMine(p, team);
                 break;
-            case "TURRET":
+            case TURRET:
                 cont = new Turret(p, team);
                 break;    
-            case "BARRICADE":
+            case BARRICADE:
                 cont = new Barricade(p, team);
                 break;  
         }    
@@ -575,60 +588,57 @@ public class Engine
         HashMap<ResourceType, Integer> contPrice = getPriceOfCont(cont.getType());
         p.getResourceMap().replaceAll((key, value) -> value - contPrice.get(key));
     }   
-    
+
     //dont look at this unless you like brute force YIKES
-    private HashMap<ResourceType, Integer> getPriceOfCont(Enum type) {
+    private HashMap<ResourceType, Integer> getPriceOfCont(VisualType type) {
         HashMap<ResourceType, Integer> price = null;
-        String typeString = type.name();
-        switch (typeString) { //buildings
-            case "WORKERSPAWN":
+        switch (type) { //buildings
+            case WORKERSPAWN:
                 price = WorkerSpawn.price;
                 break;
-            case "MILITARYSPAWN":
+            case MILITARYSPAWN:
                 price = MilitarySpawn.price;
                 break;
-            case "FARM":
+            case FARM:
                 price = Farm.price;
                 break;
-            case "HARVESTCENTER":
+            case HARVESTCENTER:
                 price = HarvestCenter.price;
                 break;
-            case "GOLDMINE":
+            case GOLDMINE:
                 price = GoldMine.price;
                 break;
-            case "STONEMINE":
+            case STONEMINE:
                 price = StoneMine.price;
                 break;
-            case "TURRET":
+            case TURRET:
                 price = Turret.price;
                 break;    
-            case "BARRICADE":
+            case BARRICADE:
                 price = Barricade.price;
-                break;  
-        }
-        switch (typeString) { //mobiles
-            case "LUMBERJACK":
+                break;
+            case LUMBERJACK:
                 price = Lumberjack.price;
                 break;
-            case "MINER":
+            case MINER:
                 price = Miner.price;
                 break;
-            case "BUILDER":
+            case BUILDER:
                 price = Builder.price;
                 break;
-            case "INFANTRY":
+            case INFANTRY:
                 price = Infantry.price;
                 break;
-            case "CAVALRY":
+            case CAVALRY:
                 price = Cavalry.price;
                 break;
-            case "RANGER":
+            case RANGER:
                 price = Ranger.price;
                 break;
-            case "DESTROYER":
+            case DESTROYER:
                 price = Destroyer.price;
                 break;    
-            case "MEDIC":
+            case MEDIC:
                 price = Medic.price;
                 break;  
         }

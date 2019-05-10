@@ -19,12 +19,12 @@ public class Tile extends JPanel {
     static final int TILE_BASE_SIZE = 36;
     private static HashMap<GroundType, Image> groundImages;
     private static HashMap<UnitType, Image> unitImages;
+    private static HashMap<UnitType, Image[]> imageSections = new HashMap<>();
 
     private final int xCoord;
     private final int yCoord;
     private int widthModifier;
     private int heightModifier;
-    private HashMap<UnitType, Image[]> imageSections = new HashMap<>();
     private Unit unit;
     private GroundType groundType;
     private UnitType unitType;
@@ -129,23 +129,13 @@ public class Tile extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 if (e.getButton() == MouseEvent.BUTTON1) {
+                    System.out.println("TILE LISTENER CALLED FOR M1");
                     selectionController.select(tile);
                 }
                 if (e.getButton() == MouseEvent.BUTTON3) {
                     if (selectionController.getSelectedTile() != null) {
                         selectionController.move(tile);
                     }
-
-//                    if (selectionController.getSelectedTile().unitType == UnitType.BUILDER) {
-//                        serverComm.move(new Point(selectionController.getSelectedTile().getCoordX(), selectionController.getSelectedTile().getCoordY()), new Point(tile.getCoordX(), tile.getCoordY()));
-//                        tile.unitType = selectionController.getSelectedTile().unitType;
-//                        selectionController.getSelectedTile().unitType = null;
-//                        System.out.println("MOVE");
-//                        tile.repaint();
-//                        selectionController.getSelectedTile().repaint();
-//                        selectionController.select(tile);
-//                    }
-
                 }
             }
         });
@@ -153,11 +143,6 @@ public class Tile extends JPanel {
 
     UnitType getUnitType() {
         return unitType;
-    }
-
-    void setUnitType(UnitType ut) {
-        unitType = ut;
-        this.repaint();
     }
 
     void setUnit(Unit unit) {
@@ -173,7 +158,9 @@ public class Tile extends JPanel {
     public void paintComponent(Graphics g) {
         g.drawImage(groundImages.get(groundType), 0, 0, null);
         if(isLargeUnit(unit)){
-            g.drawImage(imageSections.get(unitType)[calculateImgIndex()], 0, 0, null);
+            Image image = imageSections.get(unitType)[calculateImgIndex()];
+            System.out.println("Unittype: "+unitType);
+            g.drawImage(image, 0, 0, null);
         }else{
             g.drawImage(unitImages.get(unitType), 0, 0, null);
         }

@@ -2,13 +2,17 @@ package fleetbot_wars.model;
 
 import fleetbot_wars.Main;
 import fleetbot_wars.model.enums.ResourceType;
+import fleetbot_wars.model.enums.VisualType;
 import visual.ground.Ground;
 import visual.unit.Controllable;
 import visual.unit.Unit;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 //Separate thread
@@ -54,8 +58,28 @@ class Translation {
         System.out.println("CALLED");
     }
 
-    void build() {
+    void build(Tile buildersTile, Tile buildingPoint, VisualType building) {
+        int xTo = buildingPoint.getCoordX();
+        int yTo = buildingPoint.getCoordY();
+        int xBuilder = buildersTile.getCoordX();
+        int yBuilder = buildersTile.getCoordY();
 
+        Controllable builder = (Controllable) engine.getMap().groundAt(new Point(xBuilder,yBuilder)).getOwnerReference();
+
+        if(!engine.startBuild(builder,new Point(xTo,yTo),building)) {
+            System.out.println("Building failed");
+            buildingPoint.setBorder(new LineBorder(new Color(255, 20, 20),5,true));
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    buildingPoint.setBorder(null);
+                }
+            },50);
+        }
+    }
+
+    void stopBuild(Controllable builder) {
+        engine.stopBuild(builder);
     }
 
     void createUnit(UnitType unitToCreate, Tile unitToCreateWith, Tile unitCreationPoint) {

@@ -18,8 +18,18 @@ import fleetbot_wars.model.enums.VisualType;
  */
 public class Farm extends Controllable {
 
-    public static HashMap<ResourceType, Integer> price = new HashMap<>();
-    
+    public static HashMap<ResourceType, Integer> price = Farm.initPrice();
+
+    private static HashMap<ResourceType, Integer> initPrice() {
+        HashMap<ResourceType, Integer> new_price = new HashMap<>();
+        new_price.put(ResourceType.food, 15);
+        new_price.put(ResourceType.wood, 100);
+        new_price.put(ResourceType.gold, 110);
+        new_price.put(ResourceType.stone, 20);
+        new_price.put(ResourceType.upgrade, 0);
+        return new_price;
+    }
+
     /**
      * create Farm at (x,y) coordinates, for 'team' team
      * 

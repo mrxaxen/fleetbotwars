@@ -26,7 +26,7 @@ public abstract class Controllable extends Unit {
 
     /**
      * create Controllable at (x,y) coordinates, for 'team' team *
-     * 
+     *
      * @param coords
      * @param type
      * @param model
