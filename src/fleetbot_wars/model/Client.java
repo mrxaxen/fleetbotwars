@@ -11,5 +11,10 @@ package fleetbot_wars.model;
  */
 public class Client
 {
-    
+    private int id;
+
+
+    Client(int id){
+        this.id = id;
+    }
 }

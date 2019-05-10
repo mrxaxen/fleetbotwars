@@ -18,7 +18,8 @@ public class Tile extends JPanel {
     static final int TILE_BASE_SIZE = 36;
     private static HashMap<GroundType, Image> groundImages;
     private static HashMap<UnitType, Image> unitImages;
-    private static HashMap<UnitType, Image[]> imageSections = new HashMap<>();
+    //private static HashMap<UnitType, Image[]> imageSections = new HashMap<>();
+    private static HashMap<Color, HashMap<UnitType, Image[]>> iSections = new HashMap<Color, HashMap<UnitType, Image[]>>();
 
     private final int xCoord;
     private final int yCoord;
@@ -100,14 +101,18 @@ public class Tile extends JPanel {
         this.unitType = unit == null ? null : unit.getType().getUnitType();
         this.groundType = groundType;
 
+
         if(unit instanceof Controllable){
             Color color = ((Controllable) unit).getColor();
-            if (isLargeUnit(unit) && !this.imageSections.containsKey(unitType)) {
-                try {
-                    imageSections.put(unitType, genImageSections(widthModifier, heightModifier, ImageIO.read(unitType.getUrl()), color));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            HashMap<UnitType, Image[]> imgSections = iSections.get(color);
+            if(imgSections == null){
+                imgSections = new HashMap<UnitType, Image[]>();
+                iSections.put(color, imgSections);
+            }
+            try {
+                imgSections.put(unitType, genImageSections(widthModifier, heightModifier, ImageIO.read(unitType.getUrl()), color));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 
@@ -192,7 +197,9 @@ public class Tile extends JPanel {
     public void paintComponent(Graphics g) {
         g.drawImage(groundImages.get(groundType), 0, 0, null);
         if (isLargeUnit(unit)) {
-            g.drawImage(imageSections.get(unitType)[calculateImgIndex()], 0, 0, null);
+            Color color = ((Controllable)unit).getColor();
+            HashMap<UnitType, Image[]> imgSections = iSections.get(color);
+            g.drawImage(imgSections.get(unitType)[calculateImgIndex()], 0, 0, null);
         } else {
             if(unit instanceof Tree){
                 g.drawImage(unitImages.get(unitType), 0, 0, null);
