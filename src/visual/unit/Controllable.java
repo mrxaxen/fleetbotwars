@@ -29,7 +29,12 @@ public abstract class Controllable extends Unit {
 
     /**
      * create Controllable at (x,y) coordinates, for 'team' team *
+<<<<<<< HEAD
      *  @param coords
+=======
+     *
+     * @param coords
+>>>>>>> refs/remotes/origin/wiring_engine_graph
      * @param type
      * @param model
      * @param hp

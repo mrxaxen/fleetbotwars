@@ -483,6 +483,7 @@ public class Engine
 
     private boolean mineGroundCheck(Point refCoords, VisualType type, Player player) {
         Mine mine = (Mine)ghostBuilding(refCoords, type, player);
+
         return mGC_helper(mine);
     }
 
@@ -608,7 +609,8 @@ public class Engine
     private void payForUnit(Player p, Controllable cont) {
         HashMap<ResourceType, Integer> contPrice = getPriceOfCont(cont.getType());
         p.getResourceMap().replaceAll((key, value) -> value - contPrice.get(key));
-    }
+
+    }   
 
     //dont look at this unless you like brute force YIKES
     private HashMap<ResourceType, Integer> getPriceOfCont(VisualType type) {
@@ -634,7 +636,7 @@ public class Engine
                 break;
             case TURRET:
                 price = Turret.price;
-                break;
+                break;    
             case BARRICADE:
                 price = Barricade.price;
                 break;

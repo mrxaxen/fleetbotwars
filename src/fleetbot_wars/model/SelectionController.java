@@ -1,7 +1,6 @@
 package fleetbot_wars.model;
 
-import visual.unit.Controllable;
-
+import fleetbot_wars.model.enums.VisualType;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.Timer;
@@ -14,10 +13,9 @@ class SelectionController {
     private Translation serverComm = Translation.getInstance();
     private ActionBar actionBar = ActionBar.getInstance();
     private Tile selectedTile;
-    private UnitType buildingToBuild;
-    private boolean tileSelected;
-    private boolean buildMode;
-    private boolean attackMode;
+    private static VisualType buildingToBuild;
+    static boolean buildMode;
+    private static boolean attackMode;
 
     //TODO: move on right click
     private SelectionController() {
@@ -30,7 +28,6 @@ class SelectionController {
             instance = new SelectionController();
             return instance;
         }
-//        return instance;
     }
 
     Tile getSelectedTile() {
@@ -38,24 +35,44 @@ class SelectionController {
     }
 
     void select(Tile tile) {
-        if (!tileSelected) {
+
+        if(!isSelected()) {
             selectedTile = tile;
-            tileSelected = true;
-            selectedTile.setBorder(new LineBorder(new Color(20, 149, 255),5,true));
-            actionBar.changeActionBar(selectedTile.getUnitType());
-        } else {
+            selectedTile.setBorder(new LineBorder(new Color(20,149,255),5,true));
+            actionBar.changeActionBar(tile.getUnitType());
+            return;
+        }
+
+        if(isSelected()) {
+            System.out.println(buildMode);
             if(buildMode) {
-//                serverComm.createUnit(buildingToBuild,selectedTile,tile);
-                tile.setUnitType(buildingToBuild);
+                System.out.println("Build request sent");
+                serverComm.build(selectedTile,tile,buildingToBuild);
                 buildMode = false;
-            } else if(attackMode){
-                //do attack
             }
             selectedTile.setBorder(null);
-            tileSelected = false;
             selectedTile = null;
             actionBar.changeToDefault();
         }
+
+//        if (!isSelected()) {
+//            selectedTile = tile;
+//            selectedTile.setBorder(new LineBorder(new Color(20, 149, 255),5,true));
+//            actionBar.changeActionBar(tile.getUnitType());
+//        } else {
+//            System.out.println(buildMode);
+//            if(buildMode) {
+//                System.out.println("Build request sent");
+//                serverComm.build(selectedTile,tile,buildingToBuild);
+//                buildMode = false;
+//            } else if(attackMode){
+//                do attack
+//            }
+//            selectedTile.setBorder(null);
+//            selectedTile = null;
+//            setBuildMode(false);
+//            actionBar.changeToDefault();
+//        }
     }
 
     void move(Tile toTile) {
@@ -63,7 +80,6 @@ class SelectionController {
         int xTo = toTile.getCoordX();
         int xFrom = selectedTile.getCoordX();
         int yFrom = selectedTile.getCoordY();
-
 
         if(!serverComm.move(new Point(xFrom,yFrom),new Point(xTo,yTo))) {
             toTile.setBorder(new LineBorder(new Color(255, 20, 20),5,true));
@@ -78,11 +94,11 @@ class SelectionController {
         select(selectedTile);
     }
 
-    void setBuildingToBuild(UnitType unitType) {
+    void setBuildingToBuild(VisualType unitType) {
         buildingToBuild = unitType;
     }
 
-    void setBuildMode(boolean b) {
-        buildMode = b;
+    boolean isSelected() {
+        return selectedTile != null;
     }
 }

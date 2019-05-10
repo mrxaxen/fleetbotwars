@@ -39,7 +39,6 @@ public class Ground extends Visual {
      */
     public boolean isOccupied() {
         return this.occupied || ownerReference != null;
-
     }
     
     /**

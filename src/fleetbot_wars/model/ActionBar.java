@@ -5,6 +5,8 @@
  */
 package fleetbot_wars.model;
 
+import fleetbot_wars.model.enums.VisualType;
+
 import javax.swing.*;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,8 +36,6 @@ class ActionBar extends JPanel {
         addBar(attack);
         this.setBackground(GameWindow.backgroundColor);
         this.setBorder(GameWindow.uiBorder);
-//        BUILDER.setBackground(GameWindow.backgroundColor);
-//        buildMenu.setBackground(GameWindow.backgroundColor);
         oneToRuleThemAll.put("BUILDER",builder);
         oneToRuleThemAll.put("buildmenu",buildMenu);
         oneToRuleThemAll.put("attack",attack);
@@ -82,14 +82,14 @@ class ActionBar extends JPanel {
         });
     }
 
-
     private HashSet<JButton> initBuilder() {
         HashSet<JButton> buttons = new HashSet<>();
         JButton build = new JButton("Build");
         build.addActionListener(e -> {
             //Resource check through statusbar's resource check method?
+//            selectionController.setBuildMode(true);
+            selectionController.buildMode = true;
             changeActionBar("buildmenu");
-            selectionController.setBuildMode(true);
             System.out.println("BUTTON PRESSED");
         });
         buttons.add(build);
@@ -119,25 +119,26 @@ class ActionBar extends JPanel {
         JButton barricade = new JButton("Barricade");
         //TODO: implement actionbar menus and functions
         workerSpawn.addActionListener(e -> {
-            selectionController.setBuildingToBuild(UnitType.WORKERSPAWN);
+            selectionController.setBuildingToBuild(VisualType.WORKERSPAWN);
+            System.out.println("Building to build: " + VisualType.WORKERSPAWN);
         });
         militarySpawn.addActionListener(e -> {
-            selectionController.setBuildingToBuild(UnitType.MILITARYSPAWN);
+            selectionController.setBuildingToBuild(VisualType.MILITARYSPAWN);
         });
         farm.addActionListener(e -> {
-            selectionController.setBuildingToBuild(UnitType.FARM);
+            selectionController.setBuildingToBuild(VisualType.FARM);
         });
         stoneMine.addActionListener(e -> {
-            selectionController.setBuildingToBuild(UnitType.STONEMINE);
+            selectionController.setBuildingToBuild(VisualType.STONEMINE);
         });
         goldMine.addActionListener(e -> {
-            selectionController.setBuildingToBuild(UnitType.GOLDMINE);
+            selectionController.setBuildingToBuild(VisualType.GOLDMINE);
         });
         turret.addActionListener(e -> {
-            selectionController.setBuildingToBuild(UnitType.TURRET);
+            selectionController.setBuildingToBuild(VisualType.TURRET);
         });
         barricade.addActionListener(e -> {
-            selectionController.setBuildingToBuild(UnitType.BARRICADE);
+            selectionController.setBuildingToBuild(VisualType.BARRICADE);
         });
 
         workerSpawn.setEnabled(false);
