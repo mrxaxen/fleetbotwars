@@ -32,7 +32,7 @@ public class Medic extends Controllable {
 
     @Override
     public boolean isValidTarget(Unit target) {
-        return target instanceof Controllable && this.team == ((Controllable) target).team;
+        return target instanceof Controllable && this.team == ((Controllable) target).getTeam();
         // ADDITIONAL RESTRICTION? (exclude buildings)
     }
 

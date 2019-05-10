@@ -15,11 +15,11 @@ public enum GroundType {
     GOLD_2(GroundType.class.getResource("/resources/ground/gold_2.png"), new Color(255, 242,0)),
     WATER(GroundType.class.getResource("/resources/ground/water_1.png"), new Color(0,0,200)),
     WATER_1(GroundType.class.getResource("/resources/ground/water_1.png"), new Color(0,0,200)),
-    WATER_2(GroundType.class.getResource("/resources/ground/water_1.png"), new Color(0,0,200)),
+    WATER_2(GroundType.class.getResource("/resources/ground/water_2.png"), new Color(0,0,200)),
     MOUNTAIN(GroundType.class.getResource("/resources/ground/mountain_1.png"), new Color(10,10,10)),
     MOUNTAIN_1(GroundType.class.getResource("/resources/ground/mountain_1.png"), new Color(0,0,200)),
     MOUNTAIN_2(GroundType.class.getResource("/resources/ground/mountain_2.png"), new Color(0,0,200)),
-    MOUNTAIN_3(GroundType.class.getResource("/resources/ground/mountain_2.png"), new Color(0,0,200)),
+    MOUNTAIN_3(GroundType.class.getResource("/resources/ground/mountain_3.png"), new Color(0,0,200)),
 //    WOOD(GroundType.class.getResource("/resources/wood.png"), new Color(58, 29, 2, 208)); NOT USED
 
 

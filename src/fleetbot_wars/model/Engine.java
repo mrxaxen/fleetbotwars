@@ -127,7 +127,10 @@ public class Engine {
      * @param tarLoc
      */
     public boolean startMove(Controllable cont, Point tarLoc) {
-        if (!map.groundAt(tarLoc).isOccupied()) {
+        System.out.println("isbuilding: " + cont.isBuildingType());
+        if (cont.isBuildingType()) {
+            return false;
+        }else if (!map.groundAt(tarLoc).isOccupied()) {
             LinkedList<Point> path = path(cont.getReferenceCoords(), tarLoc);
             path.add(tarLoc);
             cont.setCurrPath(path);
