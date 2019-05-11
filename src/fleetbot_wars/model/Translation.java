@@ -17,7 +17,6 @@ import java.util.TimerTask;
 
 //Separate thread
 class Translation {
-
     private static Translation instance;
     private static final Color BLINK_WRONG_MOVE = new Color(255, 20, 20);
     private static final Color BLINK_ATTACK = new Color(110, 50, 220);
@@ -34,6 +33,7 @@ class Translation {
     }
 
     Ground[][] getMap() {
+
         Ground[][] engineGround = engine.getMap().getGround();
         System.out.println(engineGround == null);
 
