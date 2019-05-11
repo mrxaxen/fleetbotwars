@@ -30,7 +30,21 @@ public class Player {
     private String playerName;
     private int playerNumber;
     private Color color;
-    public final static VisualType[] initialUnits = {VisualType.BARRICADE, VisualType.BUILDER, VisualType.CAVALRY, VisualType.DESTROYER, VisualType.FARM, VisualType.GOLDMINE, VisualType.HARVESTCENTER, VisualType.INFANTRY, VisualType.LUMBERJACK, VisualType.MEDIC, VisualType.MILITARYSPAWN, VisualType.MINER, VisualType.RANGER, VisualType.STONEMINE, VisualType.TURRET, VisualType.WORKERSPAWN, VisualType.BARRICADE, VisualType.BUILDER, VisualType.CAVALRY, VisualType.DESTROYER, VisualType.FARM, VisualType.GOLDMINE, VisualType.HARVESTCENTER, VisualType.INFANTRY, VisualType.LUMBERJACK, VisualType.MEDIC, VisualType.MILITARYSPAWN, VisualType.MINER, VisualType.RANGER, VisualType.STONEMINE, VisualType.TURRET, VisualType.WORKERSPAWN, VisualType.BARRICADE, VisualType.BUILDER, VisualType.CAVALRY, VisualType.DESTROYER, VisualType.FARM, VisualType.GOLDMINE, VisualType.HARVESTCENTER, VisualType.INFANTRY, VisualType.LUMBERJACK, VisualType.MEDIC, VisualType.MILITARYSPAWN, VisualType.MINER, VisualType.RANGER, VisualType.STONEMINE, VisualType.TURRET, VisualType.WORKERSPAWN, VisualType.BARRICADE, VisualType.BUILDER, VisualType.CAVALRY, VisualType.DESTROYER, VisualType.FARM, VisualType.GOLDMINE, VisualType.HARVESTCENTER, VisualType.INFANTRY, VisualType.LUMBERJACK, VisualType.MEDIC, VisualType.MILITARYSPAWN, VisualType.MINER, VisualType.RANGER, VisualType.STONEMINE, VisualType.TURRET, VisualType.WORKERSPAWN, VisualType.BARRICADE, VisualType.BUILDER, VisualType.CAVALRY, VisualType.DESTROYER, VisualType.FARM, VisualType.GOLDMINE, VisualType.HARVESTCENTER, VisualType.INFANTRY, VisualType.LUMBERJACK, VisualType.MEDIC, VisualType.MILITARYSPAWN, VisualType.MINER, VisualType.RANGER, VisualType.STONEMINE, VisualType.TURRET, VisualType.WORKERSPAWN, VisualType.BARRICADE, VisualType.BUILDER, VisualType.CAVALRY, VisualType.DESTROYER, VisualType.FARM, VisualType.GOLDMINE, VisualType.HARVESTCENTER, VisualType.INFANTRY, VisualType.LUMBERJACK, VisualType.MEDIC, VisualType.MILITARYSPAWN, VisualType.MINER, VisualType.RANGER, VisualType.STONEMINE, VisualType.TURRET, VisualType.WORKERSPAWN};
+    public final static VisualType[] initialUnits = {VisualType.MINER, VisualType.BUILDER, VisualType.LUMBERJACK, VisualType.DESTROYER};/*
+            VisualType.FARM, VisualType.GOLDMINE, VisualType.HARVESTCENTER, VisualType.INFANTRY,VisualType.CAVALRY, VisualType.MEDIC,
+            VisualType.MILITARYSPAWN, VisualType.BARRICADE, VisualType.RANGER, VisualType.STONEMINE, VisualType.TURRET, VisualType.WORKERSPAWN,
+            VisualType.BARRICADE, VisualType.BUILDER, VisualType.CAVALRY, VisualType.DESTROYER, VisualType.FARM, VisualType.GOLDMINE,
+            VisualType.HARVESTCENTER, VisualType.INFANTRY, VisualType.LUMBERJACK, VisualType.MEDIC, VisualType.MILITARYSPAWN, VisualType.MINER,
+            VisualType.RANGER, VisualType.STONEMINE, VisualType.TURRET, VisualType.WORKERSPAWN, VisualType.BARRICADE, VisualType.BUILDER, VisualType.CAVALRY,
+            VisualType.DESTROYER, VisualType.FARM, VisualType.GOLDMINE, VisualType.HARVESTCENTER, VisualType.INFANTRY, VisualType.LUMBERJACK, VisualType.MEDIC,
+            VisualType.MILITARYSPAWN, VisualType.MINER, VisualType.RANGER, VisualType.STONEMINE, VisualType.TURRET, VisualType.WORKERSPAWN, VisualType.BARRICADE,
+            VisualType.BUILDER, VisualType.CAVALRY, VisualType.DESTROYER, VisualType.FARM, VisualType.GOLDMINE, VisualType.HARVESTCENTER, VisualType.INFANTRY,
+            VisualType.LUMBERJACK, VisualType.MEDIC, VisualType.MILITARYSPAWN, VisualType.MINER, VisualType.RANGER, VisualType.STONEMINE, VisualType.TURRET,
+            VisualType.WORKERSPAWN, VisualType.BARRICADE, VisualType.BUILDER, VisualType.CAVALRY, VisualType.DESTROYER, VisualType.FARM, VisualType.GOLDMINE,
+            VisualType.HARVESTCENTER, VisualType.INFANTRY, VisualType.LUMBERJACK, VisualType.MEDIC, VisualType.MILITARYSPAWN, VisualType.MINER, VisualType.RANGER,
+            VisualType.STONEMINE, VisualType.TURRET, VisualType.WORKERSPAWN, VisualType.BARRICADE, VisualType.BUILDER, VisualType.CAVALRY, VisualType.DESTROYER,
+            VisualType.FARM, VisualType.GOLDMINE, VisualType.HARVESTCENTER, VisualType.INFANTRY, VisualType.LUMBERJACK, VisualType.MEDIC, VisualType.MILITARYSPAWN,
+            VisualType.MINER, VisualType.RANGER, VisualType.STONEMINE, VisualType.TURRET, VisualType.WORKERSPAWN};*/
 
     /**
      * Player Object containing an individual player's data such as Units,
@@ -50,11 +64,11 @@ public class Player {
         this.color = color;
         //this.resources = initResources;
         this.resources = new HashMap<ResourceType, Integer>();
-        resources.put(ResourceType.food, 9999);
-        resources.put(ResourceType.wood, 9999);
-        resources.put(ResourceType.gold, 9999);
-        resources.put(ResourceType.stone, 9999);
-        resources.put(ResourceType.upgrade, 9999);
+        resources.put(ResourceType.food, 100);
+        resources.put(ResourceType.wood, 100);
+        resources.put(ResourceType.gold, 100);
+        resources.put(ResourceType.stone, 100);
+        resources.put(ResourceType.upgrade, 100);
     }
 
     public Player(String playerName, int playerNumber){

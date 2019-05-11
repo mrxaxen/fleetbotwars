@@ -16,6 +16,7 @@ import fleetbot_wars.model.enums.VisualType;
 
 import java.awt.*;
 
+import javafx.scene.transform.Translate;
 import visual.unit.Controllable;
 import visual.unit.Infantry;
 import fleetbot_wars.model.enums.ResourceType;
@@ -40,7 +41,6 @@ public class Main {
         players[2] = new Player("laci", 2, Color.blue);
         players[3] = new Player("drszendrey", 3, Color.yellow);
 
-
         e = Engine.getInstance(new Map(), players);
         
         SwingUtilities.invokeLater(() -> {
@@ -49,7 +49,14 @@ public class Main {
         });
 
         new Thread(() -> {
-           while (true) {
+            try {
+                synchronized (e) {
+                    e.wait();
+                }
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            while (true) {
                e.actionIteration();
                e.update();
                try {
@@ -57,12 +64,8 @@ public class Main {
                } catch (InterruptedException ex) {
                    ex.printStackTrace();
                }
-           }
+            }
         }).start();
-        
-        /*double d = 1.0 + (double)1/2;
-        int i = 1 + 1/2;
-        System.out.println(d + " " +i);*/
     }
     
 }

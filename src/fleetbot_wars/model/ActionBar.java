@@ -6,6 +6,7 @@
 package fleetbot_wars.model;
 
 import fleetbot_wars.model.enums.VisualType;
+import visual.Visual;
 
 import javax.swing.*;
 import java.util.HashMap;
@@ -33,14 +34,17 @@ class ActionBar extends JPanel {
         HashSet<JButton> builder = initBuilder();
         HashSet<JButton> buildMenu = initBuildMenu();
         HashSet<JButton> attack = initAttack();
+        HashSet<JButton> workerSpawn = initWorkerSpawner();
         addBar(builder);
         addBar(buildMenu);
         addBar(attack);
+        addBar(workerSpawn);
         this.setBackground(GameWindow.backgroundColor);
         this.setBorder(GameWindow.uiBorder);
         oneToRuleThemAll.put("BUILDER",builder);
         oneToRuleThemAll.put("buildmenu",buildMenu);
         oneToRuleThemAll.put("attack",attack);
+        oneToRuleThemAll.put(UnitType.WORKERSPAWN.name(), workerSpawn);
     }
 
     private void initAttackers() {
@@ -96,6 +100,10 @@ class ActionBar extends JPanel {
     private HashSet<JButton> initBuilder() {
         HashSet<JButton> buttons = new HashSet<>();
         JButton build = new JButton("Build");
+        build.setToolTipText("<html><body>" +
+                "<img src='" +
+                ActionBar.class.getResource("/resources/ground/gold_1.png") +
+                "' width=10 height=10>");
         build.addActionListener(e -> {
             selectionController.buildMode = true;
             changeActionBar("buildmenu");
@@ -103,6 +111,31 @@ class ActionBar extends JPanel {
         });
         buttons.add(build);
         build.setEnabled(false);
+        return buttons;
+    }
+
+    private HashSet<JButton> initWorkerSpawner() {
+        HashSet<JButton> buttons = new HashSet<>();
+        JButton builder = new JButton("Builder");
+        JButton lumberjack = new JButton("Lumberjack");
+        JButton miner = new JButton("Miner");
+
+        builder.addActionListener((e ->{
+            selectionController.createUnit(VisualType.BUILDER);
+        }));
+        lumberjack.addActionListener((e -> {
+            selectionController.createUnit(VisualType.LUMBERJACK);
+        }));
+        miner.addActionListener(e -> {
+            selectionController.createUnit(VisualType.MINER);
+        });
+        builder.setEnabled(false);
+        lumberjack.setEnabled(false);
+        miner.setEnabled(false);
+        buttons.add(builder);
+        buttons.add(lumberjack);
+        buttons.add(miner);
+
         return buttons;
     }
 

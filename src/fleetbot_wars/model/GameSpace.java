@@ -26,6 +26,7 @@ class GameSpace extends JPanel implements Talkative{
 
     private GameSpace() {
         Tile.loadImages();
+        Tile.genSections();
         grounds = serverComm.getMap();
         tiles = new Tile[GUI.mapSize.height][GUI.mapSize.width];
         GridLayout layout = new GridLayout(GUI.mapSize.height, GUI.mapSize.width);

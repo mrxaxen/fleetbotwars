@@ -109,15 +109,15 @@ class Translation {
         engine.stopBuild(builder);
     }
 
-    void createUnit(UnitType unitToCreate, Tile unitToCreateWith, Tile unitCreationPoint) {
-        //Send createUnit command to engine (unitType,x,y)
-        //Units/buildingsc
-
+    void createUnit(Tile from, VisualType unit) {
+        Point point = new Point(from.getCoordX(), from.getCoordY());
+        Controllable building = (Controllable) engine.getMap().groundAt(point).getOwnerReference();
+        engine.spawn(building,unit);
     }
 
-    void updateResources(HashMap<ResourceType, Integer> resources) {
+    void updateResource(ResourceType resourceType, Integer value) {
         SwingUtilities.invokeLater(() -> {
-            statusBar.updateResources(resources);
+            statusBar.updateResource(resourceType,value);
         });
     }
 

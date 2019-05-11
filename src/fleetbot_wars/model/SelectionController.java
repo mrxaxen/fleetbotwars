@@ -38,12 +38,11 @@ class SelectionController {
     }
 
     void select(Tile tile) {
+        System.out.println("Select: " + isSelected());
         if(!isSelected()) {
-
             if(serverComm.select(tile)) {
                 selectedTile = tile;
                 unitSelection(selectedTile.getUnit(), false, new Color(0, 255, 19));
-                //selectedTile.setBorder(new LineBorder(new Color(20,149,255),5,true));
                 actionBar.changeActionBar(tile.getUnitType());
                 return;
             }
@@ -62,24 +61,6 @@ class SelectionController {
             actionBar.changeToDefault();
         }
 
-//        if (!isSelected()) {
-//            selectedTile = tile;
-//            selectedTile.setBorder(new LineBorder(new Color(20, 149, 255),5,true));
-//            actionBar.changeActionBar(tile.getUnitType());
-//        } else {
-//            System.out.println(buildMode);
-//            if(buildMode) {
-//                System.out.println("Build request sent");
-//                serverComm.build(selectedTile,tile,buildingToBuild);
-//                buildMode = false;
-//            } else if(attackMode){
-//                do attack
-//            }
-//            selectedTile.setBorder(null);
-//            selectedTile = null;
-//            setBuildMode(false);
-//            actionBar.changeToDefault();
-//        }
     }
 
     void move(Tile toTile) {
@@ -111,6 +92,10 @@ class SelectionController {
         serverComm.attack(selectedTile,to);
         setAttackMode(false);
         select(selectedTile);
+    }
+
+    void createUnit(VisualType unitToSpawn) {
+        serverComm.createUnit(selectedTile,unitToSpawn);
     }
 
     void setAttackMode(boolean b) {

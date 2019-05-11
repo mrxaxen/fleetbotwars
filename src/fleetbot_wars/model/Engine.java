@@ -365,7 +365,7 @@ public class Engine {
     private void deathEvent(Unit u, int teamBenefiting) {
         Player p = players[teamBenefiting];
         if (u instanceof Tree) {
-            p.increaseResource(ResourceType.wood, 2);
+            p.increaseResource(ResourceType.wood, 10);
         } else { //Unit was Controllable
             Controllable cont = (Controllable) u;
             if (cont.isBuildingType()) {
@@ -538,11 +538,9 @@ public class Engine {
     }
 
     public void update() {
-        HashMap<ResourceType, Integer> resources = new HashMap<>();
         players[Translation.getInstance().getCurrPlayer()].getResourceMap().forEach((key, value) -> {
-            resources.put(key, value);
+            Translation.getInstance().updateResource(key,value);
         });
-        Translation.getInstance().updateResources(resources);
     }
 
     /**
@@ -601,6 +599,7 @@ public class Engine {
             map.groundAt(hrc).setOwnerReference(cont);
             payForUnit(players[building.getTeam()], cont);
             players[building.getTeam()].addNewControllable(cont);
+            Translation.getInstance().repaint(hrc,cont,true);
         }
     }
 
@@ -672,8 +671,7 @@ public class Engine {
         if (contType.equals(VisualType.FARM)) {
             Farm f = (Farm)cont;
             f.incrFood(players[f.getTeam()]);
-        }
-        if (cont instanceof Mine) {
+        } else if (cont instanceof Mine) {
             Mine m = (Mine)cont;
             m.incrRes(players[m.getTeam()]);
         }
@@ -740,7 +738,6 @@ public class Engine {
     private void payForUnit(Player p, Controllable cont) {
         HashMap<ResourceType, Integer> contPrice = getPriceOfCont(cont.getType());
         p.getResourceMap().replaceAll((key, value) -> value - contPrice.get(key));
-
     }
 
     //dont look at this unless you like brute force YIKES
