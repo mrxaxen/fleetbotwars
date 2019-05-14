@@ -37,12 +37,11 @@ class StatusBar extends JPanel implements Talkative {
     }
 
     void updateResource(ResourceType resourceType, Integer value) {
-        //if(!resourceType.equals(ResourceType.upgrade)) {
-            ResourceLabel rl = resourceLabels.get(resourceType);
-            rl.updateAmount(value);
-            rl.reSetText();
-            rl.repaint();
-        //}
+
+        ResourceLabel rl = resourceLabels.get(resourceType);
+        rl.updateAmount(value);
+        rl.reSetText();
+        rl.repaint();
         this.revalidate();
     }
 
@@ -56,6 +55,7 @@ class StatusBar extends JPanel implements Talkative {
     //TODO: Icon?
     class ResourceLabel extends JLabel {
 
+
         ResourceType type;
         int amount;
         ImageIcon icon;
@@ -68,8 +68,12 @@ class StatusBar extends JPanel implements Talkative {
             this.setFont(new Font("SansSerif", Font.BOLD, 12));
             this.setForeground(new Color(255,255,255));
             this.setBorder(new MatteBorder(icon));
-            System.out.println("icongecc: " + type.getURL());
-            this.setIcon(new ImageIcon(type.getURL()));
+
+            try {
+                this.setIcon(ActionBar.resizeIcon(ImageIO.read(ResourceLabel.class.getResource(type.getURL()))));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         private void borderIcon() {

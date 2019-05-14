@@ -219,7 +219,7 @@ class ActionBar extends JPanel {
         return buttons;
     }
 
-    private Icon resizeIcon(Image img) {
+    static Icon resizeIcon(Image img) {
         Image newimg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
         return new ImageIcon(newimg);
     }
@@ -381,6 +381,7 @@ class ActionBar extends JPanel {
             });
             infantry.addActionListener(e -> {
                 selectionController.setUnitToSpawn(VisualType.INFANTRY);
+
             });
 
             cavalry.setVisible(false);
@@ -396,7 +397,6 @@ class ActionBar extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         return buttons;
     }

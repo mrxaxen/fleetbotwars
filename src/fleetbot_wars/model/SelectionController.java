@@ -15,7 +15,7 @@ class SelectionController {
 
     private Translation serverComm = Translation.getInstance();
     private ActionBar actionBar = ActionBar.getInstance();
-    private Tile selectedTile;
+    private static Tile selectedTile;
     private static VisualType buildingToBuild;
     private static VisualType unitToSpawn;
     static boolean buildMode;
