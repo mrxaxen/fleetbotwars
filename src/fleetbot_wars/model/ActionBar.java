@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import static javax.swing.Box.createRigidArea;
+
 /**
  * @author WB
  */
@@ -80,6 +82,7 @@ class ActionBar extends JPanel {
 
     //Reimplements with button lists so the action bar component does not resize itself
     private ActionBar() {
+        this.add(createRigidArea(new Dimension(50, 50)));
         initAttackers();
         HashSet<BuildButton> builder = initBuilder();
         HashSet<BuildButton> milSpawner = initMilSpawner();
@@ -144,32 +147,32 @@ class ActionBar extends JPanel {
         final String s = name;
         if (active != null) {
             active.forEach((button) -> {
-                button.setEnabled(false);
+                button.setVisible(false);
             });
         }
         if (oneToRuleThemAll.containsKey(s)) {
             active = oneToRuleThemAll.get(s);
             active.forEach((button) -> {
                 System.out.println(button.getName());
-                button.setEnabled(true);
+                button.setVisible(true);
                 if (s.equals("buildmenu")) {
                     if (Translation.getInstance().enoughResource(button.price)) {
-                        button.setEnabled(true);
+                        button.setVisible(true);
                     } else {
-                        button.setEnabled(false);
+                        button.setVisible(false);
                     }
 
                 } else if (s.equals("spawresunitmenu")) {
                     if (Translation.getInstance().enoughResource(button.price)) {
-                        button.setEnabled(true);
+                        button.setVisible(true);
                     } else {
-                        button.setEnabled(false);
+                        button.setVisible(false);
                     }
                 }else if (s.equals("spawmilunitmenu")) {
                     if (Translation.getInstance().enoughResource(button.price)) {
-                        button.setEnabled(true);
+                        button.setVisible(true);
                     } else {
-                        button.setEnabled(false);
+                        button.setVisible(false);
                     }
                 }
 
@@ -186,7 +189,7 @@ class ActionBar extends JPanel {
             System.out.println("BUTTON PRESSED");
         });
         buttons.add(build);
-        build.setEnabled(false);
+        build.setVisible(false);
         return buttons;
     }
 
@@ -199,7 +202,7 @@ class ActionBar extends JPanel {
             System.out.println("BUTTON PRESSED");
         });
         buttons.add(spawn);
-        spawn.setEnabled(false);
+        spawn.setVisible(false);
         return buttons;
     }
 
@@ -212,7 +215,7 @@ class ActionBar extends JPanel {
             System.out.println("BUTTON PRESSED");
         });
         buttons.add(spawn);
-        spawn.setEnabled(false);
+        spawn.setVisible(false);
         return buttons;
     }
 
@@ -228,7 +231,7 @@ class ActionBar extends JPanel {
             selectionController.setAttackMode(true);
         });
         buttons.add(button);
-        button.setEnabled(false);
+        button.setVisible(false);
         return buttons;
     }
 
@@ -282,13 +285,13 @@ class ActionBar extends JPanel {
                 selectionController.setBuildingToBuild(VisualType.BARRICADE);
             });
 
-            workerSpawn.setEnabled(false);
-            militarySpawn.setEnabled(false);
-            farm.setEnabled(false);
-            stoneMine.setEnabled(false);
-            goldMine.setEnabled(false);
-            turret.setEnabled(false);
-            barricade.setEnabled(false);
+            workerSpawn.setVisible(false);
+            militarySpawn.setVisible(false);
+            farm.setVisible(false);
+            stoneMine.setVisible(false);
+            goldMine.setVisible(false);
+            turret.setVisible(false);
+            barricade.setVisible(false);
 
             buttons.add(workerSpawn);
             buttons.add(militarySpawn);
@@ -323,18 +326,18 @@ class ActionBar extends JPanel {
 
             //TODO: implement actionbar menus and functions
             builder.addActionListener(e -> {
-                selectionController.createUnit(VisualType.WORKERSPAWN);
+                selectionController.createUnit(VisualType.BUILDER);
             });
             miner.addActionListener(e -> {
-                selectionController.createUnit(VisualType.MILITARYSPAWN);
+                selectionController.createUnit(VisualType.MINER);
             });
             lumberJack.addActionListener(e -> {
-                selectionController.createUnit(VisualType.FARM);
+                selectionController.createUnit(VisualType.LUMBERJACK);
             });
 
-            builder.setEnabled(false);
-            miner.setEnabled(false);
-            lumberJack.setEnabled(false);
+            builder.setVisible(false);
+            miner.setVisible(false);
+            lumberJack.setVisible(false);
 
             buttons.add(builder);
             buttons.add(miner);
@@ -368,22 +371,22 @@ class ActionBar extends JPanel {
 
             //TODO: implement actionbar menus and functions
             cavalry.addActionListener(e -> {
-                selectionController.setUnitToSpawn(VisualType.WORKERSPAWN);
+                selectionController.setUnitToSpawn(VisualType.CAVALRY);
             });
             destroyer.addActionListener(e -> {
-                selectionController.setUnitToSpawn(VisualType.MILITARYSPAWN);
+                selectionController.setUnitToSpawn(VisualType.DESTROYER);
             });
             ranger.addActionListener(e -> {
-                selectionController.setUnitToSpawn(VisualType.FARM);
+                selectionController.setUnitToSpawn(VisualType.RANGER);
             });
             infantry.addActionListener(e -> {
-                selectionController.setUnitToSpawn(VisualType.FARM);
+                selectionController.setUnitToSpawn(VisualType.INFANTRY);
             });
 
-            cavalry.setEnabled(false);
-            destroyer.setEnabled(false);
-            ranger.setEnabled(false);
-            infantry.setEnabled(false);
+            cavalry.setVisible(false);
+            destroyer.setVisible(false);
+            ranger.setVisible(false);
+            infantry.setVisible(false);
 
             buttons.add(cavalry);
             buttons.add(destroyer);

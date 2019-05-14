@@ -81,7 +81,7 @@ class Translation {
                 }
             }
         }
-        blinkBorder(from,BLINK_WRONG_MOVE);
+        blinkBorder(from, BLINK_WRONG_MOVE);
     }
 
     void repaint(Point tileAt, Unit unitToPlace, boolean isGoingTo) {

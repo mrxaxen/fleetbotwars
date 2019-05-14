@@ -33,15 +33,16 @@ class StatusBar extends JPanel implements Talkative {
         resourceLabels.put(ResourceType.stone, new ResourceLabel(ResourceType.stone,serverComm.getResource(ResourceType.stone)));
         resourceLabels.put(ResourceType.gold, new ResourceLabel(ResourceType.gold,serverComm.getResource(ResourceType.gold)));
         resourceLabels.put(ResourceType.food, new ResourceLabel(ResourceType.food,serverComm.getResource(ResourceType.food)));
+        resourceLabels.put(ResourceType.upgrade, new ResourceLabel(ResourceType.upgrade,serverComm.getResource(ResourceType.upgrade)));
     }
 
     void updateResource(ResourceType resourceType, Integer value) {
-        if(!resourceType.equals(ResourceType.upgrade)) {
+        //if(!resourceType.equals(ResourceType.upgrade)) {
             ResourceLabel rl = resourceLabels.get(resourceType);
             rl.updateAmount(value);
             rl.reSetText();
             rl.repaint();
-        }
+        //}
         this.revalidate();
     }
 
@@ -67,6 +68,8 @@ class StatusBar extends JPanel implements Talkative {
             this.setFont(new Font("SansSerif", Font.BOLD, 12));
             this.setForeground(new Color(255,255,255));
             this.setBorder(new MatteBorder(icon));
+            System.out.println("icongecc: " + type.getURL());
+            this.setIcon(new ImageIcon(type.getURL()));
         }
 
         private void borderIcon() {

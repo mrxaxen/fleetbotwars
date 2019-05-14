@@ -16,7 +16,6 @@ import fleetbot_wars.model.enums.VisualType;
 
 import java.awt.*;
 
-import javafx.scene.transform.Translate;
 import visual.unit.Controllable;
 import visual.unit.Infantry;
 import fleetbot_wars.model.enums.ResourceType;

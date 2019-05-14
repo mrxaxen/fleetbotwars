@@ -96,6 +96,7 @@ class SelectionController {
     }
 
     void createUnit(VisualType unitToSpawn) {
+        System.out.println("unit to spawn:" + unitToSpawn);
         serverComm.createUnit(selectedTile,unitToSpawn);
     }
 
