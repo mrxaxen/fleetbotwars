@@ -17,7 +17,6 @@ import java.util.TimerTask;
 
 //Separate thread
 class Translation {
-
     private static Translation instance;
     private static final Color BLINK_WRONG_MOVE = new Color(255, 20, 20);
     private static final Color BLINK_ATTACK = new Color(110, 50, 220);
@@ -34,6 +33,7 @@ class Translation {
     }
 
     Ground[][] getMap() {
+
         Ground[][] engineGround = engine.getMap().getGround();
         System.out.println(engineGround == null);
 
@@ -129,13 +129,30 @@ class Translation {
         return engine.getPlayers()[currPlayer].getResourceByName(type);
     }
 
+    boolean enoughResource(HashMap<ResourceType, Integer> resNeeded){
+        System.out.println(resNeeded);
+        System.out.println(engine.getPlayers()[currPlayer].getResourceMap());
+        for(HashMap.Entry<ResourceType, Integer> entry : engine.getPlayers()[currPlayer].getResourceMap().entrySet()){
+            ResourceType currKey = entry.getKey();
+            if(entry.getValue() < resNeeded.get(currKey)){
+                return false;
+            }
+        }
+        return true;
+
+    }
+
     private void blinkBorder(Tile tile, Color color) {
-        tile.setBorder(new LineBorder(color,5,true));
+        SelectionController.unitSelection(tile.getUnit(), false, color);
+        //tile.setBorder(new LineBorder(color,5,true));
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
+                SelectionController.unitSelection(tile.getUnit(), true);
                 tile.setBorder(null);
             }
-        },50);
+        },500);
     }
+
+
 }

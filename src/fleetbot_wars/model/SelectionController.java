@@ -17,6 +17,7 @@ class SelectionController {
     private ActionBar actionBar = ActionBar.getInstance();
     private Tile selectedTile;
     private static VisualType buildingToBuild;
+    private static VisualType unitToSpawn;
     static boolean buildMode;
     private static boolean attackMode;
 
@@ -110,11 +111,15 @@ class SelectionController {
         buildingToBuild = unitType;
     }
 
+    void setUnitToSpawn(VisualType unitType){
+        unitToSpawn = unitType;
+    }
+
     boolean isSelected() {
         return selectedTile != null;
     }
 
-    private void unitSelection(Unit selectedUnit, boolean deSelect, Color color){
+    public static void unitSelection(Unit selectedUnit, boolean deSelect, Color color){
         if(selectedUnit != null && selectedUnit.getCoordsArray().size() > 1) {
             Point refCoords = selectedUnit.getReferenceCoords();
             int width = selectedUnit.getWidth();
@@ -144,7 +149,7 @@ class SelectionController {
             }
         }
     }
-    private void unitSelection(Unit selectedUnit, boolean deSelect){
+    public static void unitSelection(Unit selectedUnit, boolean deSelect){
         unitSelection(selectedUnit, deSelect, Color.green);
     }
 

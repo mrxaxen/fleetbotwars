@@ -23,7 +23,7 @@ abstract public class Mine extends Controllable {
 
     /**
      * called when specific Mine created
-     *  @param coords
+     * @param coords
      * @param type
      * @param model
      * @param hp
