@@ -17,6 +17,7 @@ class SelectionController {
     private ActionBar actionBar = ActionBar.getInstance();
     private Tile selectedTile;
     private static VisualType buildingToBuild;
+    private static VisualType unitToSpawn;
     static boolean buildMode;
     private static boolean attackMode;
 
@@ -123,6 +124,10 @@ class SelectionController {
 
     void setBuildingToBuild(VisualType unitType) {
         buildingToBuild = unitType;
+    }
+
+    void setUnitToSpawn(VisualType unitType){
+        unitToSpawn = unitType;
     }
 
     boolean isSelected() {
