@@ -216,7 +216,7 @@ class ActionBar extends JPanel {
         return buttons;
     }
 
-    private Icon resizeIcon(Image img) {
+    static Icon resizeIcon(Image img) {
         Image newimg = img.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
         return new ImageIcon(newimg);
     }
@@ -323,13 +323,13 @@ class ActionBar extends JPanel {
 
             //TODO: implement actionbar menus and functions
             builder.addActionListener(e -> {
-                selectionController.createUnit(VisualType.WORKERSPAWN);
+                selectionController.createUnit(VisualType.BUILDER);
             });
             miner.addActionListener(e -> {
-                selectionController.createUnit(VisualType.MILITARYSPAWN);
+                selectionController.createUnit(VisualType.MINER);
             });
             lumberJack.addActionListener(e -> {
-                selectionController.createUnit(VisualType.FARM);
+                selectionController.createUnit(VisualType.LUMBERJACK);
             });
 
             builder.setEnabled(false);
@@ -368,16 +368,16 @@ class ActionBar extends JPanel {
 
             //TODO: implement actionbar menus and functions
             cavalry.addActionListener(e -> {
-                selectionController.setUnitToSpawn(VisualType.WORKERSPAWN);
+                selectionController.createUnit(VisualType.CAVALRY);
             });
             destroyer.addActionListener(e -> {
-                selectionController.setUnitToSpawn(VisualType.MILITARYSPAWN);
+                selectionController.createUnit(VisualType.DESTROYER);
             });
             ranger.addActionListener(e -> {
-                selectionController.setUnitToSpawn(VisualType.FARM);
+                selectionController.createUnit(VisualType.RANGER);
             });
             infantry.addActionListener(e -> {
-                selectionController.setUnitToSpawn(VisualType.FARM);
+                selectionController.createUnit(VisualType.INFANTRY);
             });
 
             cavalry.setEnabled(false);

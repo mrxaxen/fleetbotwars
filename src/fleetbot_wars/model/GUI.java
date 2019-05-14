@@ -45,7 +45,7 @@ public class GUI extends JFrame {
 
         panels.put(ComponentType.MAIN, mainMenu);
         panels.put(ComponentType.NEW_GAME, newGameMenu);
-        panels.put(ComponentType.OPTIONS, options);
+//        panels.put(ComponentType.OPTIONS, options);
         panels.put(ComponentType.GAME_WINDOW, gameWindow);
 
         this.getContentPane().add(mainMenu);

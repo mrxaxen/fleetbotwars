@@ -51,7 +51,7 @@ public class MainMenu extends Menu {
     @Override
     protected void initButtons() {
         buttons.add(initPlay());
-        buttons.add(initOptions());
+//        buttons.add(initOptions());
         buttons.add(initExit());
         buttons.forEach((button) -> {
             button.setMinimumSize(DEFAULT_BUTTON_SIZE);
