@@ -47,8 +47,14 @@ public class Farm extends Controllable {
      * increase Player Food resource of given Player
      * @param p
      */
+    private int timer = 0;
     public void incrFood(Player p) {
-        p.increaseResource(ResourceType.food, 1);
+        if(timer == 5) {
+            p.increaseResource(ResourceType.food, 1);
+            timer = 0;
+        } else {
+            timer++;
+        }
     }
 
 }

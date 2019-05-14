@@ -30,7 +30,7 @@ public class StoneMine extends Mine {
         new_price.put(ResourceType.upgrade, 0);
         return new_price;
     }
-    
+
     /**
      * create StoneMine at (x,y) coordinates, for 'team' team
      *  @param coords
@@ -46,10 +46,16 @@ public class StoneMine extends Mine {
      * increase Player Stone resource
      * @param p
      */
+    int timer = 0;
     @Override
     public void incrRes(Player p) {
         if (isActive()) {
-            p.increaseResource(ResourceType.stone, 1);
+            if(timer == 5) {
+                p.increaseResource(ResourceType.stone, 1);
+                timer = 0;
+            } else {
+                timer++;
+            }
         }
     }
 }

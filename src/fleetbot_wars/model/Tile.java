@@ -19,7 +19,7 @@ public class Tile extends JPanel {
     private static HashMap<GroundType, Image> groundImages;
     private static HashMap<UnitType, Image> unitImages;
     //private static HashMap<UnitType, Image[]> imageSections = new HashMap<>();
-    private static HashMap<Color, HashMap<UnitType, Image[]>> iSections = new HashMap<Color, HashMap<UnitType, Image[]>>();
+    private static HashMap<Color, HashMap<UnitType, Image[]>> iSections = new HashMap<>();
 
     private final int xCoord;
     private final int yCoord;
@@ -93,6 +93,26 @@ public class Tile extends JPanel {
         return buffImage;
     }
 
+    public static void genSections() {
+        iSections.put(Color.red, new HashMap<>());
+        iSections.put(Color.green, new HashMap<>());
+        iSections.put(Color.blue, new HashMap<>());
+        iSections.put(Color.yellow, new HashMap<>());
+
+        for(UnitType ut : UnitType.values()) {
+            if(ut.getWidthInUnits() > 0 && ut.getHeightInUnits() > 0) {
+                try {
+                    iSections.get(Color.red).put(ut,genImageSections(ut.getWidthInUnits(),ut.getHeightInUnits(),ImageIO.read(ut.getUrl()),Color.red));
+                    iSections.get(Color.green).put(ut,genImageSections(ut.getWidthInUnits(),ut.getHeightInUnits(),ImageIO.read(ut.getUrl()),Color.green));
+                    iSections.get(Color.blue).put(ut,genImageSections(ut.getWidthInUnits(),ut.getHeightInUnits(),ImageIO.read(ut.getUrl()),Color.blue));
+                    iSections.get(Color.yellow).put(ut,genImageSections(ut.getWidthInUnits(),ut.getHeightInUnits(),ImageIO.read(ut.getUrl()),Color.yellow));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     Tile(GroundType groundType, Unit unit, int x, int y) {
         this.xCoord = x;
         this.yCoord = y;
@@ -102,12 +122,12 @@ public class Tile extends JPanel {
         this.unitType = unit == null ? null : unit.getType().getUnitType();
         this.groundType = groundType;
 
-
-        if (unit instanceof Controllable) {
+//        DEPRECATED? Let's hope so..
+        /*if (unit instanceof Controllable) {
             Color color = ((Controllable) unit).getColor();
             HashMap<UnitType, Image[]> imgSections = iSections.get(color);
             if (imgSections == null) {
-                imgSections = new HashMap<UnitType, Image[]>();
+                imgSections = new HashMap<>();
                 iSections.put(color, imgSections);
             }
             try {
@@ -115,7 +135,7 @@ public class Tile extends JPanel {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
         this.setPreferredSize(new Dimension(TILE_BASE_SIZE, TILE_BASE_SIZE));
 

@@ -323,13 +323,13 @@ class ActionBar extends JPanel {
 
             //TODO: implement actionbar menus and functions
             builder.addActionListener(e -> {
-                selectionController.setUnitToSpawn(VisualType.WORKERSPAWN);
+                selectionController.createUnit(VisualType.WORKERSPAWN);
             });
             miner.addActionListener(e -> {
-                selectionController.setUnitToSpawn(VisualType.MILITARYSPAWN);
+                selectionController.createUnit(VisualType.MILITARYSPAWN);
             });
             lumberJack.addActionListener(e -> {
-                selectionController.setUnitToSpawn(VisualType.FARM);
+                selectionController.createUnit(VisualType.FARM);
             });
 
             builder.setEnabled(false);
