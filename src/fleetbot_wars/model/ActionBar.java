@@ -261,7 +261,6 @@ class ActionBar extends JPanel {
             image = ImageIO.read(getClass().getResource("/resources/building/barricade.png"));
             BuildButton barricade = new BuildButton("Barricade", Barricade.price, resizeIcon(image));
 
-            //TODO: implement actionbar menus and functions
             workerSpawn.addActionListener(e -> {
                 selectionController.setBuildingToBuild(VisualType.WORKERSPAWN);
                 System.out.println("Building to build: " + VisualType.WORKERSPAWN);
@@ -324,7 +323,7 @@ class ActionBar extends JPanel {
             BuildButton lumberJack = new BuildButton("Lumberjack", Lumberjack.price, resizeIcon(image));
 
 
-            //TODO: implement actionbar menus and functions
+
             builder.addActionListener(e -> {
                 selectionController.createUnit(VisualType.BUILDER);
             });
@@ -353,7 +352,7 @@ class ActionBar extends JPanel {
 
     private HashSet<BuildButton> initMilitaryUnitsMenu() {
         HashSet<BuildButton> buttons = new HashSet<>();
-        Image image = null;
+        Image image;
         try {
 
             image = ImageIO.read(getClass().getResource("/resources/unit/cavalry.png"));
@@ -369,7 +368,7 @@ class ActionBar extends JPanel {
             BuildButton infantry = new BuildButton("Infantry", Infantry.price, resizeIcon(image));
 
 
-            //TODO: implement actionbar menus and functions
+
             cavalry.addActionListener(e -> {
                 selectionController.setUnitToSpawn(VisualType.CAVALRY);
             });

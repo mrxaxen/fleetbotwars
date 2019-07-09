@@ -44,7 +44,7 @@ public class Options extends Menu {
         this.add(lowerPane);
     }
 
-    //TODO: add buttons to lowerPane and implement listeners
+
     private JPanel initLowerPane() {
         JPanel lowerPane = new JPanel();
         GridLayout layout = new GridLayout();

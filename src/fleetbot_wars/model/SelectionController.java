@@ -21,7 +21,6 @@ class SelectionController {
     static boolean buildMode;
     private static boolean attackMode;
 
-    //TODO: move on right click
     private SelectionController() {
     }
 

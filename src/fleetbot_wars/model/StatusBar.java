@@ -52,9 +52,7 @@ class StatusBar extends JPanel implements Talkative {
         });
     }
 
-    //TODO: Icon?
     class ResourceLabel extends JLabel {
-
 
         ResourceType type;
         int amount;

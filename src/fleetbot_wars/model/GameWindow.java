@@ -96,7 +96,6 @@ class GameWindow extends JPanel {
         return scrollPane;
     }
     //Resources
-    //TODO: Sync with engine
     private StatusBar initStatusBar(/*HashMap<ResourceType,Integer> resources*/) {
         StatusBar statusBar = new StatusBar(/*resources*/);
         statusBar.setBorder(GameWindow.uiBorder);
@@ -104,7 +103,7 @@ class GameWindow extends JPanel {
     }
 
     private MiniMap initMinMap() {
-        //TODO: implement
+
         MiniMap minMap = new MiniMap(GameSpace.tiles);
         minMap.setBorder(GameWindow.uiBorder);
         return minMap;
@@ -115,7 +114,6 @@ class GameWindow extends JPanel {
     }
 
     private UnitMatrix initUnitMx() {
-        //TODO: implement
         UnitMatrix unitMX = new UnitMatrix();
 //        JButton button = new JButton("PLACEHOLDER UNITMX");
 //        unitMX.add(button);

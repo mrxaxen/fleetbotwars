@@ -288,6 +288,7 @@ public class Engine {
         if (inRange(atkr, tar) && atkr.getCurrHp() > 0) { //in range, not dead (died but not yet removed)
             stopMove(atkr);
             if (losCheck(atkr, tar)) { //in line of sight
+                System.out.println("ATTACKING");
                 atkr.hit(tar);
                 selfDef(atkr, tar);
             } else { //blocked view
@@ -350,8 +351,8 @@ public class Engine {
     private boolean inRange(Controllable attacker, Unit target) {
         //return attacker.getRngRect().intersects(target.getBodyRect());
         //return attacker.getRngRect().contains(target.getReferenceCoords());
-        return Math.abs(attacker.getReferenceCoords().x - target.getReferenceCoords().x) <= attacker.getRng()
-                && Math.abs(attacker.getReferenceCoords().y - target.getReferenceCoords().y) <= attacker.getRng();
+        return Math.abs(attacker.getReferenceCoords().x - target.getReferenceCoords().x) <= attacker.getRng()+1
+                && Math.abs(attacker.getReferenceCoords().y - target.getReferenceCoords().y) <= attacker.getRng()+1;
     }
 
     // death
@@ -388,6 +389,7 @@ public class Engine {
             players[playerIndex].addDeadControllable((Controllable) u);
         }
         for (Point c : u.getCoordsArray()) { //delete unit from the map
+            System.out.println("KILLING");
             Translation.getInstance().repaint(c,null,false);
             map.groundAt(c).setOwnerReference(null);
         }
